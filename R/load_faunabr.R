@@ -106,6 +106,7 @@ load_faunabr <- function(data_dir, data_version = "Latest_available",
                 "kingdom", "phylum", "class", "order", "family",
                 "genus", "lifeForm",
              "habitat", "states", "countryCode", "origin",
+
              "taxonomicStatus", "nomenclaturalStatus", "vernacularName",
              "taxonRank")]
   }

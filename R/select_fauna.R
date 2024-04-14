@@ -148,11 +148,11 @@ select_fauna <- function(data, include_subspecies = FALSE,
     stop(paste0("Argument data must be a data.frame, not ", class(data)))
   }
 
-  if (!is.logical(include_sub_species)) {
+
+  if (!is.logical(include_subspecies)) {
     stop(paste0("Argument include_subspecies must be logical, not ",
                 class(include_subspecies)))
   }
-
 
   #Correct characters, if necessary
     phylum <- firstup(trimws(phylum))
@@ -171,6 +171,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
     states[states == "ALL"] <- "all"
     origin <- tolower(trimws(origin))
     taxonomicStatus <- tolower(trimws(taxonomicStatus))
+
   #Check available arguments#
   if(!(filter_lifeForm %in% c("in", "only", "not_in", "and"))) {
     stop(paste0("Argument filter_lifeForm must be:\n",
@@ -276,7 +277,6 @@ select_fauna <- function(data, include_subspecies = FALSE,
   if(all(lifeForm != "all") & filter_lifeForm == "not_in") {
     d <- subset(d, !grepl(paste(newlifeForm, collapse = "|"),
                           d$lifeForm))
-
   }
 
   if(all(lifeForm != "all") & filter_lifeForm == "and") {
@@ -318,7 +318,6 @@ select_fauna <- function(data, include_subspecies = FALSE,
   if(all(habitat != "all") & filter_habitat == "not_in") {
     d <- subset(d, !grepl(paste(newhabitat, collapse = "|"),
                           d$habitat))
-
   }
 
   if(all(habitat != "all") & filter_habitat == "and") {
@@ -346,6 +345,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
                     paste(any_diff, collapse = ", ")))
     }
   }
+
 
   #Filter by state
   if(all(states != "all") & filter_states == "in") {
@@ -395,8 +395,6 @@ select_fauna <- function(data, include_subspecies = FALSE,
                     paste(any_diff, collapse = ", ")))
     }
     d <- subset(d, d$taxonomicStatus %in% taxonomicStatus2) }
-
-
   if(nrow(d) == 0) {
     warning("Combination of characteristics return 0 species")
   }

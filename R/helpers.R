@@ -82,17 +82,30 @@ translate_taxonrank <- function(rank_vector) {
 
   return(rank_vector)
 }
+
+#Extract string between patterns
+extract_between <- function(str, left, right) {
+  inicio <- regexpr(left, str) + attr(regexpr(left, str), "match.length")
+  str_inicio <- substring(str, first = inicio)
+  fim <- regexpr(right, str_inicio)
+  final <- substring(str_inicio, first = 0, last = fim - 1)
+  ifelse(inicio > 0 & fim > 0, final, NA)
+}
+
+
 #Solve incongruences between varieties/subspecies and species
 update_columns <- function(df) {
-  # Get unique values of lifeForm, habitat, vegetationType, Biome e states
+  # Get unique values of lifeForm, habitat, vegetationType, Biome e States
   unique_lifeForm <- sort(unique(unlist(strsplit(df$lifeForm, ";"))))
   unique_habitat <- sort(unique(unlist(strsplit(df$habitat, ";"))))
-  unique_states <- sort(unique(unlist(strsplit(df$states, ";"))))
+  unique_States <- sort(unique(unlist(strsplit(df$States, ";"))))
+
 
   # Update columns where taxonRank == "ESPECIE"
   df$lifeForm[df$taxonRank == "ESPECIE"] <- paste(unique_lifeForm, collapse = ";")
   df$habitat[df$taxonRank == "ESPECIE"] <- paste(unique_habitat, collapse = ";")
   df$states[df$taxonRank == "ESPECIE"] <- paste(unique_states, collapse = ";")
+  df$States[df$taxonRank == "ESPECIE"] <- paste(unique_States, collapse = ";")
 
   #Return only taxonRank == "ESPECIE"
   df <- subset(df, df$taxonRank == "ESPECIE")
@@ -235,8 +248,10 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   # dist$occurrenceRemarks <- iconv(dist$occurrenceRemarks,
   #                                 to="ASCII//TRANSLIT")
   #Extrair informações para novas coluna
-  #origin
+
+    #origin
   dist$origin <- dist$establishmentMeans
+
 
   # #Endemism
   # dist$Endemism <- ifelse(grepl("endemism:Nao endemica",
@@ -253,8 +268,6 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   # #Deletar aspas
   # dist$phytogeographicDomain <- gsub("\"", "", dist$phytogeographicDomain)
 
-  # #locality - states
-  # dist$locality <- gsub(".*-", "", dist$locality)
 
   #Organize information
   #Local
@@ -281,6 +294,7 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   #Create columns with name of the specie and accepted name
   df_final3$species <- df_final3$specificEpithet
   df_final3$subspecies <- df_final3$infraspecificEpithet
+
   # #Ignore this ranks
   # all_ranks <- unique(df_final3$taxonRank)
   # ignore_rank <- setdiff(all_ranks, c("ESPECIE", "SUB_ESPECIE"))
@@ -335,6 +349,7 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   df_final4$acceptedName[which(df_final4$acceptedName == "")] <- NA
 
   #Order columns
+
   df_final <- df_final4[,c(c("id", "taxonID","species", "subspecies",
                              "scientificName",
                              "acceptedName",
@@ -366,6 +381,7 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
 
   #Rename columns
   colnames(df_final)[colnames(df_final) == "locality"] <- "states"
+
 
 
   if(solve_incongruences){
