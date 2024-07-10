@@ -39,7 +39,7 @@ TRUE, return a list with:
 \item PAM: the presence-absence matrix (PAM)
 \item Richness_summary: a data.frame with the number of species in each site
 \item Spatial_richness: a SpatVector with the number of species in each site
-(only by State and biome)
+(by State and/or country)
 }
 
 If return_richness_summary and return_spatial_richness is set to FALSE,

@@ -3,6 +3,7 @@
 export(check_fauna_names)
 export(extract_binomial)
 export(fauna_attributes)
+export(fauna_by_vernacular)
 export(fauna_pam)
 export(fauna_spat_occ)
 export(fauna_synonym)
