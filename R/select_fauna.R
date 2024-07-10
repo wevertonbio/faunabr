@@ -1,32 +1,22 @@
 #' Selection of species based on its characteristics and distribution
 #'
-#' @description select_species allows filter species based on its
-#' characteristics and distribution available in Brazilian Flora 2020
+#' @description select_fauna allows filter species based on its
+#' characteristics and distribution available in Brazilian Fauna
 #'
 #' @param data (data.frame) the data.frame imported with the
-#' \code{\link{load_florabr}} function.
+#' \code{\link{load_faunabr}} function.
 #' @param include_subspecies (logical) include subspecies?
 #' Default = FALSE
-#' @param include_variety (logical) include varieties of the species?
-#' Default = FALSE
-#' @param Kingdom (character) The Kingdom for filtering the dataset. It can be
-#' "Plantae" or "Fungi". Default = "Plantae". To include both,
-#' use c("Plantae", "Fungi")
-#' @param Group (character) The groups for filtering the datasets. It can be
-#' "Fungi", "Angiosperms", "Gymnosperms", "Ferns and Lycophytes",
-#' "Bryophytes" and "Algae". To use more than one group, put the available
-#' items in a vector, for example: Group = c(Angiosperms", "Gymnosperms").
-#' Default = "all".
-#' @param Subgroup (character) The subgroups for filtering the dataset.
-#' Only available if the Group is "Fungi" or "Bryophytes". For Fungi, it can be
-#' "stricto sensu" or "lato sensu". For Bryophytes, it can be "Mosses",
-#' "Hornworts" and "Liverworts" . To use more than one group, put the available
-#' items in a vector, for example: Subgroup = c("Mosses", "Hornworts").
-#' Default = "all".
-#' @param Family (character) The families for filtering the dataset. It can
-#' be included more than one Family. Default = "all".
-#' @param Genus (character) The genus for filtering the dataset. It can
-#' be included more than one Genus. Default = "all".
+#' @param phylum (character) The phyla for filtering the dataset. It can
+#' be included more than one phylum. Default = "all".
+#' @param class (character) The classes for filtering the dataset. It can
+#' be included more than one class. Default = "all".
+#' @param order (character) The orders for filtering the dataset. It can
+#' be included more than one order. Default = "all".
+#' @param family (character) The families for filtering the dataset. It can
+#' be included more than one family. Default = "all".
+#' @param genus (character) The genus for filtering the dataset. It can
+#' be included more than one genus. Default = "all".
 #' @param lifeForm (character) The life forms for filtering the dataset. It can
 #' be included more than one lifeForm. Default = "all"
 #' @param filter_lifeForm (character) The type of filtering for life forms. It
@@ -37,108 +27,91 @@
 #' @param filter_habitat (character) The type of filtering for habitat. It
 #' can be "in", "only", "not_in" and "and". See details for more about this
 #' argument.
-#' @param Biome (character) The biomes for filtering the dataset. It can
-#' be included more than one biome. Default = "all"
-#' @param filter_Biome (character) The type of filtering for biome. It
-#' can be "in", "only", "not_in" and "and". See details for more about this
-#' argument.
 #' @param states (character) The states for filtering the dataset. It can
 #' be included more than one state. Default = "all".
-#' @param filter_state (character) The type of filtering for states. It
+#' @param filter_states (character) The type of filtering for states. It
 #' can be "in", "only", "not_in" and "and". See Details for more about this
 #' argument.
-#' @param VegetationType (character) The vegetation types for filtering the
-#' dataset. It can be included more than one vegetation type. Default = "all".
-#' @param filter_Vegetation (character) The type of filtering for
-#' vegetation type. It can be "in", "only", "not_in" and "and". See details for
-#' more about this argument.
-#' @param Endemism (character) The endemism (endemic or non-endemic to Brazil)
-#' for filtering the dataset. It can be "all", "Endemic" or "Non-endemic".
-#' Default = "all".
+#' @param country (character) The country or countries with confirmed
+#' occurrences for filtering the dataset. It can be included more than one
+#' country. Default = "all".
+#' @param filter_country (character) The type of filtering for country. It can
+#' be "in", "only", "not_in" and "and". See details for more about this argument.
 #' @param origin (character) The origin for filtering the dataset. It can
-#' be "all", "Native", "Cultivated" and "Naturalized". Default = "all".
+#' be "native", "introduced", "cryptogenic", "domesticaded" and "invasora".
+#' Default = "all".
 #' @param taxonomicStatus (character) The taxonomic status for filtering the
-#' dataset. It can be "all", "Accepted" or "Synonym". Default = "Accepted".
-#' @param nomenclaturalStatus (character) The nomenclatural status for
-#' filtering the dataset. Default = "Accepted"
+#' dataset. It can be "accepted_name", "synonym" or "all".
+#' Default = "accepted_name".
 #'
 #' @details It's possible to choose 4 ways to filter by lifeform, by habitat,
-#' by biome, by states and by vegetation type:
+#' by states and by country:
 #' "in": selects species that have any occurrence of the determined values. It
-#' allows multiple matches. For example, if Biome = c("Amazon", Cerrado" and
-#' filter_Biome = "in", it will select all species that occur in the Amazon and
-#' Cerrado, some of which may also occur in other biomes.
+#' allows multiple matches. For example, if country = c("brazil", argentina") and
+#' filter_country = "in", it will select all species that occur in Brazil and/or
+#' Argentina, some of which may also occur in other countries.
 #'
 #' "only": selects species that have only occurrence of the determined values.
-#' It allows only single matches. For example, if Biome = c("Amazon", "Cerrado")
-#' and filter_Biome = "only", it will select all species that occur exclusively
-#' in both the Amazon and Cerrado biomes, without any occurrences in other
-#' biomes.
+#' It allows only single matches. For example, if
+#' country = c("brazil", argentina") and filter_country = "in", it will select
+#' all species that occur exclusively in both countries, without any occurrences
+#' in other countries.
 #'
 #' "not_in": selects species that don't have occurrence of the determined
 #' values. It allows single and multiple matches. For example,
-#' if Biome = c("Amazon", "Cerrado") and filter_Biome = "not_in", it will select
-#' all species without occurrences in the Amazon and Cerrado biomes.
+#' if country = c("brazil", argentina") and filter_country = "not_in", it will select
+#' all species without occurrences in Brazil and Argentina.
 #'
 #' "and": selects species that have occurrence in all determined values. It
 #' allows single and multiple matches. For example,
-#' if Biome = c("Amazon", "Cerrado") and filter_Biome = "and", it will select
-#' all species that occurs only in both the Amazon and Cerrado biomes,
-#' including species that occurs in other biomes too.
+#' if country = c("brazil", argentina") and filter_country = "and", it will select
+#' all species that occurs only in both countries,including species that occurs
+#' in other countries too.
 #'
-#'
-#'
-#' To get the complete list of arguments available for Family, Genus, lifeForm,
-#' habitat, Biome, state, and nomenclaturalStatus, use the function
-#' \code{\link{get_attributes}}
-#'
+#' To get the complete list of arguments available for phylum, class, order,
+#' family, genus, lifeForm, habitat, states, country and origins, use
+#' the function \code{\link{fauna_attributes}}
 #'
 #' @return A new dataframe with the filtered species.
-#' @usage select_species(data,
-#'                       include_subspecies = FALSE, include_variety = FALSE,
-#'                       Kingdom = "Plantae", Group = "all", Subgroup = "all",
-#'                       Family = "all", Genus = "all",
+#' @usage select_fauna(data, include_subspecies = FALSE, phylum = "all",
+#'                       class = "all", order = "all", family = "all",
+#'                       genus = "all",
 #'                       lifeForm = "all", filter_lifeForm = "in",
 #'                       habitat = "all", filter_habitat = "in",
-#'                       Biome = "all", filter_Biome = "in",
-#'                       state = "all", filter_state = "in",
-#'                       VegetationType = "all", filter_Vegetation = "in",
-#'                       Endemism = "all", origin = "all",
-#'                       taxonomicStatus = "Accepted")
+#'                       states = "all", filter_states = "in",
+#'                       country = "all", filter_country = "in",
+#'                       origin = "all", taxonomicStatus = "accepted_name")
 #' @export
 #' @references
-#' Brazilian Flora 2020. Jardim Botânico do Rio de Janeiro. Available at:
-#' http://floradobrasil.jbrj.gov.br/
+#' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
+#' https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil
 #'
 #' @examples
-#' data("bf_data") #Load Brazilian Flora data
-#' #'Select endemic and native species of trees with disjunct occurrence in
-#' # Atlantic Forest and Amazon
-#' am_af_only <- select_species(data = bf_data,
-#'                              include_subspecies = FALSE,
-#'                              include_variety = FALSE,
-#'                              Kingdom = "Plantae",
-#'                              Group = "all", Subgroup = "all",
-#'                              Family = "all", Genus = "all",
-#'                              lifeForm = "Tree", filter_lifeForm = "only",
-#'                              habitat = "all", filter_habitat = "in",
-#'                              Biome = c("Atlantic_Forest","Amazon"),
-#'                              filter_Biome = "only",
-#'                              state = "all", filter_state = "and",
-#'                              VegetationType = "all",
-#'                              filter_Vegetation = "in",
-#'                              Endemism = "Endemic", origin = "Native",
-#'                              taxonomicStatus = "all")
-
+#' data("fauna_data") #Load data example
+#' #Select endemic and native species of birds (Aves) with confirmed occurrence
+#' #in Brazil or Argentina
+#' aves_br_ar <- select_fauna(data = fauna_data, include_subspecies = FALSE,
+#'                            phylum = "all", class = "Aves",
+#'                            order = "all",
+#'                            family = "all",
+#'                            genus = "all",
+#'                            lifeForm = "all", filter_lifeForm = "in",
+#'                            habitat = "all", filter_habitat = "in",
+#'                            states = "all", filter_states = "in",
+#'                            country = c("brazil", "argentina"),
+#'                            filter_country = "in",
+#'                            origin = "native",
+#'                            taxonomicStatus = "accepted_name")
 select_fauna <- function(data, include_subspecies = FALSE,
                          phylum = "all", class = "all", order = "all",
-                           family = "all",
-                           genus = "all",
-                           lifeForm = "all", filter_lifeForm = "in",
-                           habitat = "all", filter_habitat = "in",
-                           states = "all", filter_states = "in",
-                           origin = "all",
-                           taxonomicStatus = "accepted_name") {
+                         family = "all",
+                         genus = "all",
+                         lifeForm = "all", filter_lifeForm = "in",
+                         habitat = "all", filter_habitat = "in",
+                         states = "all", filter_states = "in",
+                         country = "all", filter_country = "in",
+                         origin = "all",
+                         taxonomicStatus = "accepted_name") {
   if (missing(data)) {
     stop("Argument data is not defined")
   }
@@ -169,6 +142,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
     habitat <- tolower(trimws(habitat))
     states <- toupper(trimws(states))
     states[states == "ALL"] <- "all"
+    country <- tolower(trimws(country))
     origin <- tolower(trimws(origin))
     taxonomicStatus <- tolower(trimws(taxonomicStatus))
 
@@ -177,18 +151,29 @@ select_fauna <- function(data, include_subspecies = FALSE,
     stop(paste0("Argument filter_lifeForm must be:\n",
                 "'in', 'only', 'not_in' or 'and'"))
   }
+
   if(!(filter_habitat %in% c("in", "only", "not_in", "and"))) {
     stop(paste0("Argument filter_habitat must be:\n",
                 "'in', 'only', 'not_in' or 'and'"))
+  }
+
+  if(!(filter_country %in% c("in", "only", "not_in", "and"))) {
+      stop(paste0("Argument filter_country must be:\n",
+                  "'in', 'only', 'not_in' or 'and'"))
+  }
+
+  if(!(filter_states %in% c("in", "only", "not_in", "and"))) {
+      stop(paste0("Argument filter_country must be:\n",
+                  "'in', 'only', 'not_in' or 'and'"))
   }
 
   if(all(phylum != "all") & !(phylum %in% unique(data$phylum))) {
     stop(paste("phylum not valid. The phylums availables are:\n",
                paste(unique(data$phylum), collapse = ", ")))  }
 
-  if(all(class != "all") & !(class %in% unique(data$class))) {
-    stop(paste("class not valid. Check the available classes with the function
-               get_fauna_att()"))  }
+  # if(all(class != "all") & !(class %in% unique(data$class))) {
+  #   stop(paste("class not valid. Check the available classes with the function
+  #              get_fauna_att()"))  }
 
   if(all(order != "all") & !(order %in% unique(data$order))) {
     stop(paste("order not valid. Check the available orders with the function
@@ -280,8 +265,9 @@ select_fauna <- function(data, include_subspecies = FALSE,
   }
 
   if(all(lifeForm != "all") & filter_lifeForm == "and") {
-    d <- subset(d, grepl(paste(newlifeForm, collapse = ";"), d$lifeForm ))
-  }
+    d <- d[rowSums(sapply(newlifeForm, function(x)
+      grepl(x, d$lifeForm))) == length(newlifeForm),]
+    }
 
 
   #habitat ####
@@ -321,8 +307,9 @@ select_fauna <- function(data, include_subspecies = FALSE,
   }
 
   if(all(habitat != "all") & filter_habitat == "and") {
-    d <- subset(d, grepl(paste(newhabitat, collapse = ";"), d$habitat))
-  }
+    d <- d[rowSums(sapply(newhabitat, function(x)
+      grepl(x, d$habitat))) == length(newhabitat),]
+    }
 
   #states ####
   if(all(states  == "all")) {
@@ -363,8 +350,48 @@ select_fauna <- function(data, include_subspecies = FALSE,
   }
 
   if(all(states != "all") & filter_states == "and") {
-    d <- subset(d, grepl(paste(newstate, collapse = ";"), d$states))
-  }
+    d <- d[rowSums(sapply(newstate, function(x)
+      grepl(x, d$states))) == length(newstate),]
+    }
+
+    #Check if it is a valid country
+    if(all(country != "all")) {
+      all_country <- unique(unlist(strsplit(d$countryCode, split = ";")))
+      newcountry <- gsub(" ", "", country)
+      newcountry <- vapply(country, FUN.VALUE = character(1), function(x){
+        paste(sort(gsub(" ", "", unlist(strsplit(x, split = ",")))),
+              collapse = ";")
+      }, USE.NAMES = FALSE)
+      newcountry <- sort(newcountry)
+      #Check if all country exists
+      newcountry2 <- unique(unlist(strsplit(newcountry, split = ";")))
+      any_diff <- setdiff(newcountry2 , all_country)
+      if(length(any_diff) > 0) {
+        warning(paste("The following country/countries is/are not valid:\n",
+                      paste(any_diff, collapse = ", ")))
+      }
+    }
+
+
+    #Filter by country
+    if(all(country != "all") & filter_country == "in") {
+      d <- subset(d, grepl(paste(newcountry, collapse = "|"),
+                           d$countryCode)) }
+
+    if(all(country != "all") & filter_country == "only") {
+      d <- subset(d, d$countryCode == paste(newcountry, collapse = ";"))
+    }
+
+    if(all(country != "all") & filter_country == "not_in") {
+      d <- subset(d, !grepl(paste(newcountry, collapse = "|"),
+                            d$countryCode))
+
+    }
+
+    if(all(country != "all") & filter_country == "and") {
+      d <- d[rowSums(sapply(newcountry, function(x)
+        grepl(x, d$countryCode))) == length(newcountry),]
+    }
 
   #origin ####
   if(all(origin == "all")) {
@@ -372,6 +399,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
 
   #Filter by origin
   if(all(origin != "all")) {
+    d$origin <- tolower(d$origin)
     origin2 <- origin
     all_origin <- unique(d$origin)
     any_diff <- setdiff(origin, all_origin)
@@ -391,7 +419,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
     all_taxonomicStatus <- unique(d$taxonomicStatus)
     any_diff <- setdiff(taxonomicStatus, all_taxonomicStatus)
     if(length(any_diff) > 0) {
-      warning(paste("The following taxonomicStatuss are not valid:\n",
+      warning(paste("The following taxonomicStatus are not valid:\n",
                     paste(any_diff, collapse = ", ")))
     }
     d <- subset(d, d$taxonomicStatus %in% taxonomicStatus2) }

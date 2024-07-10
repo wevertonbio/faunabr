@@ -1,17 +1,16 @@
-#' Download the latest version of Brazilian Flora 2020 database
+#' Download the latest version of Catálogo Taxonômico da Fauna do Brasil
 #'
 #' @description
-#' This function downloads the latest or an older version of Brazilian Flora
-#' 2020 database, merges the information into a single data.frame, and saves
-#' this data.frame in the specified directory.
-#'
+#' This function downloads the latest or an older version of Catálogo Taxonômico
+#' da Fauna do Brasil database, merges the information into a single data.frame,
+#' and saves this data.frame in the specified directory.
 #'
 #' @param output_dir (character) a directory to save the data downloaded from
-#' Brazilian Flora 2020
-#' @param data_version (character) Version of the Brazilian Flora database to
-#' download. Use "latest" to get the most recent version, updated weekly.
-#' Alternatively, specify an older version (e.g., data_version = "393.319").
-#' Default value is "latest".
+#' Fauna do Brasil
+#' @param data_version (character) Version of the Fauna do Brasil database to
+#' download. Use "latest" to get the most recent version, which is updated
+#' frequently. Alternatively, specify an older version (e.g.,
+#' data_version = "1.2").Default value is "latest".
 #' @param solve_incongruences Resolve inconsistencies between species and
 #' subspecies/varieties  information. When set to TRUE (default), species
 #' information is updated based on unique data from varieties and subspecies.
@@ -23,14 +22,14 @@
 #' Default = TRUE.
 #'
 #' @returns
-#' The function downloads the latest version of the Brazilian Flora 2020
-#' database from the official source. It then merges the information into a
-#' single data.frame, containing details on species, taxonomy, occurrence,
+#' The function downloads the latest version of the Catálogo Taxonômico da Fauna
+#' do Brasil database from the official source. It then merges the information
+#' into a single data.frame, containing details on species, taxonomy, occurrence,
 #' and other relevant data.
 #' The merged data.frame is then saved as a file in the specified output
 #' directory. The data is saved in a format that allows easy loading using the
-#' \code{\link{load_florabr}} function for further analysis in R.
-#' @usage get_florabr(output_dir, data_version = "latest",
+#' \code{\link{load_faunabr}} function for further analysis in R.
+#' @usage get_faunabr(output_dir, data_version = "latest",
 #'                  solve_incongruences = TRUE, overwrite = TRUE,
 #'                  verbose = TRUE)
 #' @export
@@ -39,18 +38,19 @@
 #' @importFrom XML htmlParse xpathSApply xmlGetAttr
 #' @importFrom utils unzip
 #' @importFrom utils read.csv
+#' @importFrom data.table fwrite
 #' @references
-#' Brazilian Flora 2020. Jardim Botânico do Rio de Janeiro. Available at:
-#' http://floradobrasil.jbrj.gov.br/
+#' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
+#' https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil
 #' @examples
 #' \dontrun{
 #' #Creating a folder in a temporary directory
-#' #Replace 'file.path(tempdir(), "florabr")' by a path folder to be create in
+#' #Replace 'file.path(tempdir(), "faunaabr")' by a path folder to be create in
 #' #your computer
-#' my_dir <- file.path(file.path(tempdir(), "florabr"))
+#' my_dir <- file.path(file.path(tempdir(), "faunabr"))
 #' dir.create(my_dir)
 #' #Download, merge and save data
-#' get_florabr(output_dir = my_dir, data_version = "latest",
+#' get_faunabr(output_dir = my_dir, data_version = "latest",
 #'             solve_incongruences = TRUE, overwrite = TRUE, verbose = TRUE)
 #' }
 get_faunabr <- function(output_dir, data_version = "latest",
@@ -140,7 +140,7 @@ get_faunabr <- function(output_dir, data_version = "latest",
   #Print final message
   if(verbose){
   message("Data downloaded and merged successfully. Final data saved in",
-              file.path(path_data, version_data, "CompleteBrazilianFlora.rds"))
+              file.path(path_data, version_data, "CompleteBrazilianFauna.gz"))
   }
 
 }

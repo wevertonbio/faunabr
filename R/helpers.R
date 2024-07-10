@@ -98,14 +98,14 @@ update_columns <- function(df) {
   # Get unique values of lifeForm, habitat, vegetationType, Biome e States
   unique_lifeForm <- sort(unique(unlist(strsplit(df$lifeForm, ";"))))
   unique_habitat <- sort(unique(unlist(strsplit(df$habitat, ";"))))
-  unique_States <- sort(unique(unlist(strsplit(df$States, ";"))))
+  unique_states <- sort(unique(unlist(strsplit(df$states, ";"))))
 
 
   # Update columns where taxonRank == "ESPECIE"
   df$lifeForm[df$taxonRank == "ESPECIE"] <- paste(unique_lifeForm, collapse = ";")
   df$habitat[df$taxonRank == "ESPECIE"] <- paste(unique_habitat, collapse = ";")
   df$states[df$taxonRank == "ESPECIE"] <- paste(unique_states, collapse = ";")
-  df$States[df$taxonRank == "ESPECIE"] <- paste(unique_States, collapse = ";")
+  df$states[df$taxonRank == "ESPECIE"] <- paste(unique_states, collapse = ";")
 
   #Return only taxonRank == "ESPECIE"
   df <- subset(df, df$taxonRank == "ESPECIE")
@@ -116,16 +116,16 @@ update_columns <- function(df) {
 #Extract binomial name
 extract_species <- function(texto) {
 
-  # Remove chaves {}
+  # Remove curly braces {}
   texto2 <- gsub("\\{|\\}", "", texto)
 
-  # Remove excesso de espaços entre palavras
+  # Remove excess of whitespace between words
   texto2 <- gsub("\\s+", " ", texto2)
 
-  # Remove espaços extras no início e fim da string
+  # Remove leading and/or trailing whitespace
   texto2 <- trimws(texto2)
 
-  # Extrair as duas primeiras palavras
+  # Extrair two first words
   binomial <- gsub("^([[:alnum:]]+[-[:alnum:]]*(?:[[:space:]]+[[:alnum:]]+[-[:alnum:]]*)?)\\b.*",
                    "\\1", texto2)
 
@@ -175,7 +175,7 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   if(version_data == "latest") {
     all_dirs <- list.dirs(path = path_data, recursive = FALSE,
                           full.names = FALSE)
-    dir_versions <- na.omit(as.numeric(all_dirs)) #Actual version
+    dir_versions <- stats::na.omit(as.numeric(all_dirs)) #Actual version
     #Get highest version
     if(length(dir_versions) > 0) {
       high_version <- max(dir_versions)
@@ -382,7 +382,16 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   #Rename columns
   colnames(df_final)[colnames(df_final) == "locality"] <- "states"
 
-
+  #Fix countries
+  df_final$countryCode[df_final$countryCode == "" & !is.na(df_final$states)] <- "brazil"
+  #Get index for more complex fixing
+  index_fix <- !grepl("brazil", df_final$countryCode) & !is.na(df_final$states)
+  countries_fix <- df_final$countryCode[index_fix]
+  countries_fixed <- sapply(countries_fix, function(x) {
+    paste(sort(c("brazil", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
+    }, USE.NAMES = FALSE)
+  df_final$countryCode[index_fix] <- countries_fixed
+  #df_final[index_fix,] %>% View()
 
   if(solve_incongruences){
     #Solve incongruences between species and subspecies
@@ -431,9 +440,159 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
   df_final$countryCode <- tolower(df_final$countryCode)
 
-  #Save as RDS
-  saveRDS(df_final,
+  #Save as gzip format
+  data.table::fwrite(df_final,
           file = file.path(path_data, version_data,
-                           "CompleteBrazilianFauna.rds"))
+                           "CompleteBrazilianFauna.gz"),
+          row.names = FALSE,
+          compress = "gzip")
 
 }
+
+# ####Generate data to examples #####
+# library(dplyr)
+# library(data.table)
+# library(terra)
+# library(geobr)
+#
+# ####Get Fauna do Brazil dataset####
+# my_dir <- "../faunabrdata/"
+# dir.create(my_dir)
+# get_faunabr(output_dir = my_dir)
+#
+# #Fauna do Brazil data
+# df <- load_faunabr(data_dir = my_dir, type = "short")
+#
+# #Get only native species of chordata
+# p <- df %>% filter(taxonRank == "species", origin == "native", phylum == "Chordata")
+# #Get only accepted names
+# pac <- p %>% filter(taxonomicStatus == "accepted_name")
+# #Include some synonyms
+# syn <- df %>% filter(acceptedName %in% c("Mazama nemorivaga", "Mazama jucunda",
+#                                     "Subulo gouzoubira"))
+#
+# #Final data
+# fauna_data <- bind_rows(pac, syn)
+# usethis::use_data(fauna_data, overwrite = TRUE)
+
+#
+# ####Get species occurrences####
+# library(plantR)
+# library(CoordinateCleaner)
+# library(pbapply)
+# library(dplyr)
+#
+# spp <- c("Panthera onca", "Chaetomys subspinosus")
+#
+# oc.gbif <- pblapply(spp, function(i) {
+#   rgbif2(species = i, force = TRUE, remove_na = TRUE) })
+# oc.gbif <- bind_rows(oc.gbif)
+#
+#
+# #Clean data
+# library(CoordinateCleaner)
+# oc_n <- oc.gbif %>% mutate(decimalLatitude = as.numeric(decimalLatitude),
+#                            decimalLongitude = as.numeric(decimalLongitude))
+#
+# occ_f <- clean_coordinates(x = oc_n, lon = "decimalLongitude",
+#                            lat = "decimalLatitude",
+#                            species = "species", countries = "countryCode",
+#                            tests = c("capitals", "centroids", "equal", "gbif",
+#                                      "institutions","seas", "zeros"))
+# #Select only valid records
+# occ <- occ_f %>% filter(.summary == TRUE) %>%
+#   dplyr::select(species, x = "decimalLongitude", y = "decimalLatitude",
+#                 datasetKey) #To get DOI
+# #Remove duplicates
+# occ_dup <- cc_dupl(occ, species = "species", lon = "x", lat = "y")
+# occurrences <- data.frame(occ_dup)
+# # #Plot records to see
+# # pts <- vect(occurrences, geom = c(x = "x",y = "y"), crs = "+init=epsg:4326")
+# # mapview::mapview(pts, zcol = "species", burst = T)
+#
+# # #Data set key
+# # ds_key <- occurrences %>% count(datasetKey)
+# #
+# # derived_dataset(
+# #   citation_data = ds_key,
+# #   title = "florabr R package: Records of plant species",
+# #   description="This data was downloaded using plantR::rgbif2, filtered using
+# #   CoordinateCleaner::clean_coordinates and later incorported as data example in
+# #   florabr R Package",
+# #   source_url="https://github.com/wevertonbio/florabr/raw/main/data/occurrences.rda",
+# #   gbif_download_doi = NULL,
+# #   user = user, #User in GBIF
+# #   pwd = pwd) #Password in GBIF
+#
+# #Remove datasetKey column
+# occurrences <- occurrences %>% dplyr::select(-datasetKey)
+# usethis::use_data(occurrences, overwrite = TRUE)
+
+# #### Get shape of countries ####
+# w <- vect(rnaturalearth::ne_countries(scale = "large",
+#                                       returnclass = "sf"))
+# as.data.frame(w) %>% View()
+# #Get only column with country
+# w <- w[,"name"]
+# w$name <- tolower(w$name)
+# w$name <- gsub(" ", "_", w$name)
+# w$name <- gsub("is\\.", "islands", w$name)
+# #Fix names manually
+# w$name[w$name == "antigua_and_barb."] <- "antigua_and_barbuda"
+# w$name[w$name == "bosnia_and_herz."] <- "bosnia_and_herzegovina"
+# w$name[w$name == "br._indian_ocean_ter."] <- "british_indian_ocean_territory"
+# w$name[w$name == "cabo_verde"] <- "cape_verde"
+# w$name[w$name == "central_african_rep."] <- "central_african_republic"
+# w$name[w$name == "congo"] <- "congo_republic"
+# w$name[w$name == "curaçao"] <- "curacao"
+# w$name[w$name == "czechia"] <- "czech_republic"
+# w$name[w$name == "dominican_rep."] <- "dominican_republic"
+# w$name[w$name == "eq._guinea"] <- "equatorial_guinea"
+# w$name[w$name == "falkland_islands"] <- "falkland_islands_islas_malvinas"
+# w$name[w$name == "faeroe_islands"] <- "faroe_islands"
+# w$name[w$name == "fr._polynesia"] <- "french_polynesia"
+# w$name[w$name == "fr._s._antarctic_lands"] <- "french_southern_territories"
+# w$name[w$name == "guinea-bissau"] <- "guinea_bissau"
+# w$name[w$name == "heard_i._and_mcdonald_islands"] <- "heard_island_and_mcdonald_islands"
+# w$name[w$name == "macao"] <- "macau"
+# w$name[w$name == "north_macedonia"] <- "macedonia_fyrom"
+# w$name[w$name == "myanmar"] <- "myanmar_burma"
+# w$name[w$name == "n._mariana_islands"] <- "northern_mariana_islands"
+# w$name[w$name == "palestine"] <- "palestinian_territories"
+# w$name[w$name == "st._kitts_and_nevis"] <- "saint_kitts_and_nevis"
+# w$name[w$name == "st._pierre_and_miquelon"] <- "saint_pierre_and_miquelon"
+# w$name[w$name == "st._vin._and_gren."] <- "saint_vincent_and_the_grenadines"
+# w$name[w$name == "são_tomé_and_principe"] <- "sao_tome_and_principe"
+# w$name[w$name == "s._geo._and_the_islands"] <- "south_georgia_and_the_south_sandwich_islands"
+# w$name[w$name == "eswatini"] <- "swaziland"
+# w$name[w$name == "timor-leste"] <- "timor_leste"
+# w$name[w$name == "united_states_of_america"] <- "united_states"
+# w$name[w$name == "u.s._virgin_islands"] <- "u_s_virgin_islands"
+# w$name[w$name == "wallis_and_futuna_islands"] <- "wallis_and_futuna"
+# w$name[w$name == "w._sahara"] <- "western_sahara"
+# w$name[w$name == "côte_d'ivoire"] <- "cote_d_ivoire"
+# w$name[w$name == "u.s._minor_outlying_islands"] <- "u_s_minor_outlying_islands"
+# #Save
+# #Simplify
+# w2 <- terra::simplifyGeom(w)
+# world_fauna <- terra::wrap(w2)
+# usethis::use_data(world_fauna, overwrite = TRUE)
+# writeVector(w, "data/teste.gpkg")
+#
+#
+# #To help fix names
+# #Get all names
+# n <- unique(w$name)
+# #Get all countries in faunadata
+# df <- load_faunabr("../faunabrdata/")
+# co <- unique(unlist(strsplit(df$countryCode, ";")))
+# #Get difference
+# no_co <- setdiff(co, n)
+# sort(no_co)
+# data.frame(n) %>% View()
+
+# # States #
+# states <- terra::unwrap(florabr::states)
+# crs(states) <- crs(countrys)
+# states <- terra::wrap(states)
+# usethis::use_data(states, overwrite = TRUE)
