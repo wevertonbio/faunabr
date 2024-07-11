@@ -6,6 +6,7 @@
 <!-- badges: start -->
 
 [![License](https://img.shields.io/badge/license-GPL%20(%3E=%203)-lightgrey.svg?style=flat)](http://www.gnu.org/licenses/gpl-3.0.html)
+[![R-CMD-check](https://github.com/wevertonbio/faunabr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wevertonbio/faunabr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized morphological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.
