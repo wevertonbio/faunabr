@@ -91,6 +91,12 @@
     <li>
       <a href="../articles/selecionando_especies.html">2. Selecionar e filtrar espécies</a>
     </li>
+    <li>
+      <a href="../articles/espacializando_faunabr.html">3. Filtrar pontos de ocorrência com faunabr</a>
+    </li>
+    <li>
+      <a href="../articles/obtendo_pam.html">4. Obtendo uma matrix de Presença-Ausência (PAM)</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -142,10 +148,10 @@ espécies com base nessas características.</p>
 <div class="section level2">
 <h2 id="carregando-os-dados">Carregando os dados<a class="anchor" aria-label="anchor" href="#carregando-os-dados"></a>
 </h2>
-<p>Antes de começar, utilize a função load_faunabr para carregar os
-dados. Para informações mais detalhadas sobre como obter e carregar os
-dados, consulte <a href="https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html">Getting
-started with faunabr</a></p>
+<p>Antes de começar, utilize a função <code><a href="../reference/load_faunabr.html">load_faunabr()</a></code> para
+carregar os dados. Para informações mais detalhadas sobre como obter e
+carregar os dados, consulte <a href="https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html">Primeiros
+passos com faunabr</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wevertonbio.github.io/faunabr/">faunabr</a></span><span class="op">)</span></span>
 <span><span class="co">#Carregar dados</span></span>
@@ -359,7 +365,7 @@ SC e RS; sem registros de ocorrências em qualquer outro estado.</p>
 <h2 id="checagem-de-nomes-científicos-e-subseleção-de-espécies">Checagem de nomes científicos e subseleção de espécies<a class="anchor" aria-label="anchor" href="#checagem-de-nomes-cient%C3%ADficos-e-subsele%C3%A7%C3%A3o-de-esp%C3%A9cies"></a>
 </h2>
 <div class="section level3">
-<h3 id="extraíndo-o-nome-binomial">Extraíndo o nome binomial<a class="anchor" aria-label="anchor" href="#extra%C3%ADndo-o-nome-binomial"></a>
+<h3 id="extraindo-o-nome-binomial">Extraindo o nome binomial<a class="anchor" aria-label="anchor" href="#extraindo-o-nome-binomial"></a>
 </h3>
 <p>Além de selecionar uma lista de espécies com base em suas
 características, o pacote também inclui uma função para subselecionar

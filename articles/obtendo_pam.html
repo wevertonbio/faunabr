@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>4. Obtaining a Presence-Absence Matrix • faunabr</title>
+<title>4. Obtendo uma matrix de Presença-Ausência (PAM) • faunabr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="4. Obtaining a Presence-Absence Matrix">
+<script src="../pkgdown.js"></script><meta property="og:title" content="4. Obtendo uma matrix de Presença-Ausência (PAM)">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -120,52 +120,51 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>4. Obtaining a Presence-Absence Matrix</h1>
+      <h1 data-toc-skip>4. Obtendo uma matrix de Presença-Ausência
+(PAM)</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/vignettes/getting_pam.Rmd" class="external-link"><code>vignettes/getting_pam.Rmd</code></a></small>
-      <div class="hidden name"><code>getting_pam.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/vignettes/obtendo_pam.Rmd" class="external-link"><code>vignettes/obtendo_pam.Rmd</code></a></small>
+      <div class="hidden name"><code>obtendo_pam.Rmd</code></div>
 
     </div>
 
     
     
-<p>One way of organizing biodiversity data is by using presence-absence
-matrices (PAMs), where a one represents the presence of species j in
-cell i, and a zero indicates absence. From a PAM, we can estimate a
-variety of metrics related to biodiversity patterns, including richness,
-range size, and composition. For a comprehensive list of biodiversity
-metrics, refer to the <a href="https://claununez.github.io/biosurvey/reference/PAM_indices.html" class="external-link">PAM_indices
-function in the biosurvey package</a>.</p>
+<p>Uma forma de organizar dados de biodiversidade é usando matrizes de
+presença-ausência (PAMs), onde 1 representa a presença da espécie j na
+célula i, e 0 indica ausência. A partir de uma PAM, podemos estimar uma
+variedade de métricas relacionadas a padrões de biodiversidade,
+incluindo riqueza, tamanho da área de distribuição e composição. Para
+uma lista abrangente de métricas de biodiversidade, consulte a função <a href="https://claununez.github.io/biosurvey/reference/PAM_indices.html" class="external-link">PAM_indices
+do pacote biosurvey</a>.</p>
 <div class="section level2">
-<h2 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+<h2 id="carregando-os-dados">Carregando os dados<a class="anchor" aria-label="anchor" href="#carregando-os-dados"></a>
 </h2>
-<p>Before you begin, use the <code>load_faunabr</code> function to load
-the data. For more detailed information on obtaining and loading the
-data, please refer to <a href="getting_started.html">1. Getting started
-with faunabr</a></p>
+<p>Antes de começar, utilize a função <code><a href="../reference/load_faunabr.html">load_faunabr()</a></code> para
+carregar os dados. Para informações mais detalhadas sobre como obter e
+carregar os dados, consulte <a href="https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html">Primeiros
+passos com faunabr</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wevertonbio.github.io/faunabr/">faunabr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#Folder where you stored the data with the function get_faunabr()</span></span>
-<span><span class="co">#Load data</span></span>
-<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>,</span>
-<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>,</span>
-<span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#short version</span></span>
+<span><span class="co">#Carregar dados</span></span>
+<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>, <span class="co">#Pasta onde foi salvo o arquivo com get_faunabr()</span></span>
+<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>, <span class="co">#Versão mais recente</span></span>
+<span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#Versão resumida</span></span>
 <span><span class="co">#&gt; Loading version 1.17</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="getting-a-presence-absence-matrix">Getting a presence-absence matrix<a class="anchor" aria-label="anchor" href="#getting-a-presence-absence-matrix"></a>
+<h2 id="obtendo-uma-matriz-de-presença-ausência">Obtendo uma matriz de presença-ausência<a class="anchor" aria-label="anchor" href="#obtendo-uma-matriz-de-presen%C3%A7a-aus%C3%AAncia"></a>
 </h2>
-<p>The <code><a href="../reference/fauna_pam.html">fauna_pam()</a></code> function facilitates the utilization of
-species distribution information in Fauna do Brazil to generate a PAM.
-Each site represents a brazilian state or a country. In addition to the
-PAM, the function also provides a summary and a SpatVector containing
-the number of species in each site.</p>
-<p>As an example, lets obtain a PAM consisting of all mammal species
-natives to Brazil:</p>
+<p>A função <code><a href="../reference/fauna_pam.html">fauna_pam()</a></code> facilita a utilização das
+informações de distribuição de espécies no Fauna do Brasil para gerar
+uma PAM. Cada local representa um estado brasileiro ou um país. Além da
+PAM, a função também fornece um resumo e um SpatVector contendo o número
+de espécies em cada local.</p>
+<p>Como exemplo, vamos obter uma PAM com todas as espécies de mamíferos
+nativos do Brasil:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Select native species of mammals with confirmed occurrence in Brazil</span></span>
+<code class="sourceCode R"><span><span class="co">#Selecionar espécies de mamíferos nativos do Brasil:</span></span>
 <span><span class="va">br_mammals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_fauna.html">select_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>,</span>
 <span>                           include_subspecies <span class="op">=</span> <span class="cn">FALSE</span>, phylum <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>                           class <span class="op">=</span> <span class="st">"Mammalia"</span>,</span>
@@ -176,13 +175,13 @@ natives to Brazil:</p>
 <span>                           states <span class="op">=</span> <span class="st">"all"</span>, filter_states <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           country <span class="op">=</span> <span class="st">"brazil"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"all"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
-<span><span class="co">#Get presence-absence matrix in states and countries</span></span>
+<span><span class="co">#PAM em Estados e Países</span></span>
 <span><span class="va">pam_mammals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_pam.html">fauna_pam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">br_mammals</span>, by_state <span class="op">=</span> <span class="cn">TRUE</span>, by_country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         remove_empty_sites <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         return_richness_summary <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         return_spatial_richness <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                         return_plot <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="co">#Visualize (as tibble) the PAM for the first 5 species and 7 sites</span></span>
+<span><span class="co">#Visualizar (em tibble) PAM com as primeiras 5 espécies nos primeiros 5 sites</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">pam_mammals</span><span class="op">$</span><span class="va">PAM</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 5</span></span>
 <span><span class="co">#&gt;   countryCode states `Stenella frontalis` `Alouatta ululata` `Platyrrhinus aurarius`</span></span>
@@ -194,10 +193,11 @@ natives to Brazil:</p>
 <span><span class="co">#&gt; 5 argentina   NA                        1                  1                       0</span></span>
 <span><span class="co">#&gt; 6 paraguay    NA                        1                  1                       0</span></span>
 <span><span class="co">#&gt; 7 colombia    NA                        1                  1                       0</span></span></code></pre></div>
-<p>Since return_richness_summary is set to TRUE, the function also
-returns a data frame containing the number of species per site.</p>
+<p>Como <em>return_richness_summary</em> está definido como
+<em>TRUE</em>, a função também retorna um dataframe contendo o número de
+espécies por local.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Visualize (as tibble) the richness summary table</span></span>
+<code class="sourceCode R"><span><span class="co">#Visualise (em tibble) a tabela com a riqueza por site</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">pam_mammals</span><span class="op">$</span><span class="va">Richness_summary</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">7</span>,<span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 7 × 3</span></span>
 <span><span class="co">#&gt;   countryCode states richness</span></span>
@@ -209,9 +209,11 @@ returns a data frame containing the number of species per site.</p>
 <span><span class="co">#&gt; 5 argentina   NA          331</span></span>
 <span><span class="co">#&gt; 6 paraguay    NA          332</span></span>
 <span><span class="co">#&gt; 7 colombia    NA          343</span></span></code></pre></div>
-<p>If return_spatial_richness is set to TRUE, the function will return a
-SpatVector containing the number of species per site. Additionally, when
-return_plot is also set to TRUE, the function returns a plot. <img src="vignettes_img/IMG05.png"><!-- --></p>
+<p>Se <em>return_spatial_richness</em> estiver definido como
+<em>TRUE</em>, a função retornará um SpatVector contendo o número de
+espécies por local. Além disso, quando <em>return_plot</em> também
+estiver definido como <em>TRUE</em> a função retornará um plot do mapa:
+<img src="vignettes_img/IMG05.png"><!-- --></p>
 </div>
   </div>
 

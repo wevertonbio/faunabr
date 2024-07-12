@@ -2,13 +2,15 @@ pandoc: 3.1.11
 pkgdown: 2.1.0
 pkgdown_sha: ~
 articles:
+  espacializando_faunabr: espacializando_faunabr.html
   getting_pam: getting_pam.html
   getting_started: getting_started.html
+  obtendo_pam: obtendo_pam.html
   primeiros_passos: primeiros_passos.html
   selecionando_especies: selecionando_especies.html
   selecting_species: selecting_species.html
   Spatialize_faunabr: Spatialize_faunabr.html
-last_built: 2024-07-12T18:57Z
+last_built: 2024-07-12T19:25Z
 urls:
   reference: https://wevertonbio.github.io/faunabr/reference
   article: https://wevertonbio.github.io/faunabr/articles

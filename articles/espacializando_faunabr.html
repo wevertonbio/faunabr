@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>3. Using faunabr to flag erroneous records • faunabr</title>
+<title>3. Filtrar pontos de ocorrência com faunabr • faunabr</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="3. Using faunabr to flag erroneous records">
+<script src="../pkgdown.js"></script><meta property="og:title" content="3. Filtrar pontos de ocorrência com faunabr">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -120,46 +120,43 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>3. Using faunabr to flag erroneous records</h1>
+      <h1 data-toc-skip>3. Filtrar pontos de ocorrência com faunabr</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/vignettes/Spatialize_faunabr.Rmd" class="external-link"><code>vignettes/Spatialize_faunabr.Rmd</code></a></small>
-      <div class="hidden name"><code>Spatialize_faunabr.Rmd</code></div>
+      <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/vignettes/espacializando_faunabr.Rmd" class="external-link"><code>vignettes/espacializando_faunabr.Rmd</code></a></small>
+      <div class="hidden name"><code>espacializando_faunabr.Rmd</code></div>
 
     </div>
 
     
     
 <div class="section level2">
-<h2 id="loading-data">Loading data<a class="anchor" aria-label="anchor" href="#loading-data"></a>
+<h2 id="carregando-os-dados">Carregando os dados<a class="anchor" aria-label="anchor" href="#carregando-os-dados"></a>
 </h2>
-<p>Before you begin, use the <code>load_faunabr</code> function to load
-the data. For more detailed information on obtaining and loading the
-data, please refer to <a href="getting_started.html">1. Getting started
-with faunabr</a></p>
+<p>Antes de começar, utilize a função load_faunabr para carregar os
+dados. Para informações mais detalhadas sobre como obter e carregar os
+dados, consulte <a href="https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html">Primeiros
+passos com faunabr</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wevertonbio.github.io/faunabr/">faunabr</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span>
-<span><span class="co">#Folder where you stored the data with the function get_faunabr()</span></span>
-<span><span class="co">#Load data</span></span>
-<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>,</span>
-<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>,</span>
-<span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#short version</span></span>
+<span><span class="co">#Carregar dados</span></span>
+<span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>, <span class="co">#Pasta onde foi salvo o arquivo com get_faunabr()</span></span>
+<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>, <span class="co">#Versão mais recente</span></span>
+<span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#Versão resumida</span></span>
 <span><span class="co">#&gt; Loading version 1.17</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="get-spatial-polygons-of-species-distribution">Get spatial polygons of species distribution<a class="anchor" aria-label="anchor" href="#get-spatial-polygons-of-species-distribution"></a>
+<h2 id="obter-polígonos-espaciais-da-distribuição-de-espécies">Obter polígonos espaciais da distribuição de espécies<a class="anchor" aria-label="anchor" href="#obter-pol%C3%ADgonos-espaciais-da-distribui%C3%A7%C3%A3o-de-esp%C3%A9cies"></a>
 </h2>
-<p>Fauna do Brasil provides information on the brazilian federal states
-and countries with confirmed occurrences of the species. The
-<code>get_spat_occ</code> function extracts these information and return
-Spatial polygons (SpatVectors) representing the distribution of the
-specie. We can choose getting the Spatialvector of the brazilian federal
-states, countries and both countries and states.</p>
+<p>Fauna do Brasil fornece informações sobre os estados brasileiros e
+países com ocorrências confirmadas das espécies. A função
+<code>get_spat_occ()</code> extrai essas informações e retorna polígonos
+espaciais (SpatVectors) que representam a distribuição da espécie.
+Podemos escolher obter o SpatVector dos estados, países, ou ambos.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Example species</span></span>
+<code class="sourceCode R"><span><span class="co">#Espécies de exemplo</span></span>
 <span><span class="va">spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Panthera onca"</span>, <span class="st">"Mazama jucunda"</span><span class="op">)</span></span>
-<span><span class="co">#Get spatial polygons</span></span>
+<span><span class="co">#Obter polígonos espaciais</span></span>
 <span><span class="va">spp_spt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_spat_occ.html">fauna_spat_occ</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>, species <span class="op">=</span> <span class="va">spp</span>, state <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                          country <span class="op">=</span> <span class="cn">TRUE</span>, state_and_country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                          verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -167,7 +164,8 @@ states, countries and both countries and states.</p>
 <span><span class="co">#&gt; Getting countries of Panthera onca</span></span>
 <span><span class="co">#&gt; Getting states of Mazama jucunda</span></span>
 <span><span class="co">#&gt; Getting countries of Mazama jucunda</span></span></code></pre></div>
-<p>The SpatVectors are stored in a nested list by species:</p>
+<p>Os SpatVectors são armazenadas em uma lista aninhada por
+espécies:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span>mfrow <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">2</span><span class="op">)</span>, mar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">states</span>,</span>
@@ -185,30 +183,31 @@ states, countries and both countries and states.</p>
 <p><img src="vignettes_img/IMG01.png"><!-- --></p>
 </div>
 <div class="section level2">
-<h2 id="filtering-occurrence-records-using-distribution-information-in-fauna-do-brasil">Filtering occurrence records using distribution information in Fauna
-do Brasil<a class="anchor" aria-label="anchor" href="#filtering-occurrence-records-using-distribution-information-in-fauna-do-brasil"></a>
+<h2 id="filtrando-registros-de-ocorrência-usando-informações-de-distribuição-no-fauna-do-brasil">Filtrando registros de ocorrência usando informações de distribuição
+no Fauna do Brasil<a class="anchor" aria-label="anchor" href="#filtrando-registros-de-ocorr%C3%AAncia-usando-informa%C3%A7%C3%B5es-de-distribui%C3%A7%C3%A3o-no-fauna-do-brasil"></a>
 </h2>
-<p>Georeferencing errors in online species records can introduce
-significant bias into ecological and biogeographical research findings.
-Some R packages, as <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13152" class="external-link">CoordinateCleaner</a>,
-help to flagging common spatial errors in biological collection data,
-for example, records of terrestrial organism that fall in the sea or
-were assigned to capital and province centroids. Since the distributions
-of species in Fauna do Brasil are based on the expertise of taxonomists,
-it represents a valuable information to add an additional step on
-checking the validity of occurrence records got from online databases
-(as GBIF or SpeciesLink). The <code>filter_faunabr</code> function
-automatized this flagging. You can use the function to flag and/or
-remove records that fall outside the brazilian states or countries with
-confirmed occurrence according to Fauna do Brasil.</p>
-<p>As example, let’s use the occurrence records of two species.
-<em>Panthera onca</em> is a terrestiral felidae with confirmed
-occurrences in 22 of the 27 brazilian states (absent in Rio Grande do
-Norte, Paraíba, Pernambuco, Alagoas, and Sergipe) and 20 countries.
-<em>Chaetomys subspinosus</em> is an arboreal rodent endemic to Brazil
-with confirmed occurrences in 5 states (Bahia, Espírito Santo, Minas
-Gerais, Rio de Janeiro, and Sergipe). Let’s plot these information using
-the function <code>get_spat_occ</code>:</p>
+<p>Erros de georreferenciamento em registros de espécies online podem
+introduzir vieses significativos nos resultados de pesquisas ecológicas
+e biogeográficas. Alguns pacotes R, como o <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13152" class="external-link">CoordinateCleaner</a>,
+ajudam a identificar erros comuns em dados de coleções biológicas, como
+registros de organismos terrestres que caem no mar ou que foram
+atribuídos a centroides de capitais e estados. Dado que as distribuições
+de espécies no Fauna do Brasil são baseadas na expertise de
+taxonomistas, elas representam informações valiosas para adicionar um
+passo adicional na verificação da validade de registros de ocorrência
+obtidos de bancos de dados online (como GBIF ou SpeciesLink). A função
+<code><a href="../reference/filter_faunabr.html">filter_faunabr()</a></code> automatiza essa identificação. Você pode
+usar a função para sinalizar e/ou remover registros que estejam fora dos
+estados brasileiros ou países com ocorrências confirmadas de acordo com
+a Fauna do Brasil.</p>
+<p>Como exemplo, vamos usar os registros de ocorrência de duas espécies.
+<em>Panthera onca</em> é um felino terrestre com ocorrências confirmadas
+em 22 dos 27 estados brasileiros (ausente no Rio Grande do Norte,
+Paraíba, Pernambuco, Alagoas e Sergipe) e em 20 países. <em>Chaetomys
+subspinosus</em> é um roedor arbóreo endêmico do Brasil com ocorrências
+confirmadas em 5 estados (Bahia, Espírito Santo, Minas Gerais, Rio de
+Janeiro e Sergipe). Vamos plotar mapas com essas informações usando a
+função <code>get_spat_occ()</code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Panthera onca"</span>, <span class="st">"Chaetomys subspinosus"</span><span class="op">)</span></span>
 <span><span class="va">pol_spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_spat_occ.html">fauna_spat_occ</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">my_spp</span>,</span>
@@ -223,10 +222,11 @@ the function <code>get_spat_occ</code>:</p>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - States"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Chaetomys subspinosus`</span><span class="op">$</span><span class="va">countries</span>,</span>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - Countries"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img/IMG02.png"><!-- --> We downloaded the
-occurrences of these two species from GBIF using the
-<code>plantR::rgbif2()</code> function. These occurrences are saved as
-data examples in the package and we can import it:</p>
+<p><img src="vignettes_img/IMG02.png"><!-- --> As ocorrências dessas
+duas espécies foram baixadas do GBIF usando a função
+<code>plantR::rgbif2()</code>. Essas ocorrências estão salvas como
+exemplos de dados no pacote (para mais detalhes, veja
+<code><a href="../reference/occurrences.html">?faunabr::occurrences</a></code>). Podemos importá-las com:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occurrences"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">occurrences</span><span class="op">)</span></span>
@@ -237,10 +237,11 @@ data examples in the package and we can import it:</p>
 <span><span class="co">#&gt; 4 Panthera onca -56.61023 -17.239688</span></span>
 <span><span class="co">#&gt; 5 Panthera onca -61.04386  -2.387029</span></span>
 <span><span class="co">#&gt; 6 Panthera onca -77.28850   0.288757</span></span></code></pre></div>
-<p>The input data with records must be a dataframe with at least 3
-columns: one informing the species name, one informing the longitude and
-one informing the latitude. Let’s check if there are records outside of
-the species’ natural ranges considering states and countries:</p>
+<p>Os dados de entrada com registros devem ser um dataframe com pelo
+menos 3 colunas: uma informando o nome da espécie, uma informando a
+longitude e outra informando a latitude. Vamos verificar se há registros
+fora das áreas naturais de ocorrência das espécies considerando estados
+e países:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">occ_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_faunabr.html">filter_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, occ <span class="op">=</span> <span class="va">occurrences</span>,</span>
 <span>                    by_state <span class="op">=</span> <span class="cn">TRUE</span>, buffer_state <span class="op">=</span> <span class="fl">20</span>,</span>
@@ -248,42 +249,43 @@ the species’ natural ranges considering states and countries:</p>
 <span>                    value <span class="op">=</span> <span class="st">"flag&amp;clean"</span>, keep_columns <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                    verbose <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Returning list with flagged and cleaned occurrences</span></span></code></pre></div>
-<p>Since we set <em>value = “flag&amp;clean”</em>, the function returned
-a list with two data.frames: one with all the records flagged if on each
-test they passed (TRUE) or not (FALSE); and another with only the
-records that passed in all tests.</p>
-<p>Let’s use the <a href="https://r-spatial.github.io/mapview/" class="external-link">mapview
-package</a> to plot an interactive map of the flagged records:</p>
+<p>Como configuramos <em>value = “flag&amp;clean”</em>, a função
+retornou uma lista com dois dataframes: um com todos os registros
+sinalizados se passaram (TRUE) ou não (FALSE) em cada teste; e outro
+apenas com os registros que passaram em todos os testes.</p>
+<p>Vamos usar o pacote <a href="https://r-spatial.github.io/mapview/" class="external-link">mapview</a> para plotar um
+mapa interativo dos registros sinalizados:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Install mapview if necessary and load package</span></span>
+<code class="sourceCode R"><span><span class="co">#Instala pacote (se necessário)</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapview"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
-<span><span class="co">#Load mapview</span></span>
+<span><span class="co">#Carregar pacote</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span></code></pre></div>
-<p>Let’s check the records of <em>Panthera onca</em>, plotting the
-records and the map got previously. You can see that the green records
-passed on the test of States, falling in the states with confirmed
-occurrence of the specie. The red dots are the records that falls
-outside the states. The gray dots are records that was not testes
-because they falls outside Brazil.</p>
+<p>Vamos verificar os registros de <em>Panthera onca</em>, plotando os
+registros e o mapa obtido anteriormente. Os pontos verdes representam os
+registros que passaram no teste dos estados, ou seja, registros dentro
+dos estados com ocorrência confirmada da espécie. Os pontos vermelhos
+são os registros que caem fora dos estados. Os pontos cinzas são
+registros que não foram testados porque estão fora do Brasil.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Convert points to spatvector</span></span>
+<code class="sourceCode R"><span><span class="co">#Converter pontos para spatvector</span></span>
 <span><span class="va">panthera_occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">occ_check</span><span class="op">$</span><span class="va">flagged</span>,</span>
 <span>                       <span class="va">occ_check</span><span class="op">$</span><span class="va">flagged</span><span class="op">$</span><span class="va">species</span> <span class="op">==</span> <span class="st">"Panthera onca"</span><span class="op">)</span></span>
 <span><span class="va">panthera_occ</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/vect.html" class="external-link">vect</a></span><span class="op">(</span><span class="va">panthera_occ</span>, geom <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span>,</span>
 <span>                     crs <span class="op">=</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/crs.html" class="external-link">crs</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">states</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#Iteractive plot</span></span>
+<span><span class="co">#Plot interativo</span></span>
 <span><span class="fu">mapview</span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">states</span>,</span>
 <span>        layer.name <span class="op">=</span> <span class="st">"States with confirmed occurrences"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_state"</span>, layer.name <span class="op">=</span> <span class="st">"Inside state?"</span>,</span>
 <span>          col.regions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img/IMG03.png" width="90%"> We can see the same
-with countries: green dots represents records that passed in the test
-and green dots represents records that did not passed the test.</p>
+<p><img src="vignettes_img/IMG03.png" width="90%"> Podemos observar o
+mesmo com os países: os pontos verdes representam registros que passaram
+no teste e os pontos vermelhos representam registros que não passaram no
+teste.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Iteractive plot</span></span>
+<code class="sourceCode R"><span><span class="co">#Plot interativo</span></span>
 <span><span class="fu">mapview</span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">countries</span>,</span>
 <span>        layer.name <span class="op">=</span> <span class="st">"Countries with confirmed occurrences"</span>, burst <span class="op">=</span> <span class="cn">TRUE</span>, legend <span class="op">=</span> <span class="cn">F</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_country"</span>,</span>
