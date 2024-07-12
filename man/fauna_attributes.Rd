@@ -24,7 +24,7 @@ characteristics
 }
 \details{
 The attribute argument accepts the following options: phylum, class, family,
-genus, lifeForm, states, country, origin, and taxonomicstatus. These options
+genus, lifeForm, habitat, states, country, origin, and taxonomicstatus. These options
 represent different characteristics of species that can be used for filtering.
 }
 \examples{

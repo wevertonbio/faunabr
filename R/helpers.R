@@ -506,9 +506,47 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
 # #Remove duplicates
 # occ_dup <- cc_dupl(occ, species = "species", lon = "x", lat = "y")
 # occurrences <- data.frame(occ_dup)
-# # #Plot records to see
-# # pts <- vect(occurrences, geom = c(x = "x",y = "y"), crs = "+init=epsg:4326")
-# # mapview::mapview(pts, zcol = "species", burst = T)
+#
+# #Generate fake data to flag
+# #States in Brazil without occurrence of panthera onca
+# br <- vect(geobr::read_state())
+# #Pernambuco and alagoas centroid
+# pe <- as.data.frame(terra::centroids(br[br$abbrev_state %in% c("PE", "AL")],
+#                                      inside = TRUE),
+#                     geom = "XY")
+# fake_occ1 <- data.frame("species" = "Panthera onca", x = pe$x, y = pe$y)
+# #States in Brazil without occurrence of "Chaetomys subspinosus"
+# #DF and SP
+# dfsp <- as.data.frame(terra::centroids(br[br$abbrev_state %in% c("DF", "SP")],
+#                                        inside = TRUE),
+#                       geom = "XY")
+# fake_occ2 <- data.frame("species" = "Chaetomys subspinosus", x = dfsp$x, y = dfsp$y)
+#
+# #Countries without occurrence of panthera onca
+# #Chile and Cuba for panthera onca
+# w <- terra::unwrap(faunabr::world_fauna)
+# chile_cuba <- as.data.frame(terra::centroids(w[w$name %in% c("chile", "cuba")],
+#                                              inside = TRUE),
+#                             geom = "XY")
+# fake_occ3 <- data.frame("species" = "Panthera onca", x = chile_cuba$x, y = chile_cuba$y)
+#
+# #Countries without occurrence of Chaetomys subspinosus
+# #Paraguai and bolivia for Chaetomys subspinosus
+# pb <- as.data.frame(terra::centroids(w[w$name %in% c("paraguay", "bolivia")],
+#                                              inside = TRUE),
+#                             geom = "XY")
+# fake_occ4 <- data.frame("species" = "Chaetomys subspinosus",
+#                         x = pb$x, y = pb$y)
+#
+# #Join data and identify as fake data
+# fake <- bind_rows(fake_occ1, fake_occ2, fake_occ3, fake_occ4)
+# fake$source <- "fake_data"
+# occurrences$source <- "gbif"
+# occurrences <- bind_rows(occurrences, fake)
+
+# #Plot records to see
+# pts <- vect(occurrences, geom = c(x = "x",y = "y"), crs = "+init=epsg:4326")
+# mapview::mapview(pts, zcol = "species", burst = T)
 #
 # # #Data set key
 # # ds_key <- occurrences %>% count(datasetKey)

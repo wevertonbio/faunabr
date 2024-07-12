@@ -80,7 +80,7 @@
 #' Records of animal species
 #'
 #' @description
-#'  A dataset containing records of 2 plant species downloaded from GBIF. The
+#'  A dataset containing records of 2 species downloaded from GBIF, with additional fake data. The
 #'  records were obtained with \code{plantR::rgbif2}
 #'
 #' @usage data(occurrences)
@@ -90,6 +90,7 @@
 #'   \item{species}{Species names (Panthera onca and Chaetomys subspinosus)}
 #'   \item{x}{Longitude}
 #'   \item{y}{Latitude}
+#'   \item{source}{record downloaded from GBIF or fake data}
 #' }
 #' @references GBIF, 2024. florabr R package: Records of plant species. https://doi.org/10.15468/DD.QPGEB7
 "occurrences"

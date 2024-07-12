@@ -1,0 +1,338 @@
+---
+title: "2. Selecting and filtering species"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{2. Selecting and filtering species}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE,
+  warning = FALSE
+)
+```
+
+### Selecting a list of species
+Selecting a list of target species is a common task in macroecological and conservation studies. For example, a researcher may seek to model the distribution of arboreal mammals that occur in a particular state.
+
+By applying different filters to the database, anyone can obtain a verified taxonomic list of Brazilian species of animals for any Brazilian state or Country. Additionally, the filter can be applied by phylum, class, order, family, genus, life form, habitat, origin, and taxonomic status.
+In this vignette, users will learn how to use *faunabr* package to select a list of species based on these features.
+
+## Loading data
+Before you begin, use the `load_faunabr` function to load the data. For more detailed information on obtaining and loading the data, please refer to [Getting started with faunabr](https://wevertonbio.github.io/faunabr/articles/getting_started.html)
+
+```{r}
+library(faunabr)
+#Folder where you stored the data with the function get_faunabr()
+#Load data
+bf <- load_faunabr(data_dir = my_dir,
+                   data_version = "Latest_available",
+                   type = "short") #short version
+#> Loading version 1.17
+```
+
+## Selecting a list of species
+One of the primary objectives of this package is to assist in selecting a species list based on taxonomic classification, characteristics and distribution. Specifically, you can filter by:
+
+* phylum, class, order, family and genus;
+* lifeForm and habitat;
+* brazilian states and countries with confirmed occurrences;
+* origin;
+* taxonomicStatus.
+
+To explore all available options for each filter, use the `fauna_attributes()` function with the desired attributes. This function will provide a list of data.frames with the available options to use in the `select_fauna()` function.
+
+```{r}
+#Get available options to filter by lifeForm, habitat and origin
+fauna_at <- fauna_attributes(data = bf,
+                             attribute = c("lifeForm", "habitat", "origin"))
+head(fauna_at$lifeForm)
+#>          lifeForm
+#> 1        colonial
+#> 2       commensal
+#> 3    ectoparasite
+#> 4 ectoparasiteIDE
+#> 5    endoparasite
+#> 6  endoparasiteid
+
+head(fauna_at$habitat)
+#>         habitat
+#> 1      arboreal
+#> 2 cavernicolous
+#> 3     fossorial
+#> 4    freshwater
+#> 5     hyporheic
+#> 6        marine
+
+head(fauna_at$origin)
+#>         origin
+#> 1  cryptogenic
+#> 2 domesticated
+#> 3   introduced
+#> 4     invasive
+#> 5       native
+```
+
+As an illustration, let's consider the scenario where we aim to retrieve a list of all native arboreal insects with confirmed occurrences in Rio de Janeiro:
+
+```{r}
+insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
+                           phylum = "all",
+                           class = "Insecta", #Select insecs
+                           order = "all",
+                           family = "all",
+                           genus = "all",
+                           lifeForm = "all", filter_lifeForm = "in",
+                           habitat = "arboreal", filter_habitat = "in",
+                           states = "RJ", #Rio de Janeiro
+                           filter_states = "in", #Select IN Rio de Janeiro
+                           country = "all", filter_country = "in",
+                           origin = "native",
+                           taxonomicStatus = "accepted_name")
+nrow(insects_rj)
+#> [1] 109
+```
+
+The filter returned 109 species that meet the specified criteria. It's important to note that these selections include species with confirmed occurrences in Rio de Janeiro, and some of them may also have confirmed occurrences in other states:
+
+```{r}
+#First 7 unique values of states in the filtered dataset
+unique(insects_rj$states)[1:7]
+#> [1] "AC;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PE;RJ;RN;RO;RR;SE;SP;TO"
+#> [2] "BA;MA;MG;MT;PR;RJ;RS;SC;SP"                                    
+#> [3] "ES;MG;PE;PR;RJ;RS;SP"                                          
+#> [4] "ES;PR;RJ;SP"                                                   
+#> [5] "RJ"                                                            
+#> [6] "RJ;SP"                                                         
+#> [7] "ES;MG;RJ;RS;SC;SP" 
+```
+
+If you wish to select species with confirmed occurrences only Rio de Janeiro, and not in any other state, modify the *filter_state* parameter to "only":
+
+```{r}
+insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
+                           phylum = "all",
+                           class = "Insecta", #Select insecs
+                           order = "all",
+                           family = "all",
+                           genus = "all",
+                           lifeForm = "all", filter_lifeForm = "in",
+                           habitat = "arboreal", filter_habitat = "in",
+                           states = "RJ", #Rio de Janeiro
+                           filter_states = "only", #Select ONLY in Rio de Janeiro
+                           country = "all", filter_country = "in",
+                           origin = "native",
+                           taxonomicStatus = "accepted_name")
+nrow(insects_rj_only)
+#> [1] 20
+unique(insects_rj_only$states)
+#> [1] "RJ"
+```
+
+Now, the filter has resulted in 20 species, all exclusively confined to Rio de Janeiro.
+
+Furthermore, the package offers the flexibility to combine various filters (please consult `?select_fauna` for comprehensive details). For instance, consider the scenario where we aim to compile a list of native insects with confirmed occurrences in the states of Paraná (PR), Santa Catarina (SC), and Rio Grande do Sul (RS):
+
+```{r}
+insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
+                           phylum = "all",
+                           class = "Insecta", #Select insecs
+                           order = "all",
+                           family = "all",
+                           genus = "all",
+                           lifeForm = "all", filter_lifeForm = "in",
+                           habitat = "all", filter_habitat = "in",
+                           states = c("PR", "SC", "RS"), #States from southern Brazil
+                           filter_states = "in", #IN any of these states
+                           country = "all", filter_country = "in",
+                           origin = "native",
+                           taxonomicStatus = "accepted_name")
+nrow(insects_south)
+#> [1] 10979
+
+#First 10 unique values of states in the filtered dataset
+unique(insects_south$states)[1:10]
+#> [1] "PR;SP"                                                                           
+#> [2] "BA;MT;RJ;RS"                                                                     
+#> [3] "RS"                                                                              
+#> [4] "PR"                                                                              
+#> [5] "PR;RS"                                                                           
+#> [6] "GO;PA;RO;RR;SC"                                                                  
+#> [7] "MG;PR;SP"                                                                        
+#> [8] "GO;MG;PR;RS;SC"                                                                  
+#> [9] "GO;RJ;SC"                                                                        
+#> [10] "AC;AL;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PB;PE;PI;PR;RJ;RN;RO;RR;RS;SC;SE;SP;TO"
+```
+
+By utilizing *filter_state = "in"*, our selection encompassed species occurring in all three states, as well as those appearing in only two or even one of them, in addition to other states. To impose a more rigorous criterion, selecting solely those species with confirmed occurrences in all three states, we can use *filter_state = "and"*:
+
+```{r}
+insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
+                           phylum = "all",
+                           class = "Insecta", #Select insecs
+                           order = "all",
+                           family = "all",
+                           genus = "all",
+                           lifeForm = "all", filter_lifeForm = "in",
+                           habitat = "all", filter_habitat = "in",
+                           states = c("PR", "SC", "RS"), #States from southern Brazil
+                           filter_states = "and", #in PR AND SC AND RS
+                           country = "all", filter_country = "in",
+                           origin = "native",
+                           taxonomicStatus = "accepted_name")
+nrow(insects_south_and)
+#> [1] 1761
+
+#First 10 unique values of states in the filtered dataset
+unique(insects_south_and$states)[1:10]
+#> [1] "GO;MG;PR;RS;SC"                                                                  
+#> [2] "AC;AL;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PB;PE;PI;PR;RJ;RN;RO;RR;RS;SC;SE;SP;TO"
+#> [3] "AC;AM;MG;MS;MT;PA;PE;PR;RO;RS;SC;SP"                                             
+#> [4] "AM;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RS;SC;SP"                                 
+#> [5] "AC;AM;AP;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RO;RR;RS;SC;SE;SP;TO"               
+#> [6] "BA;ES;MG;PR;RJ;RS;SC;SP"                                                         
+#> [7] "AM;DF;ES;GO;PR;RJ;RR;RS;SC;SP"                                                   
+#> [8] "ES;GO;MG;PR;RJ;RS;SC;SP"                                                         
+#> [9] "AC;AM;AP;BA;CE;ES;GO;MA;MG;MT;PA;PR;RJ;RO;RS;SC;SP;TO"                           
+#> [10] "GO;MG;MS;PR;RO;RS;SC;SP"
+```
+
+Now, our selection consists solely of species with confirmed occurrences in all of the specified states. However, by utilizing the "and" argument, we permit the filter to include species with occurrences in additional states. To confine the filter exclusively to species with confirmed occurrences in all three states, without any occurrences elsewhere, we can use *filter_state = "only"*:
+
+```{r}
+insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
+                           phylum = "all",
+                           class = "Insecta", #Select insecs
+                           order = "all",
+                           family = "all",
+                           genus = "all",
+                           lifeForm = "all", filter_lifeForm = "in",
+                           habitat = "all", filter_habitat = "in",
+                           states = c("PR", "SC", "RS"), #States from southern Brazil
+                           filter_states = "only", #ONLY in PR, SC and RS
+                           country = "all", filter_country = "in",
+                           origin = "native",
+                           taxonomicStatus = "accepted_name")
+nrow(insects_south_only)
+#> [1] 132
+
+#The unique state in the filtered dataset
+unique(insects_south_only$states)
+#> [1] "PR;RS;SC"
+```
+Now, the filter return only 132 species, all of them occurring in PR, SC and RS; with no recorded occurrences in any other states.
+
+## Checking names and subsetting species
+### Extracting binomial name
+In addition to selecting a species list based on their characteristics, the package also includes a function for subsetting species by name. Please note that this function exclusively operates with binomial names (Genus + specificEpithet), such as *Panthera onca*, and does not support complete scientific names (including Author or infraspecificEpithet), such as *Panthera onca (Linnaeus, 1758)*.
+
+If you have species with complete scientific names, you can extract the binomial names using the function `get_binomial()`. Don't worry about excessive spaces between words; the function will remove any extra spaces from the names.
+
+```{r}
+complete_names <- c("Pantera onça (Linnaeus, 1758)",
+                    "Zonotrichia capensis subtorquata Swainson, 1837",
+                    "Mazama bororo Duarte, 1996",
+                    "Mazama jucunda Thomas, 1913",
+                    "Arrenurus (Incertae sedis) tumulosus intercursor",
+                    "Araucaria angustifolia")
+#Panthera onca with typos to illustrate how the next function corrects it
+#Araucaria angustifolia (a Plant) was used just as an example that will be used to illustrate the 
+#next function
+binomial_names <- extract_binomial(species_names = complete_names)
+binomial_names
+#> [1] "Pantera onça"                         "Zonotrichia capensis"                
+#> [3] "Mazama bororo"                        "Mazama jucunda"                      
+#> [5] "Arrenurus (Incertae sedis) tumulosus" "Araucaria angustifolia" 
+```
+### Checking the species names
+Additionally, you can verify the spelling, nomenclatural status, and taxonomic status of species names using the check_fauna_names() function. If the function is unable to locate the name of a species in the database (due to a typo, for example), it can suggest potential names based on similarities to other entries in the database.
+To see how the function works, let's utilize the previously created binomial_names dataset:
+
+```{r}
+#Create example
+checked_names <- check_fauna_names(data = bf, 
+                             species = binomial_names,
+                             include_subspecies = FALSE,
+                             max_distance = 0.1)
+tibble::tibble(checked_names) #print data.frame as tibble
+#> # A tibble: 6 × 8
+#>   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #> family
+#>   <chr>                <chr>    <chr>             <dbl> <chr>           <chr>        #> <chr> 
+#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted_name   Zonotrichia… #> Passe…
+#> 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #> Cervi…
+#> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted_name   Mazama jucu… #> Cervi…
+#> 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted_name   Arrenurus (… #> Arren…
+#> 5 Pantera onça         Probabl… Panthera onca         2 accepted_name   Panthera on… #> Felid…
+#> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
+
+```
+We can see that *Zonotrichia capensis*, *Mazama jucunda*, and *Arrenurus (Incertae sedis)* are spelling correctly and are accepted names. *Mazama bororo*  is spelling correctly, but it is a synonym of *Mazama jucunda*.
+In the case of *Pantera onça*, the spelling appears to be potentially incorrect (as the name wasn't found in the database); however, a similar name, *Panthera onca*, is suggested by the function. The 'Distance' column indicates the Levenshtein edit distance between the input and the suggested name.
+The spelling of *Araucaria angustifolia* was flagged as Not_found (as expected, given that *Araucaria angustifo* is not an animal!). Consequently, the name was not located in the database, and there were no comparable names available.
+
+### Subsetting species
+
+To retrieve species information from the Fauna do Brasil database, employ the `subset_species()` function. For optimal performance, we highly recommend utilizing the `get_binomial()` and `check_names()` functions beforehand. This ensures that you're exclusively working with species present in the Fauna do Brasil database.
+To see how the function works, let's use the accepted names in *checked_names* created previously:
+
+```{r}
+#Get only accepted names
+accepted_names <- unique(checked_names$acceptedName)
+accepted_names <- na.omit(accepted_names) #Remove NA
+
+#Subset species
+my_sp <- subset_fauna(data = bf, species = accepted_names,
+                      include_subspecies = FALSE)
+tibble::tibble(my_sp) #print data.frame as tibble
+#> # A tibble: 4 × 19
+#>   species       subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
+#>   <chr>         <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
+#> 1 Panthera onca ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
+#> 2 Arrenurus (I… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      ""    
+#> 3 Mazama jucun… ""         Mazama jucund… ""           Animal… Chord… Mamm… Arti… Cervi… Maza… "herbiv… "terre… BA;ES… brazil      #> "nati…
+#> 4 Zonotrichia … ""         Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AL;AP… brazil      #> "nati…
+#> # ℹ 4 more variables: taxonomicStatus <chr>, nomenclaturalStatus <chr>, vernacularName <chr>, taxonRank <chr>
+```
+We can also include subspecies and/or varieties:
+
+```{r}
+my_sp2 <- subset_fauna(data = bf, species = accepted_names,
+                      include_subspecies = TRUE)
+tibble::tibble(my_sp2) #print data.frame as tibble
+#> # A tibble: 14 × 19
+#>    species      subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
+#>    <chr>        <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
+#>  1 Panthera on… ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
+#>  2 Arrenurus (… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #>    
+#>  3 Arrenurus (… "Arrenuru… Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #>    
+#>  4 Arrenurus (… "Arrenuru… Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #>    
+#>  5 Mazama jucu… ""         Mazama jucund… ""           Animal… Chord… Mamm… Arti… Cervi… Maza… "herbiv… "terre… BA;ES… brazil      #> "nati…
+#>  6 Zonotrichia… ""         Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AL;AP… brazil      #> "nati…
+#>  7 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AP     brazil      #> "nati…
+#>  8 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      RR     brazil      #> "nati…
+#>  9 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      RR     brazil      #> "nati…
+#> 10 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      BA;MA… brazil      #> "nati…
+#> 11 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      PA     brazil      #> "nati…
+#> 12 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AP;PA… brazil      #> "nati…
+#> 13 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      ES;MG… brazil      #> "nati…
+#> 14 Zonotrichia… "Zonotric… Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      TO     brazil      #> "nati…
+#> # ℹ 4 more variables: taxonomicStatus <chr>, nomenclaturalStatus <chr>, vernacularName <chr>, taxonRank <chr>
+#> 
+```
+
+### Retrieving synonyms
+We can retrieve all synonyms of a species list. This can be particularly useful, for example, when searching for records of a species and all its synonyms (as listed in the Fauna do Brasil) in online databases like GBIF. To accomplish this, utilize the function fauna_synonym. To understand how the function works, let's search for the synonyms of two species:
+```{r}
+spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
+spp_syn <- fauna_synonym(data = bf, species = spp)
+spp_syn
+#>           acceptedName               synonym     taxonomicStatus
+#> 49343     Panthera onca                  <NA>       accepted_name
+#> 60523    Mazama jucunda         Mazama bororo             synonym
+#> 61168 Subulo gouzoubira    Mazama gouazoubira             synonym
+```
+We can see that *Mazama jucunda* and *Subulo gouzoubira* have synonyms, *Mazama bororo* and *Mazama gouazoubira*, respectively. *Panthera onca* does not have any synonyms.

@@ -41,7 +41,7 @@ extract_binomial <- function(species_names) {
         if (length(close_paren_index) > 0) {
         selected_words <- paste(words[1:close_paren_index], collapse = " ")
         # Adicionar mais uma palavra após os parênteses fechados se houver
-        if (word_count > close_paren_index + 1) {
+        if (word_count >= close_paren_index + 1) {
           selected_words <- paste(selected_words, words[close_paren_index + 1])
         }
         return(selected_words)

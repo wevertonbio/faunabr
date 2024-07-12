@@ -35,11 +35,11 @@
 #' plot(spp_spt$`Panthera onca`$states)
 #' plot(spp_spt$`Mazama jucunda`$states)
 #' #Plot countries with confirmed occurrence of Panthera onca and Mazama jucunda
-#' plot(spp_spt$`Panthera onca`$countrys)
-#' plot(spp_spt$`Mazama jucunda`$countrys)
+#' plot(spp_spt$`Panthera onca`$countries)
+#' plot(spp_spt$`Mazama jucunda`$countries)
 #' #Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda
-#' plot(spp_spt$`Panthera onca`$states_countrys)
-#' plot(spp_spt$`Mazama jucunda`$states_countrys)
+#' plot(spp_spt$`Panthera onca`$states_countries)
+#' plot(spp_spt$`Mazama jucunda`$states_countries)
 #'
 fauna_spat_occ <- function(data, species, state = TRUE,
                            country = TRUE,
@@ -154,7 +154,7 @@ fauna_spat_occ <- function(data, species, state = TRUE,
 
     if(country) {
       if(verbose) {
-        message("Getting countrys of ", spp[i], "\n") }
+        message("Getting countries of ", spp[i], "\n") }
       sp_i_country<- unique(gsub(";", "|", occ_i$countryCode[1]))
 
       if(sp_i_country == "" | is.na(sp_i_country)) {
@@ -170,8 +170,6 @@ fauna_spat_occ <- function(data, species, state = TRUE,
     if(!state_and_country) {int_v <- NULL}
 
     if(state_and_country) {
-      if(verbose) {
-        message("Getting countrys of ", spp[i], "\n") }
       if((sp_i_country == "" | is.na(sp_i_country)) & verbose) {
         message(spp[i], "lacks info about states - Impossible to get
                   states and countries")
@@ -189,7 +187,7 @@ fauna_spat_occ <- function(data, species, state = TRUE,
 
     #Save objects in a list
     final_list <- list(states_v, countrys_v, int_v)
-    names(final_list) <- c("states", "countrys", "states_countrys")
+    names(final_list) <- c("states", "countries", "states_countries")
     return(final_list)
   })
   names(l_occ) <- spp

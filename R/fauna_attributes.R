@@ -13,7 +13,7 @@
 #'
 #' @details
 #' The attribute argument accepts the following options: phylum, class, family,
-#' genus, lifeForm, states, country, origin, and taxonomicstatus. These options
+#' genus, lifeForm, habitat, states, country, origin, and taxonomicstatus. These options
 #' represent different characteristics of species that can be used for filtering.
 #'
 #' @return a list of data.frames with the available options to use in the
@@ -62,13 +62,14 @@ fauna_attributes <- function(data, attribute) {
 
   #Check attributes
   no_valid <- setdiff(attrib, c("phylum", "class", "family", "genus", "lifeForm",
-                                "states", "countryCode", "origin", "taxonomicStatus"))
+                                "habitat",  "states", "countryCode", "origin",
+                                "taxonomicStatus"))
 
   if(length(no_valid) > 0) {
     stop(paste0("The informed attributes is/are not valid:\n",
                 paste(no_valid, collapse = "\n")),
          "\nValid attributes:
-    phylum, class, family, genus, lifeForm, states, country, origin, and
+    phylum, class, family, genus, lifeForm, habitat, states, country, origin, and
     taxonomicstatus")
   }
 

@@ -59,8 +59,6 @@
 #'                      by_country = TRUE, buffer_country = 20,
 #'                      value = "flag&clean", keep_columns = TRUE,
 #'                      verbose = FALSE)
-
-
 filter_faunabr <- function(data,
                            occ,
                            species = "species", long = "x", lat = "y",
@@ -171,7 +169,7 @@ data.frame"))
                         width = buffer_state * 1000)
 
   #Check records inside Brazil
-  occ_info$inside_br <- terra::is.related(occ_info, br_v, "within")
+  occ_info$inside_br <- terra::is.related(occ_info, states, "within")
   } else {
     occ_info$inside_br <- NA
   }

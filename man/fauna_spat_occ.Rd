@@ -56,10 +56,10 @@ spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
 plot(spp_spt$`Panthera onca`$states)
 plot(spp_spt$`Mazama jucunda`$states)
 #Plot countries with confirmed occurrence of Panthera onca and Mazama jucunda
-plot(spp_spt$`Panthera onca`$countrys)
-plot(spp_spt$`Mazama jucunda`$countrys)
+plot(spp_spt$`Panthera onca`$countries)
+plot(spp_spt$`Mazama jucunda`$countries)
 #Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda
-plot(spp_spt$`Panthera onca`$states_countrys)
-plot(spp_spt$`Mazama jucunda`$states_countrys)
+plot(spp_spt$`Panthera onca`$states_countries)
+plot(spp_spt$`Mazama jucunda`$states_countries)
 
 }

@@ -74,6 +74,11 @@ check_fauna_names <- function(data, species, max_distance = 0.1,
     ))
   }
 
+  #Remove subspecies
+  if(!include_subspecies){
+    data <- data[data$taxonRank == "species",]
+  }
+
   #Get all species available
   all_sp <- unique(data$species)
 

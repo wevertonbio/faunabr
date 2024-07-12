@@ -1,0 +1,179 @@
+---
+title: "3. Using faunabr to flag erroneous records"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{3. Using faunabr to flag erroneous records}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message  = FALSE,
+  eval = FALSE,
+  fig.width = 8,
+  fig.height = 6
+)
+```
+
+## Loading data
+Before you begin, use the `load_faunabr` function to load the data. For more detailed information on obtaining and loading the data, please refer to [1. Getting started with faunabr](getting_started.html)
+
+```{r Get data, results='hide', message=FALSE, warning=FALSE, echo=FALSE}
+my_dir <- file.path(file.path(tempdir(), "faunabr"))
+dir.create(my_dir)
+get_faunabr(output_dir = my_dir, #directory to save the data
+            data_version = "latest", #get the most recent version available
+            overwrite = T) #Overwrite data, if it exists
+```
+
+```{r, message=FALSE, warning=F}
+library(faunabr)
+library(terra)
+#Folder where you stored the data with the function get_faunabr()
+#Load data
+bf <- load_faunabr(data_dir = my_dir,
+                   data_version = "Latest_available",
+                   type = "short") #short version
+#> Loading version 1.17
+```
+
+
+## Get spatial polygons of species distribution
+Fauna do Brasil provides information on the brazilian federal states and countries with confirmed occurrences of the species. The `get_spat_occ` function extracts these information and return Spatial polygons (SpatVectors) representing the distribution of the specie. We can choose getting the Spatialvector of the brazilian federal states, countries and both countries and states.
+
+```{r}
+#Example species
+spp <- c("Panthera onca", "Mazama jucunda")
+#Get spatial polygons
+spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
+                          country = TRUE, state_and_country = TRUE,
+                          verbose = TRUE)
+#> Getting states of Panthera onca
+#> Getting countries of Panthera onca
+#> Getting states of Mazama jucunda
+#> Getting countries of Mazama jucunda
+```
+
+The SpatVectors are stored in a nested list by species:
+
+```{r}
+par(mfrow = c(3, 2), mar = c(2, 0, 2, 0)) 
+plot(spp_spt$`Panthera onca`$states,
+     main = paste0(names(spp_spt)[[1]], " - States"), mar = NA)
+plot(spp_spt$`Panthera onca`$countries,
+     main = paste0(names(spp_spt)[[1]], " - Countries"), mar = NA)
+plot(spp_spt$`Panthera onca`$states_countries,
+     main = paste0(names(spp_spt)[[1]], " - States and Countries"), mar = NA)
+plot(spp_spt$`Mazama jucunda`$states,
+     main = paste0(names(spp_spt)[[2]], " - States"), mar = NA)
+plot(spp_spt$`Mazama jucunda`$countries,
+     main = paste0(names(spp_spt)[[2]], " - Countries"), mar = NA)
+plot(spp_spt$`Mazama jucunda`$states_countries,
+     main = paste0(names(spp_spt)[[2]], " - States and Countries"), mar = NA)
+```
+
+```{r IMG01, eval=TRUE, echo=FALSE}
+knitr::include_graphics("vignettes_img/IMG01.png")
+```
+
+## Filtering occurrence records using distribution information in Fauna do Brasil
+
+Georeferencing errors in online species records can introduce significant bias into ecological and biogeographical research findings. Some R packages, as [CoordinateCleaner](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13152), help to flagging common spatial errors in biological collection data, for example, records of terrestrial organism that fall in the sea or were assigned to capital and province centroids.
+Since the distributions of species in Fauna do Brasil are based on the expertise of taxonomists, it represents a valuable information to add an additional step on checking the validity of occurrence records got from online databases (as GBIF or SpeciesLink). 
+The `filter_faunabr` function automatized this flagging. You can use the function to flag and/or remove records that fall outside the brazilian states or countries with confirmed occurrence according to Fauna do Brasil.
+
+As example, let's use the occurrence records of two species. *Panthera onca* is a terrestiral felidae with confirmed occurrences in 22 of the 27 brazilian states (absent in Rio Grande do Norte, Paraíba, Pernambuco, Alagoas, and Sergipe) and 20 countries.
+*Chaetomys subspinosus* is an arboreal rodent endemic to Brazil with confirmed occurrences in 5 states (Bahia, Espírito Santo, Minas Gerais, Rio de Janeiro, and Sergipe). Let's plot these information using the function `get_spat_occ`:
+
+```{r}
+my_spp <- c("Panthera onca", "Chaetomys subspinosus")
+pol_spp <- fauna_spat_occ(data = bf, species = my_spp,
+                       state = TRUE, country = TRUE, state_and_country = TRUE,
+                       verbose = TRUE)
+par(mfrow = c(2, 2), mar = c(2, 0, 2, 0))
+plot(pol_spp$`Panthera onca`$states,
+     main = paste0(names(pol_spp)[[1]], " - States"), mar = NA)
+plot(pol_spp$`Panthera onca`$countries,
+     main = paste0(names(pol_spp)[[1]], " - Countries"), mar = NA)
+plot(pol_spp$`Chaetomys subspinosus`$states,
+     main = paste0(names(pol_spp)[[2]], " - States"), mar = NA)
+plot(pol_spp$`Chaetomys subspinosus`$countries,
+     main = paste0(names(pol_spp)[[2]], " - Countries"), mar = NA)
+```
+```{r IMG02, eval=TRUE, echo = FALSE}
+knitr::include_graphics("vignettes_img/IMG02.png")
+```
+We downloaded the occurrences of these two species from GBIF using the `plantR::rgbif2()` function. These occurrences are saved as data examples in the package and we can import it:
+
+```{r}
+data("occurrences")
+head(occurrences)
+#>         species         x          y
+#> 1 Panthera onca -90.38409  17.377023
+#> 2 Panthera onca -90.24368  17.240507
+#> 3 Panthera onca -77.36680   0.287624
+#> 4 Panthera onca -56.61023 -17.239688
+#> 5 Panthera onca -61.04386  -2.387029
+#> 6 Panthera onca -77.28850   0.288757
+```
+
+The input data with records must be a dataframe with at least 3 columns: one informing the species name, one informing the longitude and one informing the latitude.
+Let's check if there are records outside of the species' natural ranges considering states and countries:
+
+```{r}
+occ_check <- filter_faunabr(data = bf, occ = occurrences,
+                    by_state = TRUE, buffer_state = 20,
+                    by_country = TRUE, buffer_country = 20,
+                    value = "flag&clean", keep_columns = TRUE,
+                    verbose = FALSE)
+#> Returning list with flagged and cleaned occurrences
+```
+
+Since we set *value = "flag&clean"*, the function returned a list with two data.frames: one with all the records flagged if on each test they passed (TRUE) or not (FALSE); and another with only the records that passed in all tests.
+
+Let's use the [mapview package](https://r-spatial.github.io/mapview/) to plot an interactive map of the flagged records:
+
+```{r, warning=FALSE, results='hide'}
+#Install mapview if necessary and load package
+if(!require(mapview)){
+    install.packages("mapview")
+}
+#Load mapview
+library(mapview)
+```
+
+Let's check the records of *Panthera onca*, plotting the records and the map got previously. You can see that the green records passed on the test of States, falling in the states with confirmed occurrence of the specie. The red dots are the records that falls outside the states. The gray dots are records that was not testes because they falls outside Brazil.
+
+```{r, fig.width= 9}
+#Convert points to spatvector
+panthera_occ <- subset(occ_check$flagged,
+                       occ_check$flagged$species == "Panthera onca")
+panthera_occ <- vect(panthera_occ, geom = c("x", "y"),
+                     crs = crs(pol_spp$`Panthera onca`$states))
+
+#Iteractive plot
+mapview(pol_spp$`Panthera onca`$states,
+        layer.name = "States with confirmed occurrences") +
+  mapview(panthera_occ, zcol = "inside_state", layer.name = "Inside state?",
+          col.regions = c("red", "green"))
+```
+```{r IMG03, eval=TRUE, echo = FALSE, fig.pos="H", out.width="90%"}
+knitr::include_graphics("vignettes_img/IMG03.png")
+```
+We can see the same with countries: green dots represents records that passed in the test and green dots represents records that did not passed the test.
+
+```{r, fig.width= 9}
+#Iteractive plot
+mapview(pol_spp$`Panthera onca`$countries,
+        layer.name = "Countries with confirmed occurrences", burst = TRUE, legend = F) +
+  mapview(panthera_occ, zcol = "inside_country",
+          col.regions = c("red", "green"),
+          layer.name = "Inside country?")
+```
+```{r IMG04, eval=TRUE, echo = FALSE, fig.pos="H", out.width="90%"}
+knitr::include_graphics("vignettes_img/IMG04.png")
+```
