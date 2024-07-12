@@ -1,0 +1,148 @@
+---
+title: "1. Primeiros passos com faunabr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{1. Primeiros passos com faunabr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = F,
+  warning = FALSE
+)
+```
+
+## Introdução
+### O que é a Fauna do Brasil?
+O [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) é resultado do esforço colaborativo de mais de 500 zoólogos especializados em diversos grupos de animais nativos do Brasil. Este banco de dados oferece descrições morfológicas detalhadas e padronizadas, informações sobre nomenclatura, distribuição geográfica e chaves de identificação para animais tanto nativos quanto não nativos encontrados no Brasil.
+
+O pacote *faunabr* oferece um conjunto de funções desenvolvidas para acessar, filtrar e espacializar da Fauna do Brasil.
+
+## Descrição geral das funções do pacote:
+
++ `get_faunabr()`: baixa a versão mais recente ou uma versão anterior do banco de dados da Fauna do Brasil.
++ `fauna_version()`: verifica se você possui a versão mais recente dos dados da Fauna do Brasil disponível em um diretório.
++ `load_faunabr()`: carrega o banco de dados da Fauna do Brasil para o R.
++ `fauna_attributes()`: exibe todas as opções disponíveis para filtrar espécies de acordo com suas características.
++ `select_fauna()`: filtra espécies com base em suas características e distribuição.
++ `extract_binomial()`: extrai o nome binomial (Gênero + epíteto específico) de um nome científico completo (Gênero + epíteto específico + Autor + Ano)
++ `fauna_synonym()`: obtém os sinônimos para as espécies.
++ `check_fauna_names()`: verifica se os nomes das espécies estão corretos.
++ `subset_fauna()`: obtém um subconjunto de espécies da Fauna do Brasil.
++ `fauna_spat_occ()`: obtém polígonos espaciais (SpatVectors) de espécies com base em sua distribuição.
++ `filter_faunabr()`: remove ou sinaliza registros fora das áreas naturais de ocorrência das espécies.
++ `fauna_pam()`: obtém uma matriz de presença-ausência de espécies com base em sua distribuição.
+
+## Instalação
+
+### Instalar a versão em desenvolvimento do GitHub
+
+Você pode atual a versão do *faunabr* no [github](https://github.com/wevertonbio/faunabr) com:
+```{r, results='hide', message=FALSE}
+if(!require(devtools)){
+    install.packages("devtools")
+}
+
+if(!require(faunabr)){
+devtools::install_github('wevertonbio/faunabr')}
+
+library(faunabr)
+```
+
+## Obtendo dados da Fauna do Brasil
+Todos os dados incluídos no Fauna do Brasil (nomenclatura, forma de vida, distribuição, etc.) são armazenados em conjuntos de dados no formato Darwin Core Archive, que são atualizados frequentemente. Antes de baixar os dados disponíveis no Fauna do Brasil, precisamos criar uma pasta para salvar os dados:
+
+```{r}
+#Criando uma pasta em um diretório temporário
+#Substitua 'file.path(tempdir(), "faunabr")' por um caminho de pasta a ser
+#criada em seu computador
+my_dir <- file.path(file.path(tempdir(), "faunabr"))
+dir.create(my_dir)
+```
+
+Agora você pode utilizar a função `get_faunabr` para obter a versão mais recente dos dados:
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+get_faunabr(output_dir = my_dir, #Pasta para salvar os dados
+            data_version = "latest", #Obter a versão mais recente
+            overwrite = T) #Sobrescrever dados, se eles já existirem
+```
+
+A função levará alguns segundos para baixar os dados e alguns minutos para mesclar os conjuntos de dados em um único data.frame. Após a conclusão bem-sucedida, você encontrará uma pasta nomeada com a versão do Fauna do Brasil. Esta pasta contém o conjunto de dados bruto baixado (arquivos TXT em português) e um arquivo chamado **CompleteBrazilianFauna.gz**. Este último representa o conjunto de dados finalizado, mesclado e traduzido para inglês.
+
+Você também tem a opção de baixar uma versão mais antiga específica do conjunto de dados da Fauna do Brasil. Para explorar as versões disponíveis, consulte [este link](https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil). Para baixar uma versão específica, basta substituir 'latest' pelo número da versão desejada. Por exemplo:
+
+```{r, results='hide', message=FALSE, warning=FALSE}
+get_faunabr(output_dir = my_dir, #Pasta para salvar os dados
+            data_version = "1.10", #Versão 1.10, publicada em 01-02-2024
+            overwrite = T) #Sobrescrever dados, se eles já existirem
+```
+
+Como mencionado anteriormente, você encontrará uma pasta chamada '1.10' dentro do diretório designado.
+
+Para visualizar as versões disponíveis no seu diretório especificado, execute:
+
+```{r}
+fauna_version(data_dir = my_dir)
+#> You have the following versions of Fauna do Brasil:
+#>  1.17
+#>  1.10
+#>  It includes the latest version:  1.17
+```
+
+## Carregando os dados
+Para utilizar as outras funções do pacote, você precisa carregar os dados em seu ambiente R. Para isso, utilize a função `load_faunabr()`. Por padrão, a função buscará automaticamente pela versão mais recente disponível no seu diretório. No entanto, você tem a opção de especificar uma versão particular usando o parâmetro *data_version*.
+Além disso, você pode escolher entre duas versões dos dados: a versão resumida 'short' (contendo as 19 colunas necessárias para executar as outras funções do pacote) ou a versão completa 'completa' (com todas as 31 colunas originais). A função importa a versão 'short' por padrão.
+
+```{r}
+#Short version
+bf <- load_faunabr(data_dir = my_dir,
+                   data_version = "Latest_available",
+                   type = "short") #resumida
+#> Loading version 393.401
+colnames(bf) #Ver colunas da versão resumida
+#>  [1] "species"             "subspecies"          "scientificName"       
+#>  [4] "acceptedName"        "kingdom"             "phylum"
+#>  [7] "class"               "order"               "family" 
+#> [10] "genus"               "lifeForm"            "habitat"
+#> [13] "states"              "countryCode"         "origin" 
+#> [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"       
+#> [19] "taxonRank"
+```
+Note que a versão completa possui 12 colunas adicionais:
+
+```{r}
+#Complete version
+bf_complete <- load_faunabr(data_dir = my_dir,
+                   data_version = "Latest_available",
+                   type = "complete") #completa
+
+colnames(bf_complete) #Ver colunas da versão completa
+#>  [1] "id"                       "taxonID"                 
+#>  [3] "species"                  "subspecies"       
+#>  [5] "scientificName"           "acceptedName"                   
+#>  [7] "acceptedNameUsage"        "parentNameUsage"                      
+#>  [9] "namePublishedInYear"      "higherClassification"      
+#> [11] "kingdom"                  "phylum"                                 
+#> [13] "class"                    "order"                                  
+#> [15] "family"                   "genus"               
+#> [17] "specificEpithet"          "infraspecificEpithet"
+#> [19] "taxonRank"                "scientificNameAuthorship"              
+#> [21] "taxonomicStatus"          "nomenclaturalStatus" 
+#> [23] "vernacularName"           "lifeForm"      
+#> [25] "habitat"                  "origin"
+#> [27] "states"                   "countryCode"    
+#> [29] "modified"                 "bibliographicCitation"               
+#> [31] "relationshipOfResource"                                
+```
+
+Se você deseja salvar os conjuntos de dados para abrir com um editor externo (por exemplo, Excel), você pode salvar o data.frame como um arquivo CSV:
+```{r, eval=FALSE, warning=FALSE, message=FALSE, }
+write.csv(x = bf,
+          file = file.path(my_dir, "BrazilianFauna.csv"),
+          row.names = F)
+```

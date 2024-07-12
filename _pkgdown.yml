@@ -9,7 +9,7 @@ navbar:
   - text: Functions
     href: reference/index.html
   - icon: fas fa-book
-    text: Articles
+    text: Articles [en]
     menu:
     - text: 1. Getting started with faunabr
       href: articles/getting_started.html
@@ -19,6 +19,13 @@ navbar:
       href: articles/Spatialize_faunabr.html
     - text: 4. Getting a Presence-Absence Matrix
       href: articles/getting_pam.html
+  - icon: fas fa-book
+    text: Tutorial [pt-br]
+    menu:
+    - text: 1. Primeiros passos com faunabr
+      href: articles/primeiros_passos.html
+    - text: 2. Selecionar e filtrar espécies
+      href: articles/selecionando_especies.html
   components:
     home: ~
 

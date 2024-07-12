@@ -1,8 +1,8 @@
 ---
-title: "2. Selecting and filtering species"
+title: "2. Selecionar e filtrar espécies"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{2. Selecting and filtering species}
+  %\VignetteIndexEntry{2. Selecionar e filtrar espécies}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -16,38 +16,37 @@ knitr::opts_chunk$set(
 )
 ```
 
-### Selecting a list of species
-Selecting a list of target species is a common task in macroecological and conservation studies. For example, a researcher may seek to model the distribution of arboreal mammals that occur in a particular state.
+### Selecionar uma lista de espécies
+Selecionar uma lista de espécies-alvo é uma tarefa comum em estudos macroecológicos e de conservação. Por exemplo, um pesquisador pode desejar modelar a distribuição de mamíferos arborícolas que ocorrem em um estado específico.
 
-By applying different filters to the database, anyone can obtain a verified taxonomic list of Brazilian species of animals for any Brazilian state or Country. Additionally, the filter can be applied by phylum, class, order, family, genus, life form, habitat, origin, and taxonomic status.
-In this vignette, users will learn how to use *faunabr* package to select a list of species based on these features.
+Aplicando diferentes filtros ao banco de dados, podemos obter uma lista verificada das espécies de animais brasileiros para qualquer estado brasileiro ou país. Além disso, o filtro pode ser aplicado para selecionar espécies por filo, classe, ordem, família, gênero, forma de vida, habitat, origem e status taxonômico.
+Neste tutorial, vamos ver como utilizar o pacote *faunabr* para selecionar uma lista de espécies com base nessas características.
 
-## Loading data
-Before you begin, use the `load_faunabr` function to load the data. For more detailed information on obtaining and loading the data, please refer to [Getting started with faunabr](https://wevertonbio.github.io/faunabr/articles/getting_started.html)
+## Carregando os dados
+Antes de começar, utilize a função load_faunabr para carregar os dados. Para informações mais detalhadas sobre como obter e carregar os dados, consulte [Getting started with faunabr](https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html)
 
 ```{r}
 library(faunabr)
-#Folder where you stored the data with the function get_faunabr()
-#Load data
-bf <- load_faunabr(data_dir = my_dir,
-                   data_version = "Latest_available",
-                   type = "short") #short version
+#Carregar dados
+bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_faunabr()
+                   data_version = "Latest_available", #Versão mais recente
+                   type = "short") #Versão resumida
 #> Loading version 1.17
 ```
 
-## Selecting a list of species
-One of the primary objectives of this package is to assist in selecting a species list based on taxonomic classification, characteristics and distribution. Specifically, you can filter by:
+## Como selecionar uma lista de espécies?
+Um dos principais objetivos deste pacote é auxiliar na seleção de uma lista de espécies com base na classificação taxonômica, características e distribuição. Especificamente, você pode filtrar por:
 
-* phylum, class, order, family and genus;
-* lifeForm and habitat;
-* brazilian states and countries with confirmed occurrences;
-* origin;
-* taxonomicStatus.
+* filo, classe, ordem, família e gênero;
+* forma de vida e habitat;
+* estados brasileiros e países com ocorrências confirmadas;
+* origem;
+* status taxonômico.
 
-To explore all available options for each filter, use the `fauna_attributes()` function with the desired attributes. This function will provide a list of data.frames with the available options to use in the `select_fauna()` function.
+Para explorar todas as opções disponíveis para cada filtro, utilize a função `fauna_attributes()` com os atributos desejados. Esta função fornecerá uma lista de data.frames com as opções disponíveis para usar na função `select_fauna()`:
 
 ```{r}
-#Get available options to filter by lifeForm, habitat and origin
+#Obter as opções disponíveis para filtrar por forma de vida, habitat e origem
 fauna_at <- fauna_attributes(data = bf,
                              attribute = c("lifeForm", "habitat", "origin"))
 head(fauna_at$lifeForm)
@@ -77,19 +76,19 @@ head(fauna_at$origin)
 #> 5       native
 ```
 
-As an illustration, let's consider the scenario where we aim to retrieve a list of all native arboreal insects with confirmed occurrences in Rio de Janeiro:
+Como exemplo, vamos considerar o cenário em que desejamos obter uma lista de todos os insetos arbóreos nativos com ocorrências confirmadas no Rio de Janeiro:
 
 ```{r}
 insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            phylum = "all",
-                           class = "Insecta", #Select insecs
+                           class = "Insecta", #Insetos
                            order = "all",
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "arboreal", filter_habitat = "in",
                            states = "RJ", #Rio de Janeiro
-                           filter_states = "in", #Select IN Rio de Janeiro
+                           filter_states = "in", #Que ocorrem NO RJ
                            country = "all", filter_country = "in",
                            origin = "native",
                            taxonomicStatus = "accepted_name")
@@ -97,10 +96,10 @@ nrow(insects_rj)
 #> [1] 109
 ```
 
-The filter returned 109 species that meet the specified criteria. It's important to note that these selections include species with confirmed occurrences in Rio de Janeiro, and some of them may also have confirmed occurrences in other states:
+O filtro retornou 109 espécies que atendem aos critérios especificados. É importante notar que essas seleções incluem espécies com ocorrências confirmadas no Rio de Janeiro, e algumas delas também podem ter ocorrências confirmadas em outros estados.
 
 ```{r}
-#First 7 unique values of states in the filtered dataset
+#Primeiros 7 valores únicos de Estados onde as espécies ocorrem
 unique(insects_rj$states)[1:7]
 #> [1] "AC;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PE;RJ;RN;RO;RR;SE;SP;TO"
 #> [2] "BA;MA;MG;MT;PR;RJ;RS;SC;SP"                                    
@@ -111,19 +110,19 @@ unique(insects_rj$states)[1:7]
 #> [7] "ES;MG;RJ;RS;SC;SP" 
 ```
 
-If you wish to select species with confirmed occurrences only Rio de Janeiro, and not in any other state, modify the *filter_state* parameter to "only":
+Se você deseja selecionar espécies com ocorrências confirmadas apenas no Rio de Janeiro, e não em nenhum outro estado, modifique o parâmetro *filter_state* para "only":
 
 ```{r}
 insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            phylum = "all",
-                           class = "Insecta", #Select insecs
+                           class = "Insecta", #Insetos
                            order = "all",
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "arboreal", filter_habitat = "in",
                            states = "RJ", #Rio de Janeiro
-                           filter_states = "only", #Select ONLY in Rio de Janeiro
+                           filter_states = "only", #Com ocorrência APENAS no RJ
                            country = "all", filter_country = "in",
                            origin = "native",
                            taxonomicStatus = "accepted_name")
@@ -133,104 +132,104 @@ unique(insects_rj_only$states)
 #> [1] "RJ"
 ```
 
-Now, the filter has resulted in 20 species, all exclusively confined to Rio de Janeiro.
+Agora, o filtro retornou 20 espécies, todas exclusivamente confinadas ao Rio de Janeiro.
 
-Furthermore, the package offers the flexibility to combine various filters (please consult `?select_fauna` for comprehensive details). For instance, consider the scenario where we aim to compile a list of native insects with confirmed occurrences in the states of Paraná (PR), Santa Catarina (SC), and Rio Grande do Sul (RS):
+Além disso, o pacote oferece a flexibilidade de combinar vários filtros (consulte `?select_fauna` para mais detalhes). Por exemplo, considere o cenário em que desejamos compilar uma lista de insetos nativos com ocorrências confirmadas nos estados do Paraná (PR), Santa Catarina (SC) e Rio Grande do Sul (RS):
 
 ```{r}
 insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            phylum = "all",
-                           class = "Insecta", #Select insecs
+                           class = "Insecta", #Insetos
                            order = "all",
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "all", filter_habitat = "in",
-                           states = c("PR", "SC", "RS"), #States from southern Brazil
-                           filter_states = "in", #IN any of these states
+                           states = c("PR", "SC", "RS"), #Estados do Sul do Brasil
+                           filter_states = "in", #EM qualquer um dos estados
                            country = "all", filter_country = "in",
                            origin = "native",
                            taxonomicStatus = "accepted_name")
 nrow(insects_south)
 #> [1] 10979
 
-#First 10 unique values of states in the filtered dataset
+#Primeiros 10 valores únicos de Estados onde as espécies ocorrem
 unique(insects_south$states)[1:10]
-#> [1] "PR;SP"                                                                           
-#> [2] "BA;MT;RJ;RS"                                                                     
-#> [3] "RS"                                                                              
-#> [4] "PR"                                                                              
-#> [5] "PR;RS"                                                                           
-#> [6] "GO;PA;RO;RR;SC"                                                                  
-#> [7] "MG;PR;SP"                                                                        
-#> [8] "GO;MG;PR;RS;SC"                                                                  
-#> [9] "GO;RJ;SC"                                                                        
+#> [1] "PR;SP" 
+#> [2] "BA;MT;RJ;RS" 
+#> [3] "RS"   
+#> [4] "PR"   
+#> [5] "PR;RS"  
+#> [6] "GO;PA;RO;RR;SC"
+#> [7] "MG;PR;SP"    
+#> [8] "GO;MG;PR;RS;SC"
+#> [9] "GO;RJ;SC"       
 #> [10] "AC;AL;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PB;PE;PI;PR;RJ;RN;RO;RR;RS;SC;SE;SP;TO"
 ```
 
-By utilizing *filter_state = "in"*, our selection encompassed species occurring in all three states, as well as those appearing in only two or even one of them, in addition to other states. To impose a more rigorous criterion, selecting solely those species with confirmed occurrences in all three states, we can use *filter_state = "and"*:
+Como utilizamos *filter_state = "in"*, nossa seleção englobou espécies que ocorrem nos três estados, mas também aquelas presentes apenas em dois ou mesmo em um deles, além de outros estados. Para impor um critério mais rigoroso, selecionando apenas as espécies com ocorrências confirmadas em todos os três estados, podemos usar *filter_state = "and"*:
 
 ```{r}
 insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            phylum = "all",
-                           class = "Insecta", #Select insecs
+                           class = "Insecta", #Insetos
                            order = "all",
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "all", filter_habitat = "in",
-                           states = c("PR", "SC", "RS"), #States from southern Brazil
-                           filter_states = "and", #in PR AND SC AND RS
+                           states = c("PR", "SC", "RS"), 
+                           filter_states = "and", #PR & SC & RS
                            country = "all", filter_country = "in",
                            origin = "native",
                            taxonomicStatus = "accepted_name")
 nrow(insects_south_and)
 #> [1] 1761
 
-#First 10 unique values of states in the filtered dataset
+#Primeiros 10 valores únicos de Estados onde as espécies ocorrem
 unique(insects_south_and$states)[1:10]
-#> [1] "GO;MG;PR;RS;SC"                                                                  
+#> [1] "GO;MG;PR;RS;SC"  
 #> [2] "AC;AL;AM;AP;BA;CE;DF;ES;GO;MA;MG;MS;MT;PA;PB;PE;PI;PR;RJ;RN;RO;RR;RS;SC;SE;SP;TO"
-#> [3] "AC;AM;MG;MS;MT;PA;PE;PR;RO;RS;SC;SP"                                             
-#> [4] "AM;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RS;SC;SP"                                 
-#> [5] "AC;AM;AP;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RO;RR;RS;SC;SE;SP;TO"               
-#> [6] "BA;ES;MG;PR;RJ;RS;SC;SP"                                                         
-#> [7] "AM;DF;ES;GO;PR;RJ;RR;RS;SC;SP"                                                   
-#> [8] "ES;GO;MG;PR;RJ;RS;SC;SP"                                                         
-#> [9] "AC;AM;AP;BA;CE;ES;GO;MA;MG;MT;PA;PR;RJ;RO;RS;SC;SP;TO"                           
+#> [3] "AC;AM;MG;MS;MT;PA;PE;PR;RO;RS;SC;SP" 
+#> [4] "AM;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RS;SC;SP" 
+#> [5] "AC;AM;AP;BA;CE;DF;ES;GO;MG;MS;MT;PA;PE;PR;RJ;RO;RR;RS;SC;SE;SP;TO"
+#> [6] "BA;ES;MG;PR;RJ;RS;SC;SP"
+#> [7] "AM;DF;ES;GO;PR;RJ;RR;RS;SC;SP"  
+#> [8] "ES;GO;MG;PR;RJ;RS;SC;SP"     
+#> [9] "AC;AM;AP;BA;CE;ES;GO;MA;MG;MT;PA;PR;RJ;RO;RS;SC;SP;TO" 
 #> [10] "GO;MG;MS;PR;RO;RS;SC;SP"
 ```
 
-Now, our selection consists solely of species with confirmed occurrences in all of the specified states. However, by utilizing the "and" argument, we permit the filter to include species with occurrences in additional states. To confine the filter exclusively to species with confirmed occurrences in all three states, without any occurrences elsewhere, we can use *filter_state = "only"*:
+Agora, nossa seleção consistiu exclusivamente em espécies com ocorrências confirmadas em todos os estados especificados. No entanto, ao utilizar o argumento *"and"*, permitimos que o filtro incluísse espécies com ocorrências em estados adicionais. Para limitar o filtro a espécies com ocorrências confirmadas exclusivamente nos três estados, sem ocorrências em outros lugares, podemos usar *filter_state = "only"*:
 
 ```{r}
 insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            phylum = "all",
-                           class = "Insecta", #Select insecs
+                           class = "Insecta", #Insetos
                            order = "all",
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "all", filter_habitat = "in",
-                           states = c("PR", "SC", "RS"), #States from southern Brazil
-                           filter_states = "only", #ONLY in PR, SC and RS
+                           states = c("PR", "SC", "RS"), 
+                           filter_states = "only", #Apenas no PR & SC & RS
                            country = "all", filter_country = "in",
                            origin = "native",
                            taxonomicStatus = "accepted_name")
 nrow(insects_south_only)
 #> [1] 132
 
-#The unique state in the filtered dataset
+#Valor único de Estados onde as espécies ocorrem
 unique(insects_south_only$states)
 #> [1] "PR;RS;SC"
 ```
-Now, the filter return only 132 species, all of them occurring in PR, SC and RS; with no recorded occurrences in any other states.
+Agora, o filtro retornou apenas 132 espécies, todas ocorrendo em PR, SC e RS; sem registros de ocorrências em qualquer outro estado.
 
-## Checking names and subsetting species
-### Extracting binomial name
-In addition to selecting a species list based on their characteristics, the package also includes a function for subsetting species by name. Please note that this function exclusively operates with binomial names (Genus + specificEpithet), such as *Panthera onca*, and does not support complete scientific names (including Author or infraspecificEpithet), such as *Panthera onca (Linnaeus, 1758)*.
+## Checagem de nomes científicos e subseleção de espécies
+### Extraíndo o nome binomial
+Além de selecionar uma lista de espécies com base em suas características, o pacote também inclui uma função para subselecionar espécies por nome. A função funciona exclusivamente com nomes binomiais (Gênero + Epíteto específico), como *Panthera onca*, e não funciona com nomes científicos completos (incluindo Autor ou Epíteto infraespecífico), como *Panthera onca (Linnaeus, 1758)*.
 
-If you have species with complete scientific names, you can extract the binomial names using the function `get_binomial()`. Don't worry about excessive spaces between words; the function will remove any extra spaces from the names.
+Se você tiver uma lista de espécies com nomes científicos completos, pode extrair os nomes binomiais usando a função `get_binomial()`. Não se preocupe com espaços excessivos entre as palavras, a função removerá quaisquer espaços extras dos nomes.
 
 ```{r}
 complete_names <- c("Pantera onça (Linnaeus, 1758)",
@@ -239,26 +238,25 @@ complete_names <- c("Pantera onça (Linnaeus, 1758)",
                     "Mazama jucunda Thomas, 1913",
                     "Arrenurus (Incertae sedis) tumulosus intercursor",
                     "Araucaria angustifolia")
-#Panthera onca with typos to illustrate how the next function corrects it
-#Araucaria angustifolia (a Plant) was used just as an example that will be used to illustrate the 
-#next function
+#Panthera onca com erros de digitação para ilustrar como a próxima função os corrige
+#Araucaria angustifolia (uma planta) foi usada apenas como um exemplo que será utilizado para ilustrar a próxima função
 binomial_names <- extract_binomial(species_names = complete_names)
 binomial_names
-#> [1] "Pantera onça"                         "Zonotrichia capensis"                
-#> [3] "Mazama bororo"                        "Mazama jucunda"                      
+#> [1] "Pantera onça"                         "Zonotrichia capensis" 
+#> [3] "Mazama bororo"                        "Mazama jucunda" 
 #> [5] "Arrenurus (Incertae sedis) tumulosus" "Araucaria angustifolia" 
 ```
-### Checking the species names
-Additionally, you can verify the spelling, nomenclatural status, and taxonomic status of species names using the check_fauna_names() function. If the function is unable to locate the name of a species in the database (due to a typo, for example), it can suggest potential names based on similarities to other entries in the database.
-To see how the function works, let's utilize the previously created binomial_names dataset:
+### Checando se os nomes das espécies estão corretos
+Vamos agora verificar a ortografia, o status nomenclatural e o status taxonômico dos nomes das espécies usando a função `check_fauna_names()`. Se a função não conseguir localizar o nome de uma espécie no banco de dados (devido a um erro tipográfico, por exemplo), ela pode sugerir nomes potenciais com base em similaridades com outras entradas no banco de dados.
+Para ver como a função funciona, vamos utilizar o dataset *binomial_names* criado anteriormente:
 
 ```{r}
-#Create example
+#Checar nomes
 checked_names <- check_fauna_names(data = bf, 
                              species = binomial_names,
                              include_subspecies = FALSE,
                              max_distance = 0.1)
-tibble::tibble(checked_names) #print data.frame as tibble
+tibble::tibble(checked_names) #Exibir tabela como tibble
 #> # A tibble: 6 × 8
 #>   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #> family
 #>   <chr>                <chr>    <chr>             <dbl> <chr>           <chr>        #> <chr> 
@@ -270,24 +268,24 @@ tibble::tibble(checked_names) #print data.frame as tibble
 #> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
 
 ```
-We can see that *Zonotrichia capensis*, *Mazama jucunda*, and *Arrenurus (Incertae sedis) tumulosus* are spelling correctly and are accepted names. *Mazama bororo*  is spelling correctly, but it is a synonym of *Mazama jucunda*.
-In the case of *Pantera onça*, the spelling appears to be potentially incorrect (as the name wasn't found in the database); however, a similar name, *Panthera onca*, is suggested by the function. The 'Distance' column indicates the Levenshtein edit distance between the input and the suggested name.
-The spelling of *Araucaria angustifolia* was flagged as Not_found (as expected, given that *Araucaria angustifolia* is not an animal!). Consequently, the name was not located in the database, and there were no comparable names available.
+Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus (Incertae sedis) tumulosus* estão escritos corretamente e são nomes aceitos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
+No caso de *Pantera onça*, a ortografia parece estar potencialmente incorreta (já que o nome não foi encontrado no banco de dados); no entanto, um nome semelhante, *Panthera onca*, é sugerido pela função. A coluna 'Distance' indica a distância de edição de Levenshtein entre a entrada e o nome sugerido.
+*Araucaria angustifolia* foi marcada como Not_found (como esperado, dado que *Araucaria angustifolia* não é um animal!). Consequentemente, o nome não foi localizado no banco de dados e não havia nomes comparáveis disponíveis.
 
-### Subsetting species
+### Subselecionando espécies
 
-To retrieve species information from the Fauna do Brasil database, employ the `subset_species()` function. For optimal performance, we highly recommend utilizing the `get_binomial()` and `check_names()` functions beforehand. This ensures that you're exclusively working with species present in the Fauna do Brasil database.
-To see how the function works, let's use the accepted names in *checked_names* created previously:
+Para obter informações sobre espécies do banco de dados Fauna do Brasil a partir de uma lista de espécies pré-definida, utilize a função `subset_species()`. Para obter um desempenho ideal, recomendamos fortemente o uso das funções `get_binomial()` e `check_names()` previamente. Isso garante que você esteja trabalhando exclusivamente com espécies presentes no banco de dados da Fauna do Brasil.
+Para ver como a função funciona, vamos usar os nomes aceitos em *checked_names* criados anteriormente:
 
 ```{r}
-#Get only accepted names
+#Obter apenas nomes aceitos
 accepted_names <- unique(checked_names$acceptedName)
-accepted_names <- na.omit(accepted_names) #Remove NA
+accepted_names <- na.omit(accepted_names) #Remove NAs
 
-#Subset species
+#Subselecionar especies
 my_sp <- subset_fauna(data = bf, species = accepted_names,
                       include_subspecies = FALSE)
-tibble::tibble(my_sp) #print data.frame as tibble
+tibble::tibble(my_sp)
 #> # A tibble: 4 × 19
 #>   species       subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
 #>   <chr>         <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
@@ -297,7 +295,7 @@ tibble::tibble(my_sp) #print data.frame as tibble
 #> 4 Zonotrichia … ""         Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AL;AP… brazil      #> "nati…
 #> # ℹ 4 more variables: taxonomicStatus <chr>, nomenclaturalStatus <chr>, vernacularName <chr>, taxonRank <chr>
 ```
-We can also include subspecies and/or varieties:
+Também podemos incluir subespécies e/ou variedades:
 
 ```{r}
 my_sp2 <- subset_fauna(data = bf, species = accepted_names,
@@ -324,8 +322,8 @@ tibble::tibble(my_sp2) #print data.frame as tibble
 #> 
 ```
 
-### Retrieving synonyms
-We can retrieve all synonyms of a species list. This can be particularly useful, for example, when searching for records of a species and all its synonyms (as listed in the Fauna do Brasil) in online databases like GBIF. To accomplish this, utilize the function fauna_synonym. To understand how the function works, let's search for the synonyms of three species:
+### Obtendo sinônimps
+Podemos obter todos os sinônimos de uma lista de espécies. Isso pode ser particularmente útil, por exemplo, ao buscar registros de uma espécie e todos os seus sinônimos (conforme listado na Fauna do Brasil) em bancos de dados online como o GBIF. Para isso, utilize a função `fauna_synonym()`. Como exemplo, vamos buscar os sinônimos de três espécies:
 ```{r}
 spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
 spp_syn <- fauna_synonym(data = bf, species = spp)
@@ -335,4 +333,4 @@ spp_syn
 #> 60523    Mazama jucunda         Mazama bororo             synonym
 #> 61168 Subulo gouzoubira    Mazama gouazoubira             synonym
 ```
-We can see that *Mazama jucunda* and *Subulo gouzoubira* have synonyms, *Mazama bororo* and *Mazama gouazoubira*, respectively. *Panthera onca* does not have any synonyms.
+Podemos ver que *Mazama jucunda* possui o sinônimo *Mazama bororo*; enquanto *Subulo gouzoubira* possui o sinônimo *Mazama gouazoubira*. *Panthera onca* não possui nenhum sinônimo listado na base de dados.
