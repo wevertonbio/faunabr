@@ -634,3 +634,21 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
 # crs(states) <- crs(countrys)
 # states <- terra::wrap(states)
 # usethis::use_data(states, overwrite = TRUE)
+
+# #### Make sticker ####
+# library(hexSticker)
+# library(showtext)
+# ## Loading Google fonts (http://www.google.com/fonts)
+# font_families_google()
+# font_add_google(name = "Markazi Text")
+# ## Automatically use showtext to render text for future devices
+# showtext_auto()
+#
+# sticker(subplot = "../faunabrdata/Mapa.png", package="faunabr", p_size=22.5,
+#         p_fontface = "bold", p_color = "black",
+#         p_family = "Markazi Text",
+#         p_y = 1.59,
+#         s_x=1, s_y=.76, s_width=.67,
+#         h_fill = "#008080",
+#         filename="../faunabrdata/HexSticker_markazi_blue4.png",
+#         spotlight = TRUE, l_alpha = 0.3)
