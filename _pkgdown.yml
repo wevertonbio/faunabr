@@ -26,6 +26,10 @@ navbar:
       href: articles/primeiros_passos.html
     - text: 2. Selecionar e filtrar espécies
       href: articles/selecionando_especies.html
+    - text: 3. Filtrar pontos de ocorrência com faunabr
+      href: articles/espacializando_faunabr.html
+    - text: 4. Obtendo uma matrix de Presença-Ausência (PAM)
+      href: articles/obtendo_pam.html
   components:
     home: ~
 

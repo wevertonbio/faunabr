@@ -23,7 +23,7 @@ Aplicando diferentes filtros ao banco de dados, podemos obter uma lista verifica
 Neste tutorial, vamos ver como utilizar o pacote *faunabr* para selecionar uma lista de espécies com base nessas características.
 
 ## Carregando os dados
-Antes de começar, utilize a função load_faunabr para carregar os dados. Para informações mais detalhadas sobre como obter e carregar os dados, consulte [Getting started with faunabr](https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html)
+Antes de começar, utilize a função `load_faunabr()` para carregar os dados. Para informações mais detalhadas sobre como obter e carregar os dados, consulte [Primeiros passos com faunabr](https://wevertonbio.github.io/faunabr/articles/primeiros_passos.html)
 
 ```{r}
 library(faunabr)
@@ -226,7 +226,7 @@ unique(insects_south_only$states)
 Agora, o filtro retornou apenas 132 espécies, todas ocorrendo em PR, SC e RS; sem registros de ocorrências em qualquer outro estado.
 
 ## Checagem de nomes científicos e subseleção de espécies
-### Extraíndo o nome binomial
+### Extraindo o nome binomial
 Além de selecionar uma lista de espécies com base em suas características, o pacote também inclui uma função para subselecionar espécies por nome. A função funciona exclusivamente com nomes binomiais (Gênero + Epíteto específico), como *Panthera onca*, e não funciona com nomes científicos completos (incluindo Autor ou Epíteto infraespecífico), como *Panthera onca (Linnaeus, 1758)*.
 
 Se você tiver uma lista de espécies com nomes científicos completos, pode extrair os nomes binomiais usando a função `get_binomial()`. Não se preocupe com espaços excessivos entre as palavras, a função removerá quaisquer espaços extras dos nomes.
