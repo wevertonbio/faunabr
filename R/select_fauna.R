@@ -402,10 +402,10 @@ select_fauna <- function(data, include_subspecies = FALSE,
     all_origin <- unique(d$origin)
     any_diff <- setdiff(origin, all_origin)
     if(length(any_diff) > 0) {
-      warning(paste("The following origins are not valid:\n",
+      warning(paste("The following origins are not available:\n",
                     paste(any_diff, collapse = ", ")))
     }
-    d2 <- d[d$origin %in% origin,] }
+    d <- d[d$origin %in% origin,] }
 
   #taxonomicStatus ####
   if(all(taxonomicStatus == "all")) {
