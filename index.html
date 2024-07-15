@@ -126,7 +126,7 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The <a href="http://fauna.jbrj.gov.br/fauna" class="external-link">Catálogo Taxonômico da Fauna do Brasil</a> is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized morphological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.</p>
+<p>The <a href="http://fauna.jbrj.gov.br/fauna" class="external-link">Catálogo Taxonômico da Fauna do Brasil</a> is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized ecological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.</p>
 <p>The faunabr package provides a suite of functions designed to retrieve, filter, and spatialize data from the Fauna do Brasil dataset.</p>
 <div class="section level2">
 <h2 id="overview-of-functions">Overview of functions<a class="anchor" aria-label="anchor" href="#overview-of-functions"></a>
@@ -190,12 +190,12 @@
 </h3>
 <p>You can install the development version of faunabr from <a href="https://github.com/wevertonbio/faunabr" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/" class="external-link">devtools</a></span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://remotes.r-lib.org" class="external-link">remotes</a></span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="va"><a href="https://wevertonbio.github.io/faunabr/">faunabr</a></span><span class="op">)</span><span class="op">)</span><span class="op">{</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'wevertonbio/faunabr'</span><span class="op">)</span><span class="op">}</span></span>
+<span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">'wevertonbio/faunabr'</span><span class="op">)</span><span class="op">}</span></span>
 <span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://wevertonbio.github.io/faunabr/">faunabr</a></span><span class="op">)</span></span></code></pre></div>
 <p>Before downloading the data available in the Fauna do Brasil, we need to create a folder to save the data:</p>
