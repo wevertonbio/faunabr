@@ -189,10 +189,10 @@ select_fauna <- function(data, include_subspecies = FALSE,
     stop(paste("Genus not valid.\n")) }
 
 
-  if(origin != "all" & !(origin %in% c('all', "native", "introduced",
-                                       "cryptogenic", "domesticated"))) {
+  if(all(origin != "all") & !any(origin %in% c('all', "native", "introduced",
+                                       "cryptogenic", "domesticated", "invasive"))) {
     stop(paste("origin not valid. The options availables are:\n",
-               "all', 'native', 'introduced', 'cryptogenic', or 'domesticated'")
+               "all', 'native', 'cryptogenic', or 'domesticated'")
     )}
 
   if(taxonomicStatus != "all" &
@@ -399,15 +399,13 @@ select_fauna <- function(data, include_subspecies = FALSE,
 
   #Filter by origin
   if(all(origin != "all")) {
-    d$origin <- tolower(d$origin)
-    origin2 <- origin
     all_origin <- unique(d$origin)
     any_diff <- setdiff(origin, all_origin)
     if(length(any_diff) > 0) {
       warning(paste("The following origins are not valid:\n",
                     paste(any_diff, collapse = ", ")))
     }
-    d <- subset(d, d$origin %in% origin2) }
+    d2 <- d[d$origin %in% origin,] }
 
   #taxonomicStatus ####
   if(all(taxonomicStatus == "all")) {
