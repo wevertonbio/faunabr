@@ -116,13 +116,17 @@ check_fauna_names <- function(data, species, max_distance = 0.1,
   spp_info <- merge(spp, d_info, by.x ="Suggested_name", by.y = "species",
                     all = TRUE, sort = FALSE)
   #Organize columns
-  spp_info <- spp_info[, c("input_name", "Spelling", "Suggested_name",
+  spp_info <- unique(spp_info[, c("input_name", "Spelling", "Suggested_name",
                            "Distance", "taxonomicStatus",
-                           "nomenclaturalStatus", "acceptedName", "family")]
+                           "nomenclaturalStatus", "acceptedName", "family")])
   spp_info$acceptedName[which(spp_info$taxonomicStatus == "accepted_name" &
                                 spp_info$acceptedName == "")] <-
     spp_info$Suggested_name[which(spp_info$taxonomicStatus == "accepted_name" &
                                     spp_info$acceptedName == "")]
+  #Identify if there is single or multiple matches
+  spp_info$matches <- ifelse(ave(spp_info$input_name,
+                                 spp_info$input_name, FUN = length) > 1,
+                             "multiple", "single")
 
   return(spp_info)
 }
