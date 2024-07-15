@@ -9,7 +9,7 @@
 [![R-CMD-check](https://github.com/wevertonbio/faunabr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/wevertonbio/faunabr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized morphological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.
+The [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized ecological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.
 
 The faunabr package provides a suite of functions designed to retrieve, filter, and spatialize data from the Fauna do Brasil dataset.
 
@@ -55,12 +55,12 @@ You can install the development version of faunabr from
 [GitHub](https://github.com/wevertonbio/faunabr) with:
 
 ``` r
-if(!require(devtools)){
-    install.packages("devtools")
+if(!require(remotes)){
+    install.packages("remotes")
 }
 
 if(!require(faunabr)){
-devtools::install_github('wevertonbio/faunabr')}
+remotes::install_github('wevertonbio/faunabr')}
 
 library(faunabr)
 ```

@@ -43,12 +43,12 @@ The faunabr package provides a suite of functions designed to retrieve, filter, 
 
 You can install the released version of *faunabr* from [github](https://github.com/wevertonbio/faunabr) with:
 ```{r, results='hide', message=FALSE}
-if(!require(devtools)){
-    install.packages("devtools")
+if(!require(remotes)){
+    install.packages("remotes")
 }
 
 if(!require(faunabr)){
-devtools::install_github('wevertonbio/faunabr')}
+remotes::install_github('wevertonbio/faunabr')}
 
 library(faunabr)
 ```

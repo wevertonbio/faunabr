@@ -322,7 +322,7 @@ tibble::tibble(my_sp2) #print data.frame as tibble
 #> 
 ```
 
-### Obtendo sinônimps
+### Obtendo sinônimos
 Podemos obter todos os sinônimos de uma lista de espécies. Isso pode ser particularmente útil, por exemplo, ao buscar registros de uma espécie e todos os seus sinônimos (conforme listado na Fauna do Brasil) em bancos de dados online como o GBIF. Para isso, utilize a função `fauna_synonym()`. Como exemplo, vamos buscar os sinônimos de três espécies:
 ```{r}
 spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")

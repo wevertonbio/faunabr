@@ -43,12 +43,12 @@ O pacote *faunabr* oferece um conjunto de funções desenvolvidas para acessar, 
 
 Você pode atual a versão do *faunabr* no [github](https://github.com/wevertonbio/faunabr) com:
 ```{r, results='hide', message=FALSE}
-if(!require(devtools)){
-    install.packages("devtools")
+if(!require(remotes)){
+    install.packages("remotes")
 }
 
 if(!require(faunabr)){
-devtools::install_github('wevertonbio/faunabr')}
+remotes::install_github('wevertonbio/faunabr')}
 
 library(faunabr)
 ```
