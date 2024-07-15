@@ -83,8 +83,8 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
   if(data_version == "latest_available") {
     #Search for directories
     all_dirs <- list.dirs(path = path_data, recursive = FALSE)
-    dir_versions <- stats::na.omit(as.numeric(gsub(data_dir, "", all_dirs,
-                                            fixed = TRUE)))
+    dir_versions <- as.numeric(gsub("[^0-9.]+", "", all_dirs))
+
     #Get highest version
     if(length(dir_versions) > 0) {
       version_data <- max(dir_versions) } else {
