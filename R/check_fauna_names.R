@@ -121,9 +121,9 @@ check_fauna_names <- function(data, species, max_distance = 0.1,
                            "Distance", "taxonomicStatus",
                            "nomenclaturalStatus", "acceptedName", "family")])
   spp_info$acceptedName[which(spp_info$taxonomicStatus == "accepted" &
-                                spp_info$acceptedName == "")] <-
+                                is.na(spp_info$acceptedName))] <-
     spp_info$Suggested_name[which(spp_info$taxonomicStatus == "accepted" &
-                                    spp_info$acceptedName == "")]
+                                    is.na(spp_info$acceptedName))]
   #Identify if there is single or multiple matches
   spp_info$matches <- ifelse(stats::ave(spp_info$input_name,
                                  spp_info$input_name, FUN = length) > 1,
