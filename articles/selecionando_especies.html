@@ -222,7 +222,7 @@ no Rio de Janeiro:</p>
 <span>                           filter_states <span class="op">=</span> <span class="st">"in"</span>, <span class="co">#Que ocorrem NO RJ</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"native"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_rj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 109</span></span></code></pre></div>
 <p>O filtro retornou 109 espécies que atendem aos critérios
@@ -255,7 +255,7 @@ no Rio de Janeiro, e não em nenhum outro estado, modifique o parâmetro
 <span>                           filter_states <span class="op">=</span> <span class="st">"only"</span>, <span class="co">#Com ocorrência APENAS no RJ</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"native"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_rj_only</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 20</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">insects_rj_only</span><span class="op">$</span><span class="va">states</span><span class="op">)</span></span>
@@ -280,7 +280,7 @@ Santa Catarina (SC) e Rio Grande do Sul (RS):</p>
 <span>                           filter_states <span class="op">=</span> <span class="st">"in"</span>, <span class="co">#EM qualquer um dos estados</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"native"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 10979</span></span>
 <span></span>
@@ -315,7 +315,7 @@ ocorrências confirmadas em todos os três estados, podemos usar
 <span>                           filter_states <span class="op">=</span> <span class="st">"and"</span>, <span class="co">#PR &amp; SC &amp; RS</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"native"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south_and</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1761</span></span>
 <span></span>
@@ -351,7 +351,7 @@ estados, sem ocorrências em outros lugares, podemos usar
 <span>                           filter_states <span class="op">=</span> <span class="st">"only"</span>, <span class="co">#Apenas no PR &amp; SC &amp; RS</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"native"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted_name"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south_only</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 132</span></span>
 <span></span>
@@ -414,11 +414,11 @@ anteriormente:</p>
 <span><span class="co">#&gt; # A tibble: 6 × 8</span></span>
 <span><span class="co">#&gt;   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #&gt; family</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                &lt;chr&gt;    &lt;chr&gt;             &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;        #&gt; &lt;chr&gt; </span></span>
-<span><span class="co">#&gt; 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted_name   Zonotrichia… #&gt; Passe…</span></span>
+<span><span class="co">#&gt; 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted   Zonotrichia… #&gt; Passe…</span></span>
 <span><span class="co">#&gt; 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #&gt; Cervi…</span></span>
-<span><span class="co">#&gt; 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted_name   Mazama jucu… #&gt; Cervi…</span></span>
-<span><span class="co">#&gt; 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted_name   Arrenurus (… #&gt; Arren…</span></span>
-<span><span class="co">#&gt; 5 Pantera onça         Probabl… Panthera onca         2 accepted_name   Panthera on… #&gt; Felid…</span></span>
+<span><span class="co">#&gt; 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted   Mazama jucu… #&gt; Cervi…</span></span>
+<span><span class="co">#&gt; 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted   Arrenurus (… #&gt; Arren…</span></span>
+<span><span class="co">#&gt; 5 Pantera onça         Probabl… Panthera onca         2 accepted   Panthera on… #&gt; Felid…</span></span>
 <span><span class="co">#&gt; 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA </span></span></code></pre></div>
 <p>Podemos ver que <em>Zonotrichia capensis</em>, <em>Mazama
 jucunda</em> e <em>Arrenurus (Incertae sedis) tumulosus</em> estão
@@ -447,11 +447,11 @@ Fauna do Brasil. Para ver como a função funciona, vamos usar os nomes
 aceitos em <em>checked_names</em> criados anteriormente:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Obter apenas nomes aceitos</span></span>
-<span><span class="va">accepted_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">checked_names</span><span class="op">$</span><span class="va">acceptedName</span><span class="op">)</span></span>
-<span><span class="va">accepted_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">accepted_names</span><span class="op">)</span> <span class="co">#Remove NAs</span></span>
+<span><span class="va">accepteds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">checked_names</span><span class="op">$</span><span class="va">acceptedName</span><span class="op">)</span></span>
+<span><span class="va">accepteds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">accepteds</span><span class="op">)</span> <span class="co">#Remove NAs</span></span>
 <span></span>
 <span><span class="co">#Subselecionar especies</span></span>
-<span><span class="va">my_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepted_names</span>,</span>
+<span><span class="va">my_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepteds</span>,</span>
 <span>                      include_subspecies <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">my_sp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # A tibble: 4 × 19</span></span>
@@ -464,7 +464,7 @@ aceitos em <em>checked_names</em> criados anteriormente:</p>
 <span><span class="co">#&gt; # ℹ 4 more variables: taxonomicStatus &lt;chr&gt;, nomenclaturalStatus &lt;chr&gt;, vernacularName &lt;chr&gt;, taxonRank &lt;chr&gt;</span></span></code></pre></div>
 <p>Também podemos incluir subespécies e/ou variedades:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepted_names</span>,</span>
+<code class="sourceCode R"><span><span class="va">my_sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepteds</span>,</span>
 <span>                      include_subspecies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">my_sp2</span><span class="op">)</span> <span class="co">#print data.frame as tibble</span></span>
 <span><span class="co">#&gt; # A tibble: 14 × 19</span></span>
@@ -501,7 +501,7 @@ três espécies:</p>
 <span><span class="va">spp_syn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_synonym.html">fauna_synonym</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">spp</span><span class="op">)</span></span>
 <span><span class="va">spp_syn</span></span>
 <span><span class="co">#&gt;           acceptedName               synonym     taxonomicStatus</span></span>
-<span><span class="co">#&gt; 49343     Panthera onca                  &lt;NA&gt;       accepted_name</span></span>
+<span><span class="co">#&gt; 49343     Panthera onca                  &lt;NA&gt;       accepted</span></span>
 <span><span class="co">#&gt; 60523    Mazama jucunda         Mazama bororo             synonym</span></span>
 <span><span class="co">#&gt; 61168 Subulo gouzoubira    Mazama gouazoubira             synonym</span></span></code></pre></div>
 <p>Podemos ver que <em>Mazama jucunda</em> possui o sinônimo <em>Mazama
