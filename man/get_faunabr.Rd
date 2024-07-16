@@ -5,7 +5,7 @@
 \title{Download the latest version of Catálogo Taxonômico da Fauna do Brasil}
 \usage{
 get_faunabr(output_dir, data_version = "latest",
-                 solve_incongruences = TRUE, overwrite = TRUE,
+                 solve_discrepancies = TRUE, overwrite = TRUE,
                  verbose = TRUE)
 }
 \arguments{
@@ -17,11 +17,11 @@ download. Use "latest" to get the most recent version, which is updated
 frequently. Alternatively, specify an older version (e.g.,
 data_version = "1.2").Default value is "latest".}
 
-\item{solve_incongruences}{Resolve inconsistencies between species and
-subspecies/varieties  information. When set to TRUE (default), species
-information is updated based on unique data from varieties and subspecies.
-For example, if a subspecies occurs in a certain biome, it implies that the
-species also occurs in that biome.}
+\item{solve_discrepancies}{Resolve inconsistencies between species and
+subspecies  information. When set to TRUE (default), species
+information is updated based on unique data from subspecies.
+For example, if a subspecies occurs in a certain state, it implies that the
+species also occurs in that state.}
 
 \item{overwrite}{(logical) If TRUE, data is overwritten. Default = TRUE.}
 
@@ -52,7 +52,7 @@ my_dir <- file.path(file.path(tempdir(), "faunabr"))
 dir.create(my_dir)
 #Download, merge and save data
 get_faunabr(output_dir = my_dir, data_version = "latest",
-            solve_incongruences = TRUE, overwrite = TRUE, verbose = TRUE)
+            solve_discrepancies = TRUE, overwrite = TRUE, verbose = TRUE)
 }
 }
 \references{

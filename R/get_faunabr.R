@@ -11,11 +11,11 @@
 #' download. Use "latest" to get the most recent version, which is updated
 #' frequently. Alternatively, specify an older version (e.g.,
 #' data_version = "1.2").Default value is "latest".
-#' @param solve_incongruences Resolve inconsistencies between species and
-#' subspecies/varieties  information. When set to TRUE (default), species
-#' information is updated based on unique data from varieties and subspecies.
-#' For example, if a subspecies occurs in a certain biome, it implies that the
-#' species also occurs in that biome.
+#' @param solve_discrepancies Resolve inconsistencies between species and
+#' subspecies  information. When set to TRUE (default), species
+#' information is updated based on unique data from subspecies.
+#' For example, if a subspecies occurs in a certain state, it implies that the
+#' species also occurs in that state.
 #' @param overwrite (logical) If TRUE, data is overwritten. Default = TRUE.
 #' @param verbose (logical) Whether to display messages during function
 #' execution. Set to TRUE to enable display, or FALSE to run silently.
@@ -30,7 +30,7 @@
 #' directory. The data is saved in a format that allows easy loading using the
 #' \code{\link{load_faunabr}} function for further analysis in R.
 #' @usage get_faunabr(output_dir, data_version = "latest",
-#'                  solve_incongruences = TRUE, overwrite = TRUE,
+#'                  solve_discrepancies = TRUE, overwrite = TRUE,
 #'                  verbose = TRUE)
 #' @export
 #'
@@ -51,10 +51,10 @@
 #' dir.create(my_dir)
 #' #Download, merge and save data
 #' get_faunabr(output_dir = my_dir, data_version = "latest",
-#'             solve_incongruences = TRUE, overwrite = TRUE, verbose = TRUE)
+#'             solve_discrepancies = TRUE, overwrite = TRUE, verbose = TRUE)
 #' }
 get_faunabr <- function(output_dir, data_version = "latest",
-                        solve_incongruences = TRUE,
+                        solve_discrepancies = TRUE,
                         overwrite = TRUE,
                         verbose = TRUE) {
   #Set folder
@@ -74,8 +74,8 @@ get_faunabr <- function(output_dir, data_version = "latest",
                 class(data_version)))
   }
 
-  if (!is.logical(solve_incongruences)) {
-    stop(paste0("Argument solve_incongruences must be logical, not ",
+  if (!is.logical(solve_discrepancies)) {
+    stop(paste0("Argument solve_discrepancies must be logical, not ",
                 class(overwrite)))
   }
 
@@ -135,7 +135,7 @@ get_faunabr <- function(output_dir, data_version = "latest",
 
   #Merge data
   merge_data(path_data = path_data, version_data = version_data,
-             solve_incongruences = solve_incongruences, verbose = verbose)
+             solve_discrepancies = solve_discrepancies, verbose = verbose)
 
   #Print final message
   if(verbose){

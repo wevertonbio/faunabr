@@ -121,7 +121,7 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
                                            "habitat", "states", "countryCode",
                                            "origin", "taxonomicStatus",
                                            "nomenclaturalStatus",
-                                           "vernacularName", "taxonRank")))
+                                           "vernacularName", "taxonRank", "id")))
   }
 }
 

@@ -36,6 +36,7 @@ translate_origins <- function(text) {
   new_origins <- gsub("INTRODUZIDA", "introduced", new_origins, ignore.case = TRUE)
   new_origins <- gsub("CRIPTOGENICA", "cryptogenic", new_origins, ignore.case = TRUE)
   new_origins <- gsub("DOMESTICADA", "domesticated", new_origins, ignore.case = TRUE)
+  new_origins <- gsub("INVASORA", "invasive", new_origins, ignore.case = TRUE)
   return(new_origins)
 }
 
@@ -99,16 +100,18 @@ update_columns <- function(df) {
   unique_lifeForm <- sort(unique(unlist(strsplit(df$lifeForm, ";"))))
   unique_habitat <- sort(unique(unlist(strsplit(df$habitat, ";"))))
   unique_states <- sort(unique(unlist(strsplit(df$states, ";"))))
-
+  unique_countries <- sort(unique(unlist(strsplit(df$countryCode, ";"))))
 
   # Update columns where taxonRank == "ESPECIE"
-  df$lifeForm[df$taxonRank == "ESPECIE"] <- paste(unique_lifeForm, collapse = ";")
-  df$habitat[df$taxonRank == "ESPECIE"] <- paste(unique_habitat, collapse = ";")
-  df$states[df$taxonRank == "ESPECIE"] <- paste(unique_states, collapse = ";")
-  df$states[df$taxonRank == "ESPECIE"] <- paste(unique_states, collapse = ";")
+  df$lifeForm[df$taxonRank == "species"] <- paste(unique_lifeForm, collapse = ";")
+  df$habitat[df$taxonRank == "species"] <- paste(unique_habitat, collapse = ";")
+  df$states[df$taxonRank == "species"] <- paste(unique_states, collapse = ";")
+  df$states[df$taxonRank == "species"] <- paste(unique_states, collapse = ";")
+  df$countryCode[df$taxonRank == "species"] <- paste(unique_countries,
+                                                     collapse = ";")
 
   #Return only taxonRank == "ESPECIE"
-  df <- subset(df, df$taxonRank == "ESPECIE")
+  df <- subset(df, df$taxonRank == "species")
 
   return(df)
 }
@@ -158,7 +161,7 @@ extract_year <- function(sn) {
 }
 
 
-merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
+merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
                        encoding = "UTF-8", verbose = TRUE) {
 
   #Set folder
@@ -220,25 +223,6 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   spProfile$habitat <- iconv(spProfile$habitat, to="ASCII//TRANSLIT")
 
 
-  # #Extract informations to new columns
-  # #Life form
-  # spProfile$lifeForm.new <- extract_between(spProfile$lifeForm,
-  #                                           left = "lifeForm:\\[",
-  #                                           right = "\\]")
-  # #Habitat
-  # spProfile$habitat.new <- extract_between(spProfile$lifeForm,
-  #                                          left = "habitat:\\[",
-  #                                          right = "\\]")
-  # #Vegetation type
-  # spProfile$vegetationType.new <- extract_between(spProfile$lifeForm,
-  #                                                 left = "vegetationType:\\[",
-  #                                                 right = "\\]")
-  #
-  # #Rename and select columns
-  # spProfile <- spProfile[,c("id", "lifeForm.new", "habitat.new",
-  #                           "vegetationType.new")]
-  # colnames(spProfile) <- c("id", "lifeForm", "habitat", "vegetationType")
-
   ###Distribution and Location
   dist <- utils::read.csv(file.path(path_data, version_data,
                                     "distribution.txt"),
@@ -253,30 +237,15 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   dist$origin <- dist$establishmentMeans
 
 
-  # #Endemism
-  # dist$Endemism <- ifelse(grepl("endemism:Nao endemica",
-  #                               dist$occurrenceRemarks),
-  #                         "Nao endemica",
-  #                         ifelse(grepl("endemism:Endemica",
-  #                                      dist$occurrenceRemarks),
-  #                                "Endemica", NA))
-  # #Phytogeographic domain
-  # dist$phytogeographicDomain <- extract_between(dist$occurrenceRemarks,
-  #                                               left = "phytogeographicDomain:\\[",
-  #                                               right = "\\]")
-
-  # #Deletar aspas
-  # dist$phytogeographicDomain <- gsub("\"", "", dist$phytogeographicDomain)
-
-
   #Organize information
   #Local
   Local <- dist[,c("id","locality","countryCode")]
   #Group location of same species
   grouped <- split(Local, Local$id)
   summarized <- lapply(grouped, function(group) {
-    paste(group$locality, collapse = ";")
-  })
+    if(!is.na(group$locality)){
+    paste(group$locality, collapse = ";")} else {group$locality}
+    })
   Local_final <- data.frame(
     id = as.numeric(names(summarized)),
     locality = unlist(summarized)
@@ -295,20 +264,6 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   df_final3$species <- df_final3$specificEpithet
   df_final3$subspecies <- df_final3$infraspecificEpithet
 
-  # #Ignore this ranks
-  # all_ranks <- unique(df_final3$taxonRank)
-  # ignore_rank <- setdiff(all_ranks, c("ESPECIE", "SUB_ESPECIE"))
-  # df_final3$species[which(!(df_final3$taxonRank %in% ignore_rank))] <-
-  #   gsub("^([[:alnum:]]+[-[:alnum:]]*(?:[[:space:]]+[[:alnum:]]+[-[:alnum:]]*)?)\\b.*",
-  #        "\\1",
-  #        df_final3$scientificName[which(!(df_final3$taxonRank %in%
-  #                                           ignore_rank))])
-
-  # df_final3$species[which(!(df_final3$taxonRank %in% ignore_rank))] <-
-  #   gsub("^((\\w+\\W+){1}\\w+).*$","\\1",
-  #        df_final3$scientificName[which(!(df_final3$taxonRank %in%
-  #                                           ignore_rank))])
-
   #Accepted name when is synonymn
   df_final3$acceptedName <- NA
   sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE") &
@@ -321,6 +276,7 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
                                  "resourcerelationship.txt"),
                        header=TRUE, sep = "\t",
                        encoding = encoding, na.strings = "")
+
   #Group resourcerelationship of same species
   grouped <- split(rr, rr$id)
   summarized_relatedResourceID <- lapply(grouped, function(group) {
@@ -349,7 +305,6 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   df_final4$acceptedName[which(df_final4$acceptedName == "")] <- NA
 
   #Order columns
-
   df_final <- df_final4[,c(c("id", "taxonID","species", "subspecies",
                              "scientificName",
                              "acceptedName",
@@ -383,62 +338,31 @@ merge_data <- function(path_data, version_data, solve_incongruences = TRUE,
   colnames(df_final)[colnames(df_final) == "locality"] <- "states"
 
   #Fix countries
-  df_final$countryCode[df_final$countryCode == "" & !is.na(df_final$states)] <- "brazil"
+  df_final$countryCode[is.na(df_final$countryCode) & !is.na(df_final$states)] <- "BRAZIL"
   #Get index for more complex fixing
-  index_fix <- !grepl("brazil", df_final$countryCode) & !is.na(df_final$states)
+  index_fix <- !grepl("BRAZIL", df_final$countryCode) & !is.na(df_final$states)
   countries_fix <- df_final$countryCode[index_fix]
   countries_fixed <- sapply(countries_fix, function(x) {
-    paste(sort(c("brazil", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
+    paste(sort(c("BRAZIL", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
     }, USE.NAMES = FALSE)
   df_final$countryCode[index_fix] <- countries_fixed
   #df_final[index_fix,] %>% View()
 
-  if(solve_incongruences){
-    #Solve incongruences between species and subspecies
-    #Get varieties, subspecies (and forms) with accepted names that occurs in Brazil
-    spp_var <- subset(df_final,
-                      df_final$taxonRank %in% c("SUB_ESPECIE") &
-                        df_final$taxonomicStatus == "NOME ACEITO")[["species"]]
-
-    #Get only species that exists as subspecies in dataframe
-    spp_var_yes <- intersect(df_final$species[which(df_final$taxonRank == "SUB_ESPECIE")],
-                             spp_var)
-    spp_var_no <- setdiff(spp_var, df_final$species[which(df_final$taxonRank == "SUB_ESPECIE")])
-
-    if (length(spp_var_no) > 0) {
-
-    #Get dataframe to update
-    d_upt <- subset(df_final, df_final$species %in% spp_var_yes)
-
-    #Update columns
-    dd_updated_list <- lapply(split(d_upt, d_upt$species), update_columns)
-
-    # Merge dataframes
-    d_upt <- do.call(rbind, dd_updated_list)
-    row.names(d_upt) <- NULL
-
-    #Update final dataframe
-    df_final <- rbind(subset(df_final, !(df_final$id %in% d_upt$id)), d_upt)
-
-    #Fix varieties and subspecies that does not appear as species
-    df_no_species <- subset(df_final, df_final$species %in% spp_var_no)
-    #Change taxonrank
-    df_no_species$taxonRank <- "Species"
-    #Create new id
-    df_no_species$id <- sample(setdiff(1:500000, df_final$id), nrow(df_no_species))
-    #Merge data
-    df_final <- rbind(df_final, df_no_species) } }
-
-
   #Translate and put in lower case
   df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
+  df_final$lifeForm[df_final$lifeForm == ""] <- NA
   df_final$origin <- translate_origins(df_final$origin)
   df_final$habitat <- translate_habitat(df_final$habitat)
   df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
-  df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME ACEITO"] <- "accepted_name"
+  df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME ACEITO"] <- "accepted"
   df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
   df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
   df_final$countryCode <- tolower(df_final$countryCode)
+
+  #Solve incongruencies?
+  if(solve_discrepancies){
+    df_final <- fauna_discrepancies(df_final)
+  }
 
   #Save as gzip format
   data.table::fwrite(df_final,

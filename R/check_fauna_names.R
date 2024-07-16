@@ -37,6 +37,7 @@
 #'                          include_subspecies = TRUE)
 #' @export
 #' @importFrom utils adist
+#' @importFrom stats ave
 #' @references
 #' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
 #' https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil
@@ -124,7 +125,7 @@ check_fauna_names <- function(data, species, max_distance = 0.1,
     spp_info$Suggested_name[which(spp_info$taxonomicStatus == "accepted_name" &
                                     spp_info$acceptedName == "")]
   #Identify if there is single or multiple matches
-  spp_info$matches <- ifelse(ave(spp_info$input_name,
+  spp_info$matches <- ifelse(stats::ave(spp_info$input_name,
                                  spp_info$input_name, FUN = length) > 1,
                              "multiple", "single")
 
