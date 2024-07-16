@@ -28,7 +28,7 @@
 #'   \item{origin}{Indicates whether the species is native, introduced,
 #'   domesticated, cryptogenic or invasive}
 #'   \item{taxonomicStatus}{Indicates the level of recognition and acceptance
-#'   of the species (accepted_name or synonym)}
+#'   of the species (accepted or synonym)}
 #'   \item{nomenclaturalStatus}{Indicates the legitimacy and validity of the
 #'   species name (original_combination, changed_combination, etc.)}
 #'   \item{vernacularName}{Locally or culturally used name for the species}

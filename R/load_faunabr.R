@@ -107,7 +107,8 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
     return(data.table::fread(file.path(path_data, version_data,
                             "CompleteBrazilianFauna.gz"),
                             data.table = FALSE,
-                            encoding = encoding)) }
+                            encoding = encoding,
+                            na.strings = "")) }
 
   if(type == "short") {
     return(data.table::fread(file.path(path_data, version_data,
@@ -121,7 +122,8 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
                                            "habitat", "states", "countryCode",
                                            "origin", "taxonomicStatus",
                                            "nomenclaturalStatus",
-                                           "vernacularName", "taxonRank", "id")))
+                                           "vernacularName", "taxonRank", "id"),
+                             na.strings = ""))
   }
 }
 

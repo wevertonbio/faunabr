@@ -92,7 +92,7 @@ insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #Select IN Rio de Janeiro
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted_name")
+                           taxonomicStatus = "accepted")
 nrow(insects_rj)
 #> [1] 109
 ```
@@ -126,7 +126,7 @@ insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #Select ONLY in Rio de Janeiro
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted_name")
+                           taxonomicStatus = "accepted")
 nrow(insects_rj_only)
 #> [1] 20
 unique(insects_rj_only$states)
@@ -150,7 +150,7 @@ insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #IN any of these states
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted_name")
+                           taxonomicStatus = "accepted")
 nrow(insects_south)
 #> [1] 10979
 
@@ -183,7 +183,7 @@ insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "and", #in PR AND SC AND RS
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted_name")
+                           taxonomicStatus = "accepted")
 nrow(insects_south_and)
 #> [1] 1761
 
@@ -216,7 +216,7 @@ insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #ONLY in PR, SC and RS
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted_name")
+                           taxonomicStatus = "accepted")
 nrow(insects_south_only)
 #> [1] 132
 
@@ -262,11 +262,11 @@ tibble::tibble(checked_names) #print data.frame as tibble
 #> # A tibble: 6 × 8
 #>   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #> family
 #>   <chr>                <chr>    <chr>             <dbl> <chr>           <chr>        #> <chr> 
-#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted_name   Zonotrichia… #> Passe…
+#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted   Zonotrichia… #> Passe…
 #> 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #> Cervi…
-#> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted_name   Mazama jucu… #> Cervi…
-#> 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted_name   Arrenurus (… #> Arren…
-#> 5 Pantera onça         Probabl… Panthera onca         2 accepted_name   Panthera on… #> Felid…
+#> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted   Mazama jucu… #> Cervi…
+#> 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted   Arrenurus (… #> Arren…
+#> 5 Pantera onça         Probabl… Panthera onca         2 accepted   Panthera on… #> Felid…
 #> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
 
 ```
@@ -281,11 +281,11 @@ To see how the function works, let's use the accepted names in *checked_names* c
 
 ```{r}
 #Get only accepted names
-accepted_names <- unique(checked_names$acceptedName)
-accepted_names <- na.omit(accepted_names) #Remove NA
+accepteds <- unique(checked_names$acceptedName)
+accepteds <- na.omit(accepteds) #Remove NA
 
 #Subset species
-my_sp <- subset_fauna(data = bf, species = accepted_names,
+my_sp <- subset_fauna(data = bf, species = accepteds,
                       include_subspecies = FALSE)
 tibble::tibble(my_sp) #print data.frame as tibble
 #> # A tibble: 4 × 19
@@ -300,7 +300,7 @@ tibble::tibble(my_sp) #print data.frame as tibble
 We can also include subspecies and/or varieties:
 
 ```{r}
-my_sp2 <- subset_fauna(data = bf, species = accepted_names,
+my_sp2 <- subset_fauna(data = bf, species = accepteds,
                       include_subspecies = TRUE)
 tibble::tibble(my_sp2) #print data.frame as tibble
 #> # A tibble: 14 × 19
@@ -331,7 +331,7 @@ spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
 spp_syn <- fauna_synonym(data = bf, species = spp)
 spp_syn
 #>           acceptedName               synonym     taxonomicStatus
-#> 49343     Panthera onca                  <NA>       accepted_name
+#> 49343     Panthera onca                  <NA>       accepted
 #> 60523    Mazama jucunda         Mazama bororo             synonym
 #> 61168 Subulo gouzoubira    Mazama gouazoubira             synonym
 ```

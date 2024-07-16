@@ -49,7 +49,7 @@
 #'                            habitat = "all", filter_habitat = "in",
 #'                            states = "all", filter_states = "in",
 #'                            country = "brazil", filter_country = "only",
-#'                            origin = "all", taxonomicStatus = "accepted_name")
+#'                            origin = "all", taxonomicStatus = "accepted")
 #' #Get presence-absence matrix in states
 #' pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, by_country = FALSE,
 #'                          remove_empty_sites = TRUE,
@@ -272,7 +272,7 @@ fauna_pam <- function(data, by_state = TRUE, by_country = FALSE,
 #                          habitat = "all", filter_habitat = "in",
 #                          states = "all", filter_states = "in",
 #                          country = "brazil", filter_country = "only",
-#                          origin = "all", taxonomicStatus = "accepted_name")
+#                          origin = "all", taxonomicStatus = "accepted")
 # #Get presence-absence matrix in states
 # pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, by_country = FALSE,
 #                          remove_empty_sites = TRUE,

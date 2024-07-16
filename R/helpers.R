@@ -382,7 +382,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # ####Get Fauna do Brazil dataset####
 # my_dir <- "../faunabrdata/"
 # dir.create(my_dir)
-# get_faunabr(output_dir = my_dir)
+# get_faunabr(output_dir = my_dir, solve_discrepancies = FALSE)
 #
 # #Fauna do Brazil data
 # df <- load_faunabr(data_dir = my_dir, type = "short")
@@ -390,7 +390,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # #Get only native species of chordata
 # p <- df %>% filter(taxonRank == "species", origin == "native", phylum == "Chordata")
 # #Get only accepted names
-# pac <- p %>% filter(taxonomicStatus == "accepted_name")
+# pac <- p %>% filter(taxonomicStatus == "accepted")
 # #Include some synonyms
 # syn <- df %>% filter(acceptedName %in% c("Mazama nemorivaga", "Mazama jucunda",
 #                                     "Subulo gouzoubira"))

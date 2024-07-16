@@ -41,8 +41,8 @@
 #' be "native", "introduced", "cryptogenic", "domesticaded" and "invasora".
 #' Default = "all".
 #' @param taxonomicStatus (character) The taxonomic status for filtering the
-#' dataset. It can be "accepted_name", "synonym" or "all".
-#' Default = "accepted_name".
+#' dataset. It can be "accepted", "synonym" or "all".
+#' Default = "accepted".
 #'
 #' @details It's possible to choose 4 ways to filter by lifeform, by habitat,
 #' by states and by country:
@@ -80,7 +80,7 @@
 #'                       habitat = "all", filter_habitat = "in",
 #'                       states = "all", filter_states = "in",
 #'                       country = "all", filter_country = "in",
-#'                       origin = "all", taxonomicStatus = "accepted_name")
+#'                       origin = "all", taxonomicStatus = "accepted")
 #' @export
 #' @references
 #' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
@@ -101,7 +101,7 @@
 #'                            country = c("brazil", "argentina"),
 #'                            filter_country = "in",
 #'                            origin = "native",
-#'                            taxonomicStatus = "accepted_name")
+#'                            taxonomicStatus = "accepted")
 select_fauna <- function(data, include_subspecies = FALSE,
                          phylum = "all", class = "all", order = "all",
                          family = "all",
@@ -111,7 +111,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
                          states = "all", filter_states = "in",
                          country = "all", filter_country = "in",
                          origin = "all",
-                         taxonomicStatus = "accepted_name") {
+                         taxonomicStatus = "accepted") {
   if (missing(data)) {
     stop("Argument data is not defined")
   }
@@ -189,16 +189,15 @@ select_fauna <- function(data, include_subspecies = FALSE,
     stop(paste("Genus not valid.\n")) }
 
 
-  if(all(origin != "all") & !any(origin %in% c('all', "native", "introduced",
-                                       "cryptogenic", "domesticated", "invasive"))) {
+  if(all(origin != "all") & !any(origin %in% unique(data$origin))) {
     stop(paste("origin not valid. The options availables are:\n",
-               "all', 'native', 'cryptogenic', or 'domesticated'")
-    )}
+               paste(unique(data$origin), collapse = ", ")))
+    }
 
-  if(taxonomicStatus != "all" &
-     !(taxonomicStatus %in% c('all', 'accepted_name', 'synonym'))) {
+  if(taxonomicStatus != "all" & !any(taxonomicStatus %in% unique(data$taxonomicStatus))) {
     stop(paste("taxonomicStatus not valid. The options availables are:\n",
-               "'all', 'accepted_name', or 'synonym'"))}
+               paste(unique(data$taxonomicStatus), collapse = ", ")))
+    }
 
   #Start to filter...
     #Taxon Rank
