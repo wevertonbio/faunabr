@@ -563,6 +563,12 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # states <- terra::wrap(states)
 # usethis::use_data(states, overwrite = TRUE)
 
+# states <- geobr::read_state() %>% vect()
+# crs(states) <- "+init=epsg:4326"
+# states <- terra::wrap(states)
+# usethis::use_data(states, overwrite = TRUE)
+
+
 # #### Make sticker ####
 # library(hexSticker)
 # library(showtext)
