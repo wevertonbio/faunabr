@@ -237,9 +237,10 @@ data.frame"))
   }
 
   occ_flag <- as.data.frame(occ_info)
+  colnames(occ_flag)[which(colnames(occ_flag) == "species")] <- species
 
   if (keep_columns) {
-    occ_flag <- merge(occ_flag, occ, by = c("species", "id_f"))
+    occ_flag <- merge(occ_flag, occ, by = c(species, "id_f"))
     occ_flag$id_f <- NULL
     occ_flag <- occ_flag[, c(species, long, lat, colnames(occ_flag)[!(colnames(occ_flag) %in%
                                                                         c(species, long, lat))])]
@@ -248,7 +249,7 @@ data.frame"))
   }
   if (!keep_columns) {
     occ_flag <- merge(occ_flag, occ[, c(species, lat, long,
-                                        "id_f")], by = c("species", "id_f"))
+                                        "id_f")], by = c(species, "id_f"))
     occ_flag$id_f <- NULL
     occ_flag <- occ_flag[, c(species, long, lat, names(occ_flag)[!(names(occ_flag) %in%
                                                                      c(species, long, lat))])]
