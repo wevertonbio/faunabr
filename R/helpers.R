@@ -352,6 +352,9 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   df_final$countryCode[index_fix] <- countries_fixed
   #df_final[index_fix,] %>% View()
 
+  #Fix states
+  df_final$states <- gsub("BR-", "", df_final$states)
+
   #Translate and put in lower case
   df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
   df_final$lifeForm[df_final$lifeForm == ""] <- NA
