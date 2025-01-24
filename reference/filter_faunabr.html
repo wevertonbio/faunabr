@@ -103,7 +103,8 @@ natural ranges according to information provided by the Fauna do Brasil database
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_faunabr</span><span class="op">(</span><span class="va">data</span>, <span class="va">occ</span>, species <span class="op">=</span> <span class="st">"species"</span>, long <span class="op">=</span> <span class="st">"x"</span>, lat <span class="op">=</span> <span class="st">"y"</span>,</span>
 <span>                      by_state <span class="op">=</span> <span class="cn">TRUE</span>, buffer_state <span class="op">=</span> <span class="fl">20</span>, by_country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                      buffer_country <span class="op">=</span> <span class="fl">20</span>, value <span class="op">=</span> <span class="st">"flag&amp;clean"</span>,</span>
-<span>                      keep_columns <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>                      keep_columns <span class="op">=</span> <span class="cn">TRUE</span>, spat_state <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>                      spat_country <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -161,6 +162,22 @@ input occ. If False, keep only the columns species, long and lat.
 Default = TRUE</p></dd>
 
 
+<dt id="arg-spat-state">spat_state<a class="anchor" aria-label="anchor" href="#arg-spat-state"></a></dt>
+<dd><p>(SpatVector) a SpatVector of the Brazilian states. By
+default, it uses the SpatVector provided by geobr::read_state(). It can be
+another Spatvector, but the structure must be identical to
+'faunabr::states', with a column called "abbrev_state" identifying the states
+codes.</p></dd>
+
+
+<dt id="arg-spat-country">spat_country<a class="anchor" aria-label="anchor" href="#arg-spat-country"></a></dt>
+<dd><p>(SpatVector) a SpatVector of the world countries. By
+default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+can be another Spatvector, but the structure must be identical to
+'faunabr::world_fauna', with a column called "country_code" identifying the
+country codes.</p></dd>
+
+
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>(logical) Whether to display species being filtered during
 function execution. Set to TRUE to enable display, or FALSE to run silently.
@@ -188,8 +205,7 @@ species fall inside it.</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#Test function</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fauna_data"</span><span class="op">)</span> <span class="co">#Load fauna e Funga do Brasil data</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fauna_data"</span><span class="op">)</span> <span class="co">#Load fauna e Funga do Brasil data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occurrences"</span><span class="op">)</span> <span class="co">#Load occurrences</span></span></span>
 <span class="r-in"><span><span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">occurrences</span>, <span class="va">species</span> <span class="op">==</span> <span class="st">"Panthera onca"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">fd</span> <span class="op">&lt;-</span> <span class="fu">filter_faunabr</span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>,</span></span>

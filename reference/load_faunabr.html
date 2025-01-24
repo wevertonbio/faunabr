@@ -98,7 +98,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_faunabr</span><span class="op">(</span><span class="va">data_dir</span>, data_version <span class="op">=</span> <span class="st">"latest_available"</span>,</span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">load_faunabr</span><span class="op">(</span><span class="va">data_dir</span>, data_version <span class="op">=</span> <span class="st">"latest"</span>,</span>
 <span>                    type <span class="op">=</span> <span class="st">"short"</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, encoding <span class="op">=</span> <span class="st">"UTF-8"</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -113,9 +113,9 @@ downloaded from Brazilian Fauna using the <a href="get_faunabr.html">get_faunabr
 
 <dt id="arg-data-version">data_version<a class="anchor" aria-label="anchor" href="#arg-data-version"></a></dt>
 <dd><p>(character) the version of Brazilian Fauna database to
-be loaded. It can be "latest_available", which will load the latest version
+be loaded. It can be "latest", which will load the latest version
 available; or another specified version, for example "1.2".
-Default = "latest_available".</p></dd>
+Default = "latest".</p></dd>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
@@ -169,7 +169,7 @@ https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil</
 <span class="r-in"><span><span class="fu">get_fauna</span><span class="op">(</span>output_dir <span class="op">=</span> <span class="va">my_dir</span>, data_version <span class="op">=</span> <span class="st">"latest"</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>            verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#Load data</span></span></span>
-<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">load_faunabr</span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>, data_version <span class="op">=</span> <span class="st">"latest_available"</span>,</span></span>
+<span class="r-in"><span><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu">load_faunabr</span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>, data_version <span class="op">=</span> <span class="st">"latest"</span>,</span></span>
 <span class="r-in"><span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>

@@ -267,7 +267,7 @@ version by default.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Short version</span></span>
 <span><span class="va">bf</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>,</span>
-<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>,</span>
+<span>                   data_version <span class="op">=</span> <span class="st">"latest"</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#short</span></span>
 <span><span class="co">#&gt; Loading version 393.401</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">bf</span><span class="op">)</span> <span class="co">#See variables from short version</span></span>
@@ -277,12 +277,12 @@ version by default.</p>
 <span><span class="co">#&gt; [10] "genus"               "lifeForm"            "habitat"</span></span>
 <span><span class="co">#&gt; [13] "states"              "countryCode"         "origin" </span></span>
 <span><span class="co">#&gt; [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"          </span></span>
-<span><span class="co">#&gt; [19] "taxonRank"</span></span></code></pre></div>
+<span><span class="co">#&gt; [19] "taxonRank"           "id"</span></span></code></pre></div>
 <p>Note that the complete version has 12 more columns:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Complete version</span></span>
 <span><span class="va">bf_complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>,</span>
-<span>                   data_version <span class="op">=</span> <span class="st">"Latest_available"</span>,</span>
+<span>                   data_version <span class="op">=</span> <span class="st">"latest"</span>,</span>
 <span>                   type <span class="op">=</span> <span class="st">"complete"</span><span class="op">)</span> <span class="co">#complete</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">colnames</a></span><span class="op">(</span><span class="va">bf_complete</span><span class="op">)</span> <span class="co">#See variables from complete version</span></span>

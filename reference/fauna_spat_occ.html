@@ -100,14 +100,8 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fauna_spat_occ</span><span class="op">(</span></span>
-<span>  <span class="va">data</span>,</span>
-<span>  <span class="va">species</span>,</span>
-<span>  state <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  state_and_country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">fauna_spat_occ</span><span class="op">(</span><span class="va">data</span>, <span class="va">species</span>, state <span class="op">=</span> <span class="cn">TRUE</span>, country <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>                      spat_state <span class="op">=</span> <span class="cn">NULL</span>, spat_country <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -134,11 +128,20 @@ species? Default = TRUE</p></dd>
 species? Default = TRUE</p></dd>
 
 
-<dt id="arg-state-and-country">state_and_country<a class="anchor" aria-label="anchor" href="#arg-state-and-country"></a></dt>
-<dd><p>(character) get a Spatvector representing both states
-and countrys with occurrence of the specie?
-To use state_and_country = TRUE, you must define state = TRUE and country = TRUE".
-Default = TRUE</p></dd>
+<dt id="arg-spat-state">spat_state<a class="anchor" aria-label="anchor" href="#arg-spat-state"></a></dt>
+<dd><p>(SpatVector) a SpatVector of the Brazilian states. By
+default, it uses the SpatVector provided by geobr::read_state(). It can be
+another Spatvector, but the structure must be identical to
+'faunabr::states', with a column called "abbrev_state" identifying the states
+codes.</p></dd>
+
+
+<dt id="arg-spat-country">spat_country<a class="anchor" aria-label="anchor" href="#arg-spat-country"></a></dt>
+<dd><p>(SpatVector) a SpatVector of the world countries. By
+default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+can be another Spatvector, but the structure must be identical to
+'faunabr::world_fauna', with a column called "country_code" identifying the
+country codes.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -149,20 +152,19 @@ Default = TRUE.</p></dd>
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list with SpatVectors of states and/or countrys and/or both for each
+    <p>A list with SpatVectors of states and/or countrys for each
 specie.</p>
     </div>
 
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> terra 1.7.83</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> terra 1.8.10</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fauna_data"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Panthera onca"</span>, <span class="st">"Mazama jucunda"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">#Get states, countrys and intersection states-countrys of species</span></span></span>
 <span class="r-in"><span><span class="va">spp_spt</span> <span class="op">&lt;-</span> <span class="fu">fauna_spat_occ</span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>, species <span class="op">=</span> <span class="va">spp</span>, state <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                          country <span class="op">=</span> <span class="cn">TRUE</span>, state_and_country <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                          verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                          country <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Getting states of Panthera onca</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Getting countries of Panthera onca</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Getting states of Mazama jucunda</span>
@@ -177,11 +179,6 @@ specie.</p>
 <span class="r-plt img"><img src="fauna_spat_occ-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">$</span><span class="va">`Mazama jucunda`</span><span class="op">$</span><span class="va">countries</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="fauna_spat_occ-4.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="co">#Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">states_countries</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="fauna_spat_occ-5.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">$</span><span class="va">`Mazama jucunda`</span><span class="op">$</span><span class="va">states_countries</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="fauna_spat_occ-6.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
