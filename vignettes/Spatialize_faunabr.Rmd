@@ -36,14 +36,14 @@ library(terra)
 #Folder where you stored the data with the function get_faunabr()
 #Load data
 bf <- load_faunabr(data_dir = my_dir,
-                   data_version = "Latest_available",
+                   data_version = "latest",
                    type = "short") #short version
-#> Loading version 1.17
+#> Loading version 1.3
 ```
 
 
 ## Get spatial polygons of species distribution
-Fauna do Brasil provides information on the brazilian federal states and countries with confirmed occurrences of the species. The `get_spat_occ` function extracts these information and return Spatial polygons (SpatVectors) representing the distribution of the specie. We can choose getting the Spatialvector of the brazilian federal states, countries and both countries and states.
+Fauna do Brasil provides information on the brazilian federal states and countries with confirmed occurrences of the species. The `get_spat_occ` function extracts these information and return Spatial polygons (SpatVectors) representing the distribution of the specie. We can choose getting the Spatialvector of the brazilian federal states and/or countries.
 
 ```{r}
 #Example species
@@ -66,14 +66,10 @@ plot(spp_spt$`Panthera onca`$states,
      main = paste0(names(spp_spt)[[1]], " - States"), mar = NA)
 plot(spp_spt$`Panthera onca`$countries,
      main = paste0(names(spp_spt)[[1]], " - Countries"), mar = NA)
-plot(spp_spt$`Panthera onca`$states_countries,
-     main = paste0(names(spp_spt)[[1]], " - States and Countries"), mar = NA)
 plot(spp_spt$`Mazama jucunda`$states,
      main = paste0(names(spp_spt)[[2]], " - States"), mar = NA)
 plot(spp_spt$`Mazama jucunda`$countries,
      main = paste0(names(spp_spt)[[2]], " - Countries"), mar = NA)
-plot(spp_spt$`Mazama jucunda`$states_countries,
-     main = paste0(names(spp_spt)[[2]], " - States and Countries"), mar = NA)
 ```
 
 ```{r IMG01, eval=TRUE, echo=FALSE}
