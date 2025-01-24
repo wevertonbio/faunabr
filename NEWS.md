@@ -1,3 +1,3 @@
-# faunabr 0.0.1
+# faunabr 1.0.0
 
 * Initial CRAN submission.
