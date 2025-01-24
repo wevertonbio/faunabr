@@ -4,7 +4,7 @@
 \alias{load_faunabr}
 \title{Load Brazilian Fauna database}
 \usage{
-load_faunabr(data_dir, data_version = "latest_available",
+load_faunabr(data_dir, data_version = "latest",
                     type = "short", verbose = TRUE, encoding = "UTF-8")
 }
 \arguments{
@@ -12,9 +12,9 @@ load_faunabr(data_dir, data_version = "latest_available",
 downloaded from Brazilian Fauna using the \link{get_faunabr} function.}
 
 \item{data_version}{(character) the version of Brazilian Fauna database to
-be loaded. It can be "latest_available", which will load the latest version
+be loaded. It can be "latest", which will load the latest version
 available; or another specified version, for example "1.2".
-Default = "latest_available".}
+Default = "latest".}
 
 \item{type}{(character) it determines the number of columns that will be
 loaded. It can be "short" or "complete". Default = "short". See details.}
@@ -55,7 +55,7 @@ dir.create(my_dir)
 get_fauna(output_dir = my_dir, data_version = "latest", overwrite = TRUE,
             verbose = TRUE)
 #Load data
-df <- load_faunabr(data_dir = my_dir, data_version = "latest_available",
+df <- load_faunabr(data_dir = my_dir, data_version = "latest",
                    type = "short")
 }
 }

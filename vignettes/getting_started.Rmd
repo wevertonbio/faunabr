@@ -101,7 +101,7 @@ Additionally, you can choose between two versions of the data: the 'short' versi
 ```{r}
 #Short version
 bf <- load_faunabr(data_dir = my_dir,
-                   data_version = "Latest_available",
+                   data_version = "latest",
                    type = "short") #short
 #> Loading version 393.401
 colnames(bf) #See variables from short version
@@ -111,14 +111,14 @@ colnames(bf) #See variables from short version
 #> [10] "genus"               "lifeForm"            "habitat"
 #> [13] "states"              "countryCode"         "origin" 
 #> [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"          
-#> [19] "taxonRank"
+#> [19] "taxonRank"           "id"
 ```
 Note that the complete version has 12 more columns:
 
 ```{r}
 #Complete version
 bf_complete <- load_faunabr(data_dir = my_dir,
-                   data_version = "Latest_available",
+                   data_version = "latest",
                    type = "complete") #complete
 
 colnames(bf_complete) #See variables from complete version

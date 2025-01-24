@@ -14,10 +14,11 @@ A \code{SpatVector} with 258 geometries and 1 attribute:
 world_fauna
 }
 \description{
-A simplified and packed SpatVector of the world country polygons. The spatial
-data was originally obtained from \code{rnaturalearth::ne_countries}. Borders
-have been simplified by removing vertices of borders using \code{terra::simplifyGeom}.
-It's necessary unpack the Spatvectos using \code{terra::unwrap}
+A simplified and packed SpatVector of the world country polygons. The
+spatial data was originally obtained from \code{rnaturalearth::ne_countries}.
+Borders have been simplified by removing vertices of borders using
+\code{terra::simplifyGeom}.It's necessary unpack the Spatvectos using
+\code{terra::unwrap}
 
 @usage data(world_fauna)
 biomes <- terra::unwrap(world_fauna)

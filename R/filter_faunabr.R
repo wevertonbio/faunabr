@@ -21,6 +21,16 @@
 #' @param keep_columns (logical) if TRUE, keep all the original columns of the
 #' input occ. If False, keep only the columns species, long and lat.
 #' Default = TRUE
+#' @param spat_state (SpatVector) a SpatVector of the Brazilian states. By
+#' default, it uses the SpatVector provided by geobr::read_state(). It can be
+#' another Spatvector, but the structure must be identical to
+#' 'faunabr::states', with a column called "abbrev_state" identifying the states
+#' codes.
+#' @param spat_country (SpatVector) a SpatVector of the world countries. By
+#' default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+#' can be another Spatvector, but the structure must be identical to
+#' 'faunabr::world_fauna', with a column called "country_code" identifying the
+#' country codes.
 #' @param verbose (logical) Whether to display species being filtered during
 #' function execution. Set to TRUE to enable display, or FALSE to run silently.
 #' Default = TRUE.
@@ -42,14 +52,14 @@
 #' @usage filter_faunabr(data, occ, species = "species", long = "x", lat = "y",
 #'                       by_state = TRUE, buffer_state = 20, by_country = TRUE,
 #'                       buffer_country = 20, value = "flag&clean",
-#'                       keep_columns = TRUE, verbose = TRUE)
+#'                       keep_columns = TRUE, spat_state = NULL,
+#'                       spat_country = NULL, verbose = TRUE)
 #' @export
 #'
 #' @importFrom terra aggregate subset buffer unwrap mask as.data.frame vect
 #' @importFrom data.table rbindlist
 #' @importFrom stats na.omit
 #' @examples
-#' #Test function
 #' data("fauna_data") #Load fauna e Funga do Brasil data
 #' data("occurrences") #Load occurrences
 #' pts <- subset(occurrences, species == "Panthera onca")
@@ -65,6 +75,8 @@ filter_faunabr <- function(data,
                            by_state = TRUE, buffer_state = 20,
                            by_country = TRUE, buffer_country = 20,
                            value = "flag&clean", keep_columns = TRUE,
+                           spat_state = NULL,
+                           spat_country = NULL,
                            verbose = TRUE) {
   if (missing(data)) {
     stop("Argument data is not defined")
@@ -146,7 +158,8 @@ data.frame"))
   }
   d_info <- subset(d, d$species %in% unique(occ_info$species))
   d_info[d_info == ""] <- NA
-  sp_info <- lapply(seq_along(spp), function(i) {
+
+   sp_info <- lapply(seq_along(spp), function(i) {
     sp <- subset(d_info, d_info$species == spp[i])
     sp$states <- paste0(na.omit(unique(sp$states)), collapse = ";")
     sp$countrycode <- paste0(na.omit(unique(sp$countrycode)), collapse = ";")
@@ -157,11 +170,18 @@ data.frame"))
   occ_info <- terra::vect(occ_info, geom = c("x", "y"),
                           crs = "+init=epsg:4326")
 
-  #Get vector of states
-  states <- terra::unwrap(faunabr::states)
 
-  #Get vector of countries
-  countrys <- terra::unwrap(faunabr::world_fauna)
+  #Load data
+  if(is.null(spat_state)){
+    states <- terra::unwrap(faunabr::states)} else {
+      states <- spat_state
+      }
+
+  if(is.null(spat_country)){
+    countrys <- terra::unwrap(faunabr::world_fauna) } else {
+      countrys <- spat_country
+      }
+
 
   #Buffer around Brazil (to select records inside Brazil)
   if(by_state){
@@ -169,7 +189,7 @@ data.frame"))
                         width = buffer_state * 1000)
 
   #Check records inside Brazil
-  occ_info$inside_br <- terra::is.related(occ_info, states, "within")
+  occ_info$inside_br <- terra::is.related(occ_info, states, "intersects")
   } else {
     occ_info$inside_br <- NA
   }
@@ -187,23 +207,22 @@ data.frame"))
         }
         states_final <- occ_i
         states_final$inside_state <- "No info"
-      }
-      else {
-        states_v <- terra::aggregate(terra::subset(states,
-                                                   grepl(sp_i_state, states$abbrev_state)))
-        states_v <- terra::buffer(states_v, width = buffer_state *
-                                    1000)
+      } else {
+        states_v <- terra::aggregate(terra::subset(states, grepl(sp_i_state,states$abbrev_state)))
+        #Get distance
+        distance_i <- terra::distance(occ_i[occ_i$inside_br], states_v,
+                                      unit = "km")[,1]
+        distance_i <- distance_i <= buffer_state
         #Create columns
         occ_i$inside_state <- NA
         #Fill inside_state of records inside br
-        occ_i$inside_state[occ_i$inside_br] <- terra::is.related(occ_i[occ_i$inside_br],
-                                                                 states_v,
-                                                                 "intersects")
+        occ_i$inside_state[occ_i$inside_br] <- distance_i
       }
       return(occ_i)
     })
     occ_info <- do.call("rbind", l_state)
   }
+
   if (!by_country) {
     occ_info$inside_country <- NA
   } else {
@@ -220,16 +239,18 @@ data.frame"))
         }
         countrys_final <- occ_i
         countrys_final$inside_country <- "No info"
-      }
-      else {
+      } else {
         countrys_v <- terra::aggregate(terra::subset(countrys,
-                                                   grepl(sp_i_country, countrys$name)))
-        countrys_v <- terra::buffer(countrys_v, width = buffer_country *
-                                    1000)
+                                       grepl(sp_i_country, countrys$country_code)))
+        #Get distance
+        distance_i <- terra::distance(occ_i, countrys_v,
+                                      unit = "km")[,1]
+        distance_i <- distance_i <= buffer_country
+
         #Create columns
         occ_i$inside_country <- NA
         #Fill inside country
-        occ_i$inside_country <- terra::is.related(occ_i, countrys_v, "intersects")
+        occ_i$inside_country <- distance_i
       }
       return(occ_i)
     })

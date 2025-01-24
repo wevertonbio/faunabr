@@ -63,10 +63,11 @@
 #' SpatVector of the world countries
 #'
 #' @description
-#'  A simplified and packed SpatVector of the world country polygons. The spatial
-#'  data was originally obtained from \code{rnaturalearth::ne_countries}. Borders
-#'  have been simplified by removing vertices of borders using \code{terra::simplifyGeom}.
-#'  It's necessary unpack the Spatvectos using \code{terra::unwrap}
+#'  A simplified and packed SpatVector of the world country polygons. The
+#'  spatial data was originally obtained from \code{rnaturalearth::ne_countries}.
+#'  Borders have been simplified by removing vertices of borders using
+#'  \code{terra::simplifyGeom}.It's necessary unpack the Spatvectos using
+#'  \code{terra::unwrap}
 #'
 #'  @usage data(world_fauna)
 #'  biomes <- terra::unwrap(world_fauna)
@@ -80,8 +81,8 @@
 #' Records of animal species
 #'
 #' @description
-#'  A dataset containing records of 2 species downloaded from GBIF, with additional fake data. The
-#'  records were obtained with \code{plantR::rgbif2}
+#'  A dataset containing records of 2 species downloaded from GBIF, with
+#'  additional fake data. The records were obtained with \code{plantR::rgbif2}
 #'
 #' @usage data(occurrences)
 #'
@@ -94,3 +95,20 @@
 #' }
 #' @references GBIF, 2024. florabr R package: Records of plant species. https://doi.org/10.15468/DD.QPGEB7
 "occurrences"
+
+#' Country Codes and Names
+#'
+#' @description
+#' A dataset containing country codes used in the Catálogo Taxonômico da Fauna
+#' do Brasil along with their corresponding country names, as defined in
+#' \code{faunabr::world_fauna}.
+#'
+#' @usage data(country_codes)
+#'
+#' @format A \code{data.frame} with 244 rows and 2 variables:
+#' \describe{
+#'   \item{map_name}{Country names as defined in \code{faunabr::world_fauna}.}
+#'   \item{country_code}{Country codes used in the Catálogo Taxonômico da Fauna
+#'   do Brasil.}
+#' }
+"country_codes"

@@ -11,7 +11,7 @@
 #' spp <- c("Panthera onca (Linnaeus, 1758)",
 #' "Zonotrichia capensis subtorquata Swainson, 1837",
 #' "Paraganaspis egeria Díaz & Gallardo, 1996",
-#' "Arrenurus (Incertae sedis) tumulosus intercursor")
+#' "Arrenurus tumulosus intercursor")
 #' spp_new <- extract_binomial(species_names = spp)
 #' spp_new
 #'

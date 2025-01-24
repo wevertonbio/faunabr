@@ -3,9 +3,9 @@
 #' @param data_dir (character) the same directory used to save the data
 #' downloaded from Brazilian Fauna using the \link{get_faunabr} function.
 #' @param data_version (character) the version of Brazilian Fauna database to
-#' be loaded. It can be "latest_available", which will load the latest version
+#' be loaded. It can be "latest", which will load the latest version
 #' available; or another specified version, for example "1.2".
-#' Default = "latest_available".
+#' Default = "latest".
 #' @param type (character) it determines the number of columns that will be
 #' loaded. It can be "short" or "complete". Default = "short". See details.
 #' @param verbose (logical) Whether to display messages during function
@@ -27,7 +27,7 @@
 #' available) of the Brazilian Fauna database. This data.frame is necessary to
 #' run most of the functions of the package.
 #'
-#' @usage load_faunabr(data_dir, data_version = "latest_available",
+#' @usage load_faunabr(data_dir, data_version = "latest",
 #'                     type = "short", verbose = TRUE, encoding = "UTF-8")
 #' @importFrom stats na.omit
 #' @importFrom data.table fread
@@ -47,10 +47,10 @@
 #' get_fauna(output_dir = my_dir, data_version = "latest", overwrite = TRUE,
 #'             verbose = TRUE)
 #' #Load data
-#' df <- load_faunabr(data_dir = my_dir, data_version = "latest_available",
+#' df <- load_faunabr(data_dir = my_dir, data_version = "latest",
 #'                    type = "short")
 #' }
-load_faunabr <- function(data_dir, data_version = "latest_available",
+load_faunabr <- function(data_dir, data_version = "latest",
                          type = "short", verbose = TRUE, encoding = "UTF-8"){
   #Set folder
   if (missing(data_dir)) {
@@ -80,10 +80,11 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
   path_data <-  data_dir
 
   #Get latest available version if version was not set
-  if(data_version == "latest_available") {
+  if(data_version == "latest") {
     #Search for directories
     all_dirs <- list.dirs(path = path_data, recursive = FALSE)
-    dir_versions <- as.numeric(sub(".*/([0-9.]+)$", "\\1", all_dirs))
+    dir_versions <- na.omit(suppressWarnings(
+      as.numeric(sub(".*/([0-9.]+)$", "\\1", all_dirs))))
 
     #Get highest version
     if(length(dir_versions) > 0) {
@@ -91,12 +92,14 @@ load_faunabr <- function(data_dir, data_version = "latest_available",
         version_data <- 0
       }
   } else {version_data <-  data_version}
-  #Stop if version_data = 0
-  if (version_data == 0) {
-    stop("There is no version of the Catalog of the Brazilian Fauna in the
-    specified directory.
-    Please check the directory or run the 'get_faunabr' function
-    to download the latest version of the data")
+
+  #Check if version_data is avaliable
+  check_folder <- version_data %in% list.dirs(path_data, full.names = F)
+
+  if (!check_folder) {
+    stop("The version specified - ", version_data, " - is not available in the
+    specified directory. Please check the directory or run the 'get_faunabr' function
+    to download the latest version of the data.")
   }
 
   #Load data

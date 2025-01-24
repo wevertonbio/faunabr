@@ -55,8 +55,8 @@ fauna_version <- function(data_dir) {
                                        fixed = TRUE))
 
   #Get version
-  latest_version <- gsub(".*catalogo_taxonomico_da_fauna_do_brasil&v=([0-9.]+).*", "\\1",
-                         link_download)
+  latest_version <- as.numeric(gsub(".*catalogo_taxonomico_da_fauna_do_brasil&v=([0-9.]+).*", "\\1",
+                         link_download))
 
   #Check if you have the latest version
   is_latest <- high_version == latest_version

@@ -13,19 +13,21 @@ translate_lifeform <- function(text) {
   new_lifeform <- gsub("VIDA_LIVRE_INDIVIDUAL", "free_living_individual", text, ignore.case = TRUE)
   new_lifeform <- gsub("COLONIAL", "colonial", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("SESSIL", "sessile", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ECTOPARASITO", "ectoparasite", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("HERBIVORO", "herbivore", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("EUSSOCIAL", "eusocial", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("PREDADOR", "predator", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("ENDOPARASITOIDE", "endoparasitoid", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ENDOPARASITO", "endoparasite", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("ECTOPARASITOIDE", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("HIPERPARASITOIDE", "hyperparasitoid", new_lifeform, ignore.case = TRUE)
+  new_lifeform <- gsub("ECTOPARASITO", "ectoparasite", new_lifeform, ignore.case = TRUE)
+  new_lifeform <- gsub("ENDOPARASITO", "endoparasite", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("COMENSAL", "commensal", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("EPIBIONTE", "epibiont", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("POLINIZADOR", "polynizer", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("INQUILINO", "inquiline", new_lifeform, ignore.case = TRUE)
   new_lifeform <- gsub("MUTUAL", "mutualistic", new_lifeform, ignore.case = TRUE)
+  new_lifeform <- gsub("endoparasiteid", "endoparasitoid", new_lifeform, ignore.case = TRUE)
+  new_lifeform <- gsub("ectoparasiteid", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
   return(new_lifeform)
 }
 
@@ -271,9 +273,10 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   #Accepted name when is synonymn
   df_final3$acceptedName <- NA
   sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE") &
-                                           df_final3$taxonomicStatus == "SINONIMO")
+                  df_final3$taxonomicStatus == "SINONIMO" &
+                    !is.na(df_final3$acceptedNameUsage))
   df_final3[sp_syn, "acceptedName"] <- sapply(df_final3[sp_syn, "acceptedNameUsage"],
-                                                   extract_species)
+                                              extract_species)
 
   #resourcerelationship
   rr <- utils::read.csv(file.path(path_data, version_data,
@@ -342,12 +345,12 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   colnames(df_final)[colnames(df_final) == "locality"] <- "states"
 
   #Fix countries
-  df_final$countryCode[is.na(df_final$countryCode) & !is.na(df_final$states)] <- "BRAZIL"
+  df_final$countryCode[is.na(df_final$countryCode) & !is.na(df_final$states)] <- "BR"
   #Get index for more complex fixing
-  index_fix <- !grepl("BRAZIL", df_final$countryCode) & !is.na(df_final$states)
+  index_fix <- !grepl("BR", df_final$countryCode) & !is.na(df_final$states)
   countries_fix <- df_final$countryCode[index_fix]
   countries_fixed <- sapply(countries_fix, function(x) {
-    paste(sort(c("BRAZIL", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
+    paste(sort(c("BR", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
     }, USE.NAMES = FALSE)
   df_final$countryCode[index_fix] <- countries_fixed
   #df_final[index_fix,] %>% View()
@@ -361,10 +364,12 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   df_final$origin <- translate_origins(df_final$origin)
   df_final$habitat <- translate_habitat(df_final$habitat)
   df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
-  df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME ACEITO"] <- "accepted"
+  df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME_ACEITO"] <- "accepted"
   df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
   df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
-  df_final$countryCode <- tolower(df_final$countryCode)
+  #df_final$countryCode <- tolower(df_final$countryCode)
+  df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
+
 
   #Solve incongruencies?
   if(solve_discrepancies){
@@ -497,54 +502,68 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # occurrences <- occurrences %>% dplyr::select(-datasetKey)
 # usethis::use_data(occurrences, overwrite = TRUE)
 
-# #### Get shape of countries ####
+# # #### Get shape of countries ####
 # w <- vect(rnaturalearth::ne_countries(scale = "large",
 #                                       returnclass = "sf"))
 # as.data.frame(w) %>% View()
+# #Match with countrycodes in data
+# cc <- bf$countryCode %>% strsplit(";") %>% unlist() %>% unique()
+# country_names <- countrycode::countrycode(cc, origin = "iso2c",
+#                                           destination = "country.name")
+# country_names <- gsub("&", "and", country_names)
+# # Create a dataframe
+# country_df <- data.frame(
+#   country_code = cc,
+#   country_name = country_names,
+#   stringsAsFactors = FALSE
+# )
+# #Fix some names manually
+# country_df$country_name[country_df$country_code == "KOS"] <- "Kosovo"
+# country_df$country_name[country_df$country_code == "PS-GZA"] <- "Palestine"
+# #Saves as data names country_codes
+# country_codes <- country_df %>% na.omit()
+# #Match with names in w
+# w$name %>% as.data.frame %>% View()
+# c_matches <- florabr::match_names(species = country_df$country_name,
+#                                   species_to_match = w$name_long) %>%
+#   filter(!is.na(input_name))
+# #Merge data
+# c_matches <- c_matches %>% rename(bf_name = input_name,
+#                                   map_name = Suggested_name) %>%
+#   select(-Distance) %>%
+#   left_join(country_codes, by = join_by("bf_name" =="country_name"))
+# #Fix manually
+# c_matches$map_name[c_matches$country_code == "CV"] <- "Republic of Cabo Verde"
+# c_matches$map_name[c_matches$country_code == "CD"] <- "Democratic Republic of the Congo"
+# c_matches$map_name[c_matches$country_code == "CG"] <- "Republic of the Congo"
+# c_matches$map_name[c_matches$country_code == "VC"] <- "Saint Vincent and the Grenadines"
+# c_matches$map_name[c_matches$country_code == "KR"] <- "Republic of Korea"
+# c_matches$map_name[c_matches$country_code == "CZ"] <- "Czech Republic"
+# c_matches$map_name[c_matches$country_code == "SH"] <- "Saint Helena"
+# c_matches$map_name[c_matches$country_code == "LC"] <- "Saint Lucia"
+# c_matches$map_name[c_matches$country_code == "FM"] <- 'Federated States of Micronesia'
+# c_matches$map_name[c_matches$country_code == "KP"] <- 'Dem. Rep. Korea'
+# c_matches$map_name[c_matches$country_code == "MM"] <- 'Myanmar'
+# c_matches$map_name[c_matches$country_code == "VI"] <- 'United States Virgin Islands'
+# c_matches$map_name[c_matches$country_code == "HK"] <- 'Hong Kong'
+# c_matches$map_name[c_matches$country_code == "MO"] <- 'Macao'
+# c_matches$map_name[c_matches$country_code == "UM"] <- 'United States Minor Outlying Islands'
+# c_matches$map_name[c_matches$country_code == "TF"] <- 'French Southern and Antarctic Lands'
+# c_matches$map_name[c_matches$country_code == "GS"] <- 'South Georgia and the Islands'
+# c_matches$map_name[c_matches$country_code == "SZ"] <- 'Kingdom of eSwatini'
+# #Save as data
+# country_codes <- c_matches %>% select(-bf_names)
+# usethis::use_data(country_codes, overwrite = TRUE)
+#
 # #Get only column with country
-# w <- w[,"name"]
-# w$name <- tolower(w$name)
-# w$name <- gsub(" ", "_", w$name)
-# w$name <- gsub("is\\.", "islands", w$name)
-# #Fix names manually
-# w$name[w$name == "antigua_and_barb."] <- "antigua_and_barbuda"
-# w$name[w$name == "bosnia_and_herz."] <- "bosnia_and_herzegovina"
-# w$name[w$name == "br._indian_ocean_ter."] <- "british_indian_ocean_territory"
-# w$name[w$name == "cabo_verde"] <- "cape_verde"
-# w$name[w$name == "central_african_rep."] <- "central_african_republic"
-# w$name[w$name == "congo"] <- "congo_republic"
-# w$name[w$name == "curaçao"] <- "curacao"
-# w$name[w$name == "czechia"] <- "czech_republic"
-# w$name[w$name == "dominican_rep."] <- "dominican_republic"
-# w$name[w$name == "eq._guinea"] <- "equatorial_guinea"
-# w$name[w$name == "falkland_islands"] <- "falkland_islands_islas_malvinas"
-# w$name[w$name == "faeroe_islands"] <- "faroe_islands"
-# w$name[w$name == "fr._polynesia"] <- "french_polynesia"
-# w$name[w$name == "fr._s._antarctic_lands"] <- "french_southern_territories"
-# w$name[w$name == "guinea-bissau"] <- "guinea_bissau"
-# w$name[w$name == "heard_i._and_mcdonald_islands"] <- "heard_island_and_mcdonald_islands"
-# w$name[w$name == "macao"] <- "macau"
-# w$name[w$name == "north_macedonia"] <- "macedonia_fyrom"
-# w$name[w$name == "myanmar"] <- "myanmar_burma"
-# w$name[w$name == "n._mariana_islands"] <- "northern_mariana_islands"
-# w$name[w$name == "palestine"] <- "palestinian_territories"
-# w$name[w$name == "st._kitts_and_nevis"] <- "saint_kitts_and_nevis"
-# w$name[w$name == "st._pierre_and_miquelon"] <- "saint_pierre_and_miquelon"
-# w$name[w$name == "st._vin._and_gren."] <- "saint_vincent_and_the_grenadines"
-# w$name[w$name == "são_tomé_and_principe"] <- "sao_tome_and_principe"
-# w$name[w$name == "s._geo._and_the_islands"] <- "south_georgia_and_the_south_sandwich_islands"
-# w$name[w$name == "eswatini"] <- "swaziland"
-# w$name[w$name == "timor-leste"] <- "timor_leste"
-# w$name[w$name == "united_states_of_america"] <- "united_states"
-# w$name[w$name == "u.s._virgin_islands"] <- "u_s_virgin_islands"
-# w$name[w$name == "wallis_and_futuna_islands"] <- "wallis_and_futuna"
-# w$name[w$name == "w._sahara"] <- "western_sahara"
-# w$name[w$name == "côte_d'ivoire"] <- "cote_d_ivoire"
-# w$name[w$name == "u.s._minor_outlying_islands"] <- "u_s_minor_outlying_islands"
-# #Save
+# w <- w[,"name_long"]
+#
 # #Simplify
 # w2 <- terra::simplifyGeom(w)
-# world_fauna <- terra::wrap(w2)
+#
+# #Merge with countryCode
+# w3 <- merge(w2, country_codes, by.x = "name_long", by.y = "map_name")
+# world_fauna <- terra::wrap(w3)
 # usethis::use_data(world_fauna, overwrite = TRUE)
 # writeVector(w, "data/teste.gpkg")
 #

@@ -29,9 +29,9 @@ Antes de começar, utilize a função `load_faunabr()` para carregar os dados. P
 library(faunabr)
 #Carregar dados
 bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_faunabr()
-                   data_version = "Latest_available", #Versão mais recente
+                   data_version = "latest", #Versão mais recente
                    type = "short") #Versão resumida
-#> Loading version 1.17
+#> Loading version 1.3
 ```
 
 ## Como selecionar uma lista de espécies?
@@ -70,10 +70,8 @@ head(fauna_at$habitat)
 head(fauna_at$origin)
 #>         origin
 #> 1  cryptogenic
-#> 2 domesticated
-#> 3   introduced
-#> 4     invasive
-#> 5       native
+#> 2       exotic
+#> 3       native
 ```
 
 Como exemplo, vamos considerar o cenário em que desejamos obter uma lista de todos os insetos arbóreos nativos com ocorrências confirmadas no Rio de Janeiro:
@@ -93,10 +91,10 @@ insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            origin = "native",
                            taxonomicStatus = "accepted")
 nrow(insects_rj)
-#> [1] 109
+#> [1] 114
 ```
 
-O filtro retornou 109 espécies que atendem aos critérios especificados. É importante notar que essas seleções incluem espécies com ocorrências confirmadas no Rio de Janeiro, e algumas delas também podem ter ocorrências confirmadas em outros estados.
+O filtro retornou 114 espécies que atendem aos critérios especificados. É importante notar que essas seleções incluem espécies com ocorrências confirmadas no Rio de Janeiro, e algumas delas também podem ter ocorrências confirmadas em outros estados.
 
 ```{r}
 #Primeiros 7 valores únicos de Estados onde as espécies ocorrem
@@ -127,12 +125,12 @@ insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            origin = "native",
                            taxonomicStatus = "accepted")
 nrow(insects_rj_only)
-#> [1] 20
+#> [1] 22
 unique(insects_rj_only$states)
 #> [1] "RJ"
 ```
 
-Agora, o filtro retornou 20 espécies, todas exclusivamente confinadas ao Rio de Janeiro.
+Agora, o filtro retornou 22 espécies, todas exclusivamente confinadas ao Rio de Janeiro.
 
 Além disso, o pacote oferece a flexibilidade de combinar vários filtros (consulte `?select_fauna` para mais detalhes). Por exemplo, considere o cenário em que desejamos compilar uma lista de insetos nativos com ocorrências confirmadas nos estados do Paraná (PR), Santa Catarina (SC) e Rio Grande do Sul (RS):
 
@@ -151,7 +149,7 @@ insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            origin = "native",
                            taxonomicStatus = "accepted")
 nrow(insects_south)
-#> [1] 10979
+#> [1] 11461
 
 #Primeiros 10 valores únicos de Estados onde as espécies ocorrem
 unique(insects_south$states)[1:10]
@@ -184,7 +182,7 @@ insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            origin = "native",
                            taxonomicStatus = "accepted")
 nrow(insects_south_and)
-#> [1] 1761
+#> [1] 1924
 
 #Primeiros 10 valores únicos de Estados onde as espécies ocorrem
 unique(insects_south_and$states)[1:10]
@@ -217,13 +215,13 @@ insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            origin = "native",
                            taxonomicStatus = "accepted")
 nrow(insects_south_only)
-#> [1] 132
+#> [1] 134
 
 #Valor único de Estados onde as espécies ocorrem
 unique(insects_south_only$states)
 #> [1] "PR;RS;SC"
 ```
-Agora, o filtro retornou apenas 132 espécies, todas ocorrendo em PR, SC e RS; sem registros de ocorrências em qualquer outro estado.
+Agora, o filtro retornou apenas 134 espécies, todas ocorrendo em PR, SC e RS; sem registros de ocorrências em qualquer outro estado.
 
 ## Checagem de nomes científicos e subseleção de espécies
 ### Extraindo o nome binomial
@@ -236,7 +234,7 @@ complete_names <- c("Pantera onça (Linnaeus, 1758)",
                     "Zonotrichia capensis subtorquata Swainson, 1837",
                     "Mazama bororo Duarte, 1996",
                     "Mazama jucunda Thomas, 1913",
-                    "Arrenurus (Incertae sedis) tumulosus intercursor",
+                    "Arrenurus tumulosus intercursor",
                     "Araucaria angustifolia")
 #Panthera onca com erros de digitação para ilustrar como a próxima função os corrige
 #Araucaria angustifolia (uma planta) foi usada apenas como um exemplo que será utilizado para ilustrar a próxima função
@@ -244,7 +242,7 @@ binomial_names <- extract_binomial(species_names = complete_names)
 binomial_names
 #> [1] "Pantera onça"                         "Zonotrichia capensis" 
 #> [3] "Mazama bororo"                        "Mazama jucunda" 
-#> [5] "Arrenurus (Incertae sedis) tumulosus" "Araucaria angustifolia" 
+#> [5] "Arrenurus tumulosus"                  "Araucaria angustifolia" 
 ```
 ### Checando se os nomes das espécies estão corretos
 Vamos agora verificar a ortografia, o status nomenclatural e o status taxonômico dos nomes das espécies usando a função `check_fauna_names()`. Se a função não conseguir localizar o nome de uma espécie no banco de dados (devido a um erro tipográfico, por exemplo), ela pode sugerir nomes potenciais com base em similaridades com outras entradas no banco de dados.
@@ -263,12 +261,12 @@ tibble::tibble(checked_names) #Exibir tabela como tibble
 #> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted   Zonotrichia… #> Passe…
 #> 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #> Cervi…
 #> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted   Mazama jucu… #> Cervi…
-#> 4 Arrenurus (Incertae… Correct  Arrenurus (In…        0 accepted   Arrenurus (… #> Arren…
+#> 4 Arrenurus (Incertae… Correct  Arrenurus tum…        0 accepted   Arrenurus t… #> Arren…
 #> 5 Pantera onça         Probabl… Panthera onca         2 accepted   Panthera on… #> Felid…
 #> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
 
 ```
-Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus (Incertae sedis) tumulosus* estão escritos corretamente e são nomes aceitos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
+Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus tumulosus* estão escritos corretamente e são nomes aceitos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
 No caso de *Pantera onça*, a ortografia parece estar potencialmente incorreta (já que o nome não foi encontrado no banco de dados); no entanto, um nome semelhante, *Panthera onca*, é sugerido pela função. A coluna 'Distance' indica a distância de edição de Levenshtein entre a entrada e o nome sugerido.
 *Araucaria angustifolia* foi marcada como Not_found (como esperado, dado que *Araucaria angustifolia* não é um animal!). Consequentemente, o nome não foi localizado no banco de dados e não havia nomes comparáveis disponíveis.
 

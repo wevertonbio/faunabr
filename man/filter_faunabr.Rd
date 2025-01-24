@@ -7,7 +7,8 @@
 filter_faunabr(data, occ, species = "species", long = "x", lat = "y",
                       by_state = TRUE, buffer_state = 20, by_country = TRUE,
                       buffer_country = 20, value = "flag&clean",
-                      keep_columns = TRUE, verbose = TRUE)
+                      keep_columns = TRUE, spat_state = NULL,
+                      spat_country = NULL, verbose = TRUE)
 }
 \arguments{
 \item{data}{(data.frame) the data.frame imported with the
@@ -39,6 +40,18 @@ Default = "flag&clean".}
 input occ. If False, keep only the columns species, long and lat.
 Default = TRUE}
 
+\item{spat_state}{(SpatVector) a SpatVector of the Brazilian states. By
+default, it uses the SpatVector provided by geobr::read_state(). It can be
+another Spatvector, but the structure must be identical to
+'faunabr::states', with a column called "abbrev_state" identifying the states
+codes.}
+
+\item{spat_country}{(SpatVector) a SpatVector of the world countries. By
+default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+can be another Spatvector, but the structure must be identical to
+'faunabr::world_fauna', with a column called "country_code" identifying the
+country codes.}
+
 \item{verbose}{(logical) Whether to display species being filtered during
 function execution. Set to TRUE to enable display, or FALSE to run silently.
 Default = TRUE.}
@@ -64,7 +77,6 @@ specie, draws a buffer around the polygons, and tests if the records of the
 species fall inside it.
 }
 \examples{
-#Test function
 data("fauna_data") #Load fauna e Funga do Brasil data
 data("occurrences") #Load occurrences
 pts <- subset(occurrences, species == "Panthera onca")

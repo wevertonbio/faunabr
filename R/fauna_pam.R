@@ -48,10 +48,11 @@
 #'                            lifeForm = "all", filter_lifeForm = "in",
 #'                            habitat = "all", filter_habitat = "in",
 #'                            states = "all", filter_states = "in",
-#'                            country = "brazil", filter_country = "only",
+#'                            country = "BR", filter_country = "only",
 #'                            origin = "all", taxonomicStatus = "accepted")
 #' #Get presence-absence matrix in states
-#' pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, by_country = FALSE,
+#' pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE,
+#'                          by_country = FALSE,
 #'                          remove_empty_sites = TRUE,
 #'                          return_richness_summary = TRUE,
 #'                          return_spatial_richness = TRUE,
@@ -130,7 +131,7 @@ fauna_pam <- function(data, by_state = TRUE, by_country = FALSE,
 
 
   if(by_state & by_country){
-    sites$states[sites$countryCode != "brazil"] <- NA
+    sites$states[sites$countryCode != "BR"] <- NA
     sites <- unique(sites)
   }
 
@@ -177,21 +178,21 @@ fauna_pam <- function(data, by_state = TRUE, by_country = FALSE,
     #Load data
     if(by_state & !by_country) {
       m <- terra::unwrap(faunabr::states)
-      names(m)[1] <- "states"
+      names(m)[2] <- "states"
     }
     if(by_country & !by_state) {
       m <- terra::unwrap(faunabr::world_fauna)
-      names(m)[1] <- "countryCode"
+      names(m)[3] <- "countryCode"
     }
 
     #If by_country and by_country, merge polygons
     if(by_country & by_state){
-      m_world <- terra::unwrap(faunabr::world_fauna)
-      names(m_world)[1] <- "countryCode"
-      m_states <- terra::unwrap(faunabr::states)
-      names(m_states)[1] <- "states"
+      m_world <- terra::simplifyGeom(terra::unwrap(faunabr::world_fauna))
+      names(m_world)[3] <- "countryCode"
+      m_states <- terra::simplifyGeom(terra::unwrap(faunabr::states))
+      names(m_states)[2] <- "states"
       m <- terra::union(m_world, m_states)
-      m$states[m$countryCode != "brazil"] <- NA
+      m$states[m$country_code != "BR"] <- NA
     }
 
     #Get columns
@@ -229,8 +230,7 @@ fauna_pam <- function(data, by_state = TRUE, by_country = FALSE,
       if(n_breaks >= 10){
         terra::plot(m, "richness", breaks = set_breaks,
                     col = rev(grDevices::terrain.colors(length(set_breaks))),
-                    main = plot_title) }
-      else{
+                    main = plot_title) }    else{
         terra::plot(m, "richness", col = rev(grDevices::terrain.colors(n_breaks)),
                     main = plot_title)
       }

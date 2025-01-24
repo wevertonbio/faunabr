@@ -28,9 +28,9 @@ Antes de começar, utilize a função `load_faunabr()` para carregar os dados. P
 library(faunabr)
 #Carregar dados
 bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_faunabr()
-                   data_version = "Latest_available", #Versão mais recente
+                   data_version = "latest", #Versão mais recente
                    type = "short") #Versão resumida
-#> Loading version 1.17
+#> Loading version 1.3
 ```
 
 ## Obtendo uma matriz de presença-ausência
@@ -48,10 +48,11 @@ br_mammals <- select_fauna(data = fauna_data,
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "all", filter_habitat = "in",
                            states = "all", filter_states = "in",
-                           country = "brazil", filter_country = "in",
+                           country = "BR", filter_country = "in",
                            origin = "all", taxonomicStatus = "accepted")
-#PAM em Estados e Países
-pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, by_country = TRUE,
+#PAM em Estados do Brasil
+pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, 
+                         by_country = FALSE,
                          remove_empty_sites = TRUE,
                          return_richness_summary = TRUE,
                          return_spatial_richness = TRUE,
@@ -59,30 +60,30 @@ pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, by_country = TRUE,
 #Visualizar (em tibble) PAM com as primeiras 5 espécies nos primeiros 5 sites
 tibble::tibble(pam_mammals$PAM[1:7, 1:5])
 #> # A tibble: 7 × 5
-#>   countryCode states `Stenella frontalis` `Alouatta ululata` `Platyrrhinus aurarius`
-#>   <fct>       <fct>                 <dbl>              <dbl>                   <dbl>
-#> 1 brazil      AM                        1                  1                       1
-#> 2 guyana      NA                        1                  1                       1
-#> 3 suriname    NA                        1                  1                       1
-#> 4 venezuela   NA                        1                  1                       1
-#> 5 argentina   NA                        1                  1                       0
-#> 6 paraguay    NA                        1                  1                       0
-#> 7 colombia    NA                        1                  1                       0
+#>   states `Platyrrhinus aurarius` `Kannabateomys amblyonyx` `Callicebus lucifer` `Cerradomys maracajuensis`
+#>   <fct>                    <dbl>                     <dbl>                <dbl>                      <dbl>
+#> 1 AM                           1                         0                    1                          0
+#> 2 ES                           0                         1                    0                          0
+#> 3 MG                           0                         1                    0                          1
+#> 4 PR                           0                         1                    0                          0
+#> 5 RJ                           0                         1                    0                          0
+#> 6 RS                           0                         1                    0                          0
+#> 7 SC                           0                         1                    0                          0
 ```
 Como *return_richness_summary* está definido como *TRUE*, a função também retorna um dataframe contendo o número de espécies por local.
 ```{r}
 #Visualise (em tibble) a tabela com a riqueza por site
 tibble::tibble(pam_mammals$Richness_summary[1:7,])
 #> # A tibble: 7 × 3
-#>   countryCode states richness
-#>   <fct>       <fct>     <dbl>
-#> 1 brazil      AM          775
-#> 2 guyana      NA          336
-#> 3 suriname    NA          328
-#> 4 venezuela   NA          342
-#> 5 argentina   NA          331
-#> 6 paraguay    NA          332
-#> 7 colombia    NA          343
+#> states   richness
+#>   <fct>     <dbl>
+#> 1 AM          225
+#> 2 ES          120
+#> 3 MG          188
+#> 4 PR          116
+#> 5 RJ          133
+#> 6 RS          105
+#> 7 SC          101
 ```
 
 Se *return_spatial_richness* estiver definido como *TRUE*, a função retornará um SpatVector contendo o número de espécies por local. Além disso, quando *return_plot* também estiver definido como *TRUE* a função retornará um plot do mapa:

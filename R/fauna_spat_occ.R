@@ -9,19 +9,27 @@
 #' species? Default = TRUE
 #' @param country (logical) get SpatVector of countrys with occurrence of the
 #' species? Default = TRUE
-#' @param state_and_country (character) get a Spatvector representing both states
-#' and countrys with occurrence of the specie?
-#' To use state_and_country = TRUE, you must define state = TRUE and country = TRUE".
-#' Default = TRUE
+#' @param spat_state (SpatVector) a SpatVector of the Brazilian states. By
+#' default, it uses the SpatVector provided by geobr::read_state(). It can be
+#' another Spatvector, but the structure must be identical to
+#' 'faunabr::states', with a column called "abbrev_state" identifying the states
+#' codes.
+#' @param spat_country (SpatVector) a SpatVector of the world countries. By
+#' default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+#' can be another Spatvector, but the structure must be identical to
+#' 'faunabr::world_fauna', with a column called "country_code" identifying the
+#' country codes.
 #' @param verbose (logical) Whether to display species being filtered during
 #' function execution. Set to TRUE to enable display, or FALSE to run silently.
 #' Default = TRUE.
 #'
-#' @return A list with SpatVectors of states and/or countrys and/or both for each
+#' @return A list with SpatVectors of states and/or countrys for each
 #' specie.
 #' @importFrom terra subset unwrap intersect mask
 #' @importFrom data.table rbindlist
 #' @importFrom stats na.omit
+#' @usage fauna_spat_occ(data, species, state = TRUE, country = TRUE,
+#'                       spat_state = NULL, spat_country = NULL, verbose = TRUE)
 #' @export
 #' @examples
 #' library(terra)
@@ -29,21 +37,18 @@
 #' spp <- c("Panthera onca", "Mazama jucunda")
 #' #Get states, countrys and intersection states-countrys of species
 #' spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
-#'                           country = TRUE, state_and_country = TRUE,
-#'                           verbose = TRUE)
+#'                           country = TRUE, verbose = TRUE)
 #' #Plot states with confirmed occurrence of Panthera onca and Mazama jucunda
 #' plot(spp_spt$`Panthera onca`$states)
 #' plot(spp_spt$`Mazama jucunda`$states)
 #' #Plot countries with confirmed occurrence of Panthera onca and Mazama jucunda
 #' plot(spp_spt$`Panthera onca`$countries)
 #' plot(spp_spt$`Mazama jucunda`$countries)
-#' #Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda
-#' plot(spp_spt$`Panthera onca`$states_countries)
-#' plot(spp_spt$`Mazama jucunda`$states_countries)
 #'
 fauna_spat_occ <- function(data, species, state = TRUE,
                            country = TRUE,
-                           state_and_country = TRUE,
+                           spat_state = NULL,
+                           spat_country = NULL,
                            verbose = TRUE) {
   if (missing(data)) {
     stop("Argument data is not defined")
@@ -69,11 +74,6 @@ fauna_spat_occ <- function(data, species, state = TRUE,
     stop(paste0("Argument country must be logical, not ", class(country)))
   }
 
-  if (!is.logical(state_and_country)) {
-    stop(paste0("Argument state_and_country must be logical, not ",
-                class(state_and_country)))
-  }
-
   if (!is.logical(verbose)) {
     stop(paste0("Argument verbose must be logical, not ", class(verbose)))
   }
@@ -88,10 +88,6 @@ fauna_spat_occ <- function(data, species, state = TRUE,
   #Check if there is at least one TRUE in states or countrys
   if(!state & !country){
     stop("At least one of the parameters state or country must be TRUE")
-  }
-  if(state_and_country & (!state | !country)) {
-    stop("To use state_and_country = TRUE, you must define state = TRUE and
-         country = TRUE")
   }
 
   #Load data
@@ -114,7 +110,7 @@ fauna_spat_occ <- function(data, species, state = TRUE,
     sp <- subset(d_info, d_info$species == spp[i])
     sp$states <- paste0(stats::na.omit(unique(sp$states)),
                         collapse = ";")
-    sp$country <- paste0(stats::na.omit(unique(sp$country)),
+    sp$countryCode <- paste0(stats::na.omit(unique(sp$countryCode)),
                        collapse = ";")
     return(sp)
   })
@@ -122,10 +118,16 @@ fauna_spat_occ <- function(data, species, state = TRUE,
 
   #Load data
   if(state) {
-    states <- terra::unwrap(faunabr::states)
+    if(is.null(spat_state)){
+    states <- terra::unwrap(faunabr::states)} else {
+      states <- spat_state
+    }
   }
   if(country) {
-    countrys <- terra::unwrap(faunabr::world_fauna)
+    if(is.null(spat_country)){
+    countrys <- terra::unwrap(faunabr::world_fauna) } else {
+    countrys <- spat_country
+    }
   }
 
   #Get state and countries
@@ -155,7 +157,7 @@ fauna_spat_occ <- function(data, species, state = TRUE,
     if(country) {
       if(verbose) {
         message("Getting countries of ", spp[i], "\n") }
-      sp_i_country<- unique(gsub(";", "|", occ_i$countryCode[1]))
+      sp_i_country <- unique(gsub(";", "|", occ_i$country[1]))
 
       if(sp_i_country == "" | is.na(sp_i_country)) {
         if(verbose){
@@ -164,30 +166,12 @@ fauna_spat_occ <- function(data, species, state = TRUE,
         countrys_v <- "No_info"
       } else {
         countrys_v <- terra::subset(countrys, grepl(sp_i_country,
-                                                countrys$name)) }
+                                                countrys$country_code)) }
     }
 
-    if(!state_and_country) {int_v <- NULL}
-
-    if(state_and_country) {
-      if((sp_i_country == "" | is.na(sp_i_country)) & verbose) {
-        message(spp[i], "lacks info about states - Impossible to get
-                  states and countries")
-      }
-      if((sp_i_country == "" | is.na(sp_i_country)) & verbose) {
-        message(spp[i], "lacks info about countrys - Impossible to get
-                  states and countries")
-      }
-
-      if(length(countrys_v[countrys_v$name != "brazil"]) > 0){
-      int_v <- terra::union(countrys_v[countrys_v$name != "brazil"],
-                            states_v)}
-      else (int_v <- states_v)
-      }
-
     #Save objects in a list
-    final_list <- list(states_v, countrys_v, int_v)
-    names(final_list) <- c("states", "countries", "states_countries")
+    final_list <- list(states_v, countrys_v)
+    names(final_list) <- c("states", "countries")
     return(final_list)
   })
   names(l_occ) <- spp
@@ -209,6 +193,3 @@ fauna_spat_occ <- function(data, species, state = TRUE,
 # #Plot countries with confirmed occurrence of Panthera onca and Mazama jucunda
 # plot(spp_spt$`Panthera onca`$countrys)
 # plot(spp_spt$`Mazama jucunda`$countrys)
-# #Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda
-# plot(spp_spt$`Panthera onca`$states_countrys)
-# plot(spp_spt$`Mazama jucunda`$states_countrys)

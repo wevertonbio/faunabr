@@ -126,15 +126,16 @@ get_faunabr <- function(output_dir, data_version = "latest",
   }
 
   #Unzip folder
+  version_data_numeric <- as.numeric(version_data)
   utils::unzip(zipfile = paste0(file.path(path_data, version_data), ".zip"),
-        exdir = file.path(path_data, version_data))
+        exdir = file.path(path_data, version_data_numeric))
 
   #Print message
   if(verbose){
   message("Merging data. Please wait a moment...\n") }
 
   #Merge data
-  merge_data(path_data = path_data, version_data = version_data,
+  merge_data(path_data = path_data, version_data = version_data_numeric,
              solve_discrepancies = solve_discrepancies, verbose = verbose)
 
   #Print final message

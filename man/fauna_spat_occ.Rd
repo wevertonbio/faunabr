@@ -5,14 +5,8 @@
 \title{Get Spatial polygons (SpatVectors) of species based on its distribution
 (states and countrys) according to Fauna do Brasil}
 \usage{
-fauna_spat_occ(
-  data,
-  species,
-  state = TRUE,
-  country = TRUE,
-  state_and_country = TRUE,
-  verbose = TRUE
-)
+fauna_spat_occ(data, species, state = TRUE, country = TRUE,
+                      spat_state = NULL, spat_country = NULL, verbose = TRUE)
 }
 \arguments{
 \item{data}{(data.frame) the data.frame imported with the
@@ -27,17 +21,24 @@ species? Default = TRUE}
 \item{country}{(logical) get SpatVector of countrys with occurrence of the
 species? Default = TRUE}
 
-\item{state_and_country}{(character) get a Spatvector representing both states
-and countrys with occurrence of the specie?
-To use state_and_country = TRUE, you must define state = TRUE and country = TRUE".
-Default = TRUE}
+\item{spat_state}{(SpatVector) a SpatVector of the Brazilian states. By
+default, it uses the SpatVector provided by geobr::read_state(). It can be
+another Spatvector, but the structure must be identical to
+'faunabr::states', with a column called "abbrev_state" identifying the states
+codes.}
+
+\item{spat_country}{(SpatVector) a SpatVector of the world countries. By
+default, it uses the SpatVector provided by rnaturalearth::ne_countries. It
+can be another Spatvector, but the structure must be identical to
+'faunabr::world_fauna', with a column called "country_code" identifying the
+country codes.}
 
 \item{verbose}{(logical) Whether to display species being filtered during
 function execution. Set to TRUE to enable display, or FALSE to run silently.
 Default = TRUE.}
 }
 \value{
-A list with SpatVectors of states and/or countrys and/or both for each
+A list with SpatVectors of states and/or countrys for each
 specie.
 }
 \description{
@@ -50,16 +51,12 @@ data("fauna_data")
 spp <- c("Panthera onca", "Mazama jucunda")
 #Get states, countrys and intersection states-countrys of species
 spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
-                          country = TRUE, state_and_country = TRUE,
-                          verbose = TRUE)
+                          country = TRUE, verbose = TRUE)
 #Plot states with confirmed occurrence of Panthera onca and Mazama jucunda
 plot(spp_spt$`Panthera onca`$states)
 plot(spp_spt$`Mazama jucunda`$states)
 #Plot countries with confirmed occurrence of Panthera onca and Mazama jucunda
 plot(spp_spt$`Panthera onca`$countries)
 plot(spp_spt$`Mazama jucunda`$countries)
-#Plot countries and states with confirmed occurrence of Panthera onca and Mazama jucunda
-plot(spp_spt$`Panthera onca`$states_countries)
-plot(spp_spt$`Mazama jucunda`$states_countries)
 
 }
