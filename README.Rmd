@@ -111,7 +111,7 @@ by default.
 ``` r
 #Load the short version
 bf <- load_fauna(data_dir = my_dir,
-                   data_version = "Latest_available",
+                   data_version = "latest",
                    type = "short") #short
 ```
 
