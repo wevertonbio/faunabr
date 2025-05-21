@@ -6,12 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3. Filtrar pontos de ocorrência com faunabr • faunabr</title>
-<!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
-<link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
-<link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png">
-<link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
-<link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
+<!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../favicon-48x48.png">
+<link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
+<link rel="icon" sizes="any" href="../favicon.ico">
+<link rel="manifest" href="../site.webmanifest">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/united/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -176,7 +175,7 @@ espécies:</p>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - States"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">$</span><span class="va">`Mazama jucunda`</span><span class="op">$</span><span class="va">countries</span>,</span>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">spp_spt</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - Countries"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img%2FIMG01.png"><!-- --></p>
+<p><img src="vignettes_img/IMG01.png"><!-- --></p>
 </div>
 <div class="section level2">
 <h2 id="filtrando-registros-de-ocorrência-usando-informações-de-distribuição-no-fauna-do-brasil">Filtrando registros de ocorrência usando informações de distribuição
@@ -218,7 +217,7 @@ função <code>get_spat_occ()</code>:</p>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - States"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/plot.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Chaetomys subspinosus`</span><span class="op">$</span><span class="va">countries</span>,</span>
 <span>     main <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rspatial.github.io/terra/reference/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">pol_spp</span><span class="op">)</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, <span class="st">" - Countries"</span><span class="op">)</span>, mar <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img%2FIMG02.png"><!-- --> As ocorrências dessas
+<p><img src="vignettes_img/IMG02.png"><!-- --> As ocorrências dessas
 duas espécies foram baixadas do GBIF usando a função
 <code>plantR::rgbif2()</code>. Essas ocorrências estão salvas como
 exemplos de dados no pacote (para mais detalhes, veja
@@ -226,13 +225,13 @@ exemplos de dados no pacote (para mais detalhes, veja
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"occurrences"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/headtail.html" class="external-link">head</a></span><span class="op">(</span><span class="va">occurrences</span><span class="op">)</span></span>
-<span><span class="co">#&gt;         species         x          y</span></span>
-<span><span class="co">#&gt; 1 Panthera onca -90.38409  17.377023</span></span>
-<span><span class="co">#&gt; 2 Panthera onca -90.24368  17.240507</span></span>
-<span><span class="co">#&gt; 3 Panthera onca -77.36680   0.287624</span></span>
-<span><span class="co">#&gt; 4 Panthera onca -56.61023 -17.239688</span></span>
-<span><span class="co">#&gt; 5 Panthera onca -61.04386  -2.387029</span></span>
-<span><span class="co">#&gt; 6 Panthera onca -77.28850   0.288757</span></span></code></pre></div>
+<span><span class="co">#&gt;         species         x          y  source</span></span>
+<span><span class="co">#&gt; 1 Panthera onca -90.38409  17.377023    gbif</span></span>
+<span><span class="co">#&gt; 2 Panthera onca -90.24368  17.240507    gbif</span></span>
+<span><span class="co">#&gt; 3 Panthera onca -77.36680   0.287624    gbif</span></span>
+<span><span class="co">#&gt; 4 Panthera onca -56.61023 -17.239688    gbif</span></span>
+<span><span class="co">#&gt; 5 Panthera onca -61.04386  -2.387029    gbif</span></span>
+<span><span class="co">#&gt; 6 Panthera onca -77.28850   0.288757    gbif</span></span></code></pre></div>
 <p>Os dados de entrada com registros devem ser um dataframe com pelo
 menos 3 colunas: uma informando o nome da espécie, uma informando a
 longitude e outra informando a latitude. Vamos verificar se há registros
@@ -276,7 +275,7 @@ registros que não foram testados porque estão fora do Brasil.</p>
 <span>        layer.name <span class="op">=</span> <span class="st">"States with confirmed occurrences"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_state"</span>, layer.name <span class="op">=</span> <span class="st">"Inside state?"</span>,</span>
 <span>          col.regions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img%2FIMG03.png" width="90%"> Podemos observar o
+<p><img src="vignettes_img/IMG03.png" width="90%"> Podemos observar o
 mesmo com os países: os pontos verdes representam registros que passaram
 no teste e os pontos vermelhos representam registros que não passaram no
 teste.</p>
@@ -287,7 +286,7 @@ teste.</p>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_country"</span>,</span>
 <span>          col.regions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span>,</span>
 <span>          layer.name <span class="op">=</span> <span class="st">"Inside country?"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img%2FIMG04.png" width="90%"></p>
+<p><img src="vignettes_img/IMG04.png" width="90%"></p>
 </div>
   </div>
 
@@ -306,7 +305,7 @@ teste.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
       </footer>
