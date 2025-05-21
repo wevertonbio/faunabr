@@ -97,13 +97,13 @@ As ocorrências dessas duas espécies foram baixadas do GBIF usando a função `
 ```{r}
 data("occurrences")
 head(occurrences)
-#>         species         x          y
-#> 1 Panthera onca -90.38409  17.377023
-#> 2 Panthera onca -90.24368  17.240507
-#> 3 Panthera onca -77.36680   0.287624
-#> 4 Panthera onca -56.61023 -17.239688
-#> 5 Panthera onca -61.04386  -2.387029
-#> 6 Panthera onca -77.28850   0.288757
+#>         species         x          y  source
+#> 1 Panthera onca -90.38409  17.377023    gbif
+#> 2 Panthera onca -90.24368  17.240507    gbif
+#> 3 Panthera onca -77.36680   0.287624    gbif
+#> 4 Panthera onca -56.61023 -17.239688    gbif
+#> 5 Panthera onca -61.04386  -2.387029    gbif
+#> 6 Panthera onca -77.28850   0.288757    gbif
 ```
 
 Os dados de entrada com registros devem ser um dataframe com pelo menos 3 colunas: uma informando o nome da espécie, uma informando a longitude e outra informando a latitude.

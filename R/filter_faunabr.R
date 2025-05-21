@@ -185,7 +185,7 @@ data.frame"))
 
   #Buffer around Brazil (to select records inside Brazil)
   if(by_state){
-  br_v <- terra::buffer(countrys[countrys$name == "brazil"],
+  br_v <- terra::buffer(countrys[countrys$bf_name == "Brazil"],
                         width = buffer_state * 1000)
 
   #Check records inside Brazil

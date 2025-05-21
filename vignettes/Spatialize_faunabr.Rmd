@@ -23,6 +23,7 @@ knitr::opts_chunk$set(
 Before you begin, use the `load_faunabr` function to load the data. For more detailed information on obtaining and loading the data, please refer to [1. Getting started with faunabr](getting_started.html)
 
 ```{r Get data, results='hide', message=FALSE, warning=FALSE, echo=FALSE}
+library(faunabr) #Load package
 my_dir <- file.path(file.path(tempdir(), "faunabr"))
 dir.create(my_dir)
 get_faunabr(output_dir = my_dir, #directory to save the data
@@ -31,11 +32,9 @@ get_faunabr(output_dir = my_dir, #directory to save the data
 ```
 
 ```{r, message=FALSE, warning=F}
-library(faunabr)
 library(terra)
-#Folder where you stored the data with the function get_faunabr()
 #Load data
-bf <- load_faunabr(data_dir = my_dir,
+bf <- load_faunabr(data_dir = my_dir, #Folder where you stored the data with the function get_faunabr()
                    data_version = "latest",
                    type = "short") #short version
 #> Loading version 1.3
@@ -88,7 +87,7 @@ As example, let's use the occurrence records of two species. *Panthera onca* is 
 ```{r}
 my_spp <- c("Panthera onca", "Chaetomys subspinosus")
 pol_spp <- fauna_spat_occ(data = bf, species = my_spp,
-                       state = TRUE, country = TRUE, state_and_country = TRUE,
+                       state = TRUE, country = TRUE, 
                        verbose = TRUE)
 par(mfrow = c(2, 2), mar = c(2, 0, 2, 0))
 plot(pol_spp$`Panthera onca`$states,
@@ -108,13 +107,13 @@ We downloaded the occurrences of these two species from GBIF using the `plantR::
 ```{r}
 data("occurrences")
 head(occurrences)
-#>         species         x          y
-#> 1 Panthera onca -90.38409  17.377023
-#> 2 Panthera onca -90.24368  17.240507
-#> 3 Panthera onca -77.36680   0.287624
-#> 4 Panthera onca -56.61023 -17.239688
-#> 5 Panthera onca -61.04386  -2.387029
-#> 6 Panthera onca -77.28850   0.288757
+#>         species         x          y  source
+#> 1 Panthera onca -90.38409  17.377023    gbif
+#> 2 Panthera onca -90.24368  17.240507    gbif
+#> 3 Panthera onca -77.36680   0.287624    gbif
+#> 4 Panthera onca -56.61023 -17.239688    gbif
+#> 5 Panthera onca -61.04386  -2.387029    gbif
+#> 6 Panthera onca -77.28850   0.288757    gbif
 ```
 
 The input data with records must be a dataframe with at least 3 columns: one informing the species name, one informing the longitude and one informing the latitude.

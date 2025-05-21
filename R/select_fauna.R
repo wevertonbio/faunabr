@@ -143,6 +143,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
     states <- toupper(trimws(states))
     states[states == "ALL"] <- "all"
     country <- toupper(trimws(country))
+    country[country == "ALL"] <- "all"
     origin <- tolower(trimws(origin))
     taxonomicStatus <- tolower(trimws(taxonomicStatus))
 
