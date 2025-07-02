@@ -161,6 +161,11 @@ recente dos dados da Fauna do Brasil disponível em um diretório.</li>
 <code><a href="../reference/load_faunabr.html">load_faunabr()</a></code>: carrega o banco de dados da Fauna do
 Brasil para o R.</li>
 <li>
+<code><a href="../reference/translate_faunabr.html">translate_faunabr()</a></code>: traduz os dados de “forma de vida
+(lifeForm)”, “origem (origin)”, “habitat”, “ranking taxonômico
+(taxonRank)” e “Status Taxonômico (taxonomicStatus)” entre Português e
+Inglês.</li>
+<li>
 <code><a href="../reference/fauna_attributes.html">fauna_attributes()</a></code>: exibe todas as opções disponíveis
 para filtrar espécies de acordo com suas características.</li>
 <li>
@@ -227,22 +232,26 @@ a versão mais recente dos dados:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_faunabr.html">get_faunabr</a></span><span class="op">(</span>output_dir <span class="op">=</span> <span class="va">my_dir</span>, <span class="co">#Pasta para salvar os dados</span></span>
 <span>            data_version <span class="op">=</span> <span class="st">"latest"</span>, <span class="co">#Obter a versão mais recente</span></span>
+<span>            translate <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#Manter versão original em português</span></span>
 <span>            overwrite <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">#Sobrescrever dados, se eles já existirem</span></span></code></pre></div>
 <p>A função levará alguns segundos para baixar os dados e alguns minutos
-para mesclar os conjuntos de dados em um único data.frame. Após a
-conclusão bem-sucedida, você encontrará uma pasta nomeada com a versão
-do Fauna do Brasil. Esta pasta contém o conjunto de dados bruto baixado
-(arquivos TXT em português) e um arquivo chamado
+para mesclar os conjuntos de dados em um único <code>data.frame.</code>
+Após a conclusão bem-sucedida, você encontrará uma pasta nomeada com a
+versão do Fauna do Brasil. Esta pasta contém o conjunto de dados bruto
+baixado (arquivos TXT em português) e um arquivo chamado
 <strong>CompleteBrazilianFauna.gz</strong>. Este último representa o
-conjunto de dados finalizado, mesclado e traduzido para inglês.</p>
+conjunto de dados final mesclado. Por padrão, os dados são traduzidos
+para o inglês, mas aqui mantemos a versão original em português
+definindo <code>translate = TRUE</code>.</p>
 <p>Você também tem a opção de baixar uma versão mais antiga específica
 do conjunto de dados da Fauna do Brasil. Para explorar as versões
 disponíveis, consulte <a href="https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil" class="external-link">este
-link</a>. Para baixar uma versão específica, basta substituir ‘latest’
-pelo número da versão desejada. Por exemplo:</p>
+link</a>. Para baixar uma versão específica, basta substituir
+<code>latest</code> pelo número da versão desejada. Por exemplo:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_faunabr.html">get_faunabr</a></span><span class="op">(</span>output_dir <span class="op">=</span> <span class="va">my_dir</span>, <span class="co">#Pasta para salvar os dados</span></span>
 <span>            data_version <span class="op">=</span> <span class="st">"1.10"</span>, <span class="co">#Versão 1.10, publicada em 01-02-2024</span></span>
+<span>            translate <span class="op">=</span> <span class="cn">FALSE</span>, <span class="co">#Manter versão original em português</span></span>
 <span>            overwrite <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">#Sobrescrever dados, se eles já existirem</span></span></code></pre></div>
 <p>Como mencionado anteriormente, você encontrará uma pasta chamada
 ‘1.10’ dentro do diretório designado.</p>
@@ -264,9 +273,9 @@ dados em seu ambiente R. Para isso, utilize a função
 automaticamente pela versão mais recente disponível no seu diretório. No
 entanto, você tem a opção de especificar uma versão particular usando o
 parâmetro <em>data_version</em>. Além disso, você pode escolher entre
-duas versões dos dados: a versão resumida ‘short’ (contendo as 19
+duas versões dos dados: a versão resumida ‘short’ (contendo as 21
 colunas necessárias para executar as outras funções do pacote) ou a
-versão completa ‘completa’ (com todas as 31 colunas originais). A função
+versão completa ‘completa’ (com todas as 32 colunas originais). A função
 importa a versão ‘short’ por padrão.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Short version</span></span>
@@ -281,8 +290,8 @@ importa a versão ‘short’ por padrão.</p>
 <span><span class="co">#&gt; [10] "genus"               "lifeForm"            "habitat"</span></span>
 <span><span class="co">#&gt; [13] "states"              "countryCode"         "origin" </span></span>
 <span><span class="co">#&gt; [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"       </span></span>
-<span><span class="co">#&gt; [19] "taxonRank"           "id"</span></span></code></pre></div>
-<p>Note que a versão completa possui 12 colunas adicionais:</p>
+<span><span class="co">#&gt; [19] "taxonRank"           "id"                  "language"</span></span></code></pre></div>
+<p>Note que a versão completa possui 11 colunas adicionais:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Complete version</span></span>
 <span><span class="va">bf_complete</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/load_faunabr.html">load_faunabr</a></span><span class="op">(</span>data_dir <span class="op">=</span> <span class="va">my_dir</span>,</span>
@@ -305,11 +314,70 @@ importa a versão ‘short’ por padrão.</p>
 <span><span class="co">#&gt; [25] "habitat"                  "origin"</span></span>
 <span><span class="co">#&gt; [27] "states"                   "countryCode"    </span></span>
 <span><span class="co">#&gt; [29] "modified"                 "bibliographicCitation"               </span></span>
-<span><span class="co">#&gt; [31] "relationshipOfResource"                                </span></span></code></pre></div>
+<span><span class="co">#&gt; [31] "relationshipOfResource"   "language"                        </span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="traduzir-atributos">Traduzir atributos<a class="anchor" aria-label="anchor" href="#traduzir-atributos"></a>
+</h2>
+<p>Por padrão, os dados baixados do <a href="http://fauna.jbrj.gov.br/fauna" class="external-link">Catálogo Taxonômico da Fauna do
+Brasil</a> são traduzidos para o inglês, a menos que você defina
+<code>translate = FALSE</code> na função <code><a href="../reference/get_faunabr.html">get_faunabr()</a></code>. No
+entanto, é possível usar a função <code><a href="../reference/translate_faunabr.html">translate_faunabr()</a></code> para
+traduzir os dados carregados entre inglês e português:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Traduzir do português para o inglês</span></span>
+<span><span class="va">bf_ingles</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/translate_faunabr.html">translate_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, to <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span></span>
+<span><span class="co"># Ver formas de vida (em ingles)</span></span>
+<span><span class="fu"><a href="../reference/fauna_attributes.html">fauna_attributes</a></span><span class="op">(</span><span class="va">bf_ingles</span>, <span class="st">"lifeForm"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  $lifeForm</span></span>
+<span><span class="co">#&gt;                  lifeForm</span></span>
+<span><span class="co">#&gt; 1                colonial</span></span>
+<span><span class="co">#&gt; 2               commensal</span></span>
+<span><span class="co">#&gt; 3            ectoparasite</span></span>
+<span><span class="co">#&gt; 4          ectoparasitoid</span></span>
+<span><span class="co">#&gt; 5            endoparasite</span></span>
+<span><span class="co">#&gt; 6          endoparasitoid</span></span>
+<span><span class="co">#&gt; 7                epibiont</span></span>
+<span><span class="co">#&gt; 8                eusocial</span></span>
+<span><span class="co">#&gt; 9  free_living_individual</span></span>
+<span><span class="co">#&gt; 10              herbivore</span></span>
+<span><span class="co">#&gt; 11        hyperparasitoid</span></span>
+<span><span class="co">#&gt; 12              inquiline</span></span>
+<span><span class="co">#&gt; 13            mutualistic</span></span>
+<span><span class="co">#&gt; 14              polynizer</span></span>
+<span><span class="co">#&gt; 15               predator</span></span>
+<span><span class="co">#&gt; 16                sessile</span></span>
+<span></span>
+<span><span class="co"># Traduzir do inglês para o português</span></span>
+<span><span class="va">bf_portugues</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/translate_faunabr.html">translate_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf_ingles</span>, to <span class="op">=</span> <span class="st">"pt_br"</span><span class="op">)</span></span>
+<span><span class="co">#Ver formas de vida disponíveis em portugues novamente</span></span>
+<span><span class="fu"><a href="../reference/fauna_attributes.html">fauna_attributes</a></span><span class="op">(</span><span class="va">bf_portugues</span>, <span class="st">"lifeForm"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  $lifeForm</span></span>
+<span><span class="co">#&gt;                 lifeForm</span></span>
+<span><span class="co">#&gt; 1               colonial</span></span>
+<span><span class="co">#&gt; 2               comensal</span></span>
+<span><span class="co">#&gt; 3           ectoparasito</span></span>
+<span><span class="co">#&gt; 4        ectoparasitoide</span></span>
+<span><span class="co">#&gt; 5           endoparasito</span></span>
+<span><span class="co">#&gt; 6        endoparasitoide</span></span>
+<span><span class="co">#&gt; 7              epibionte</span></span>
+<span><span class="co">#&gt; 8              eussocial</span></span>
+<span><span class="co">#&gt; 9              herbivoro</span></span>
+<span><span class="co">#&gt; 10      hiperparasitoide</span></span>
+<span><span class="co">#&gt; 11             inquilino</span></span>
+<span><span class="co">#&gt; 12                mutual</span></span>
+<span><span class="co">#&gt; 13           polinizador</span></span>
+<span><span class="co">#&gt; 14              predador</span></span>
+<span><span class="co">#&gt; 15                sessil</span></span>
+<span><span class="co">#&gt; 16 vida_livre_individual</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="salvar-dados">Salvar dados<a class="anchor" aria-label="anchor" href="#salvar-dados"></a>
+</h2>
 <p>Se você deseja salvar os conjuntos de dados para abrir com um editor
 externo (por exemplo, Excel), você pode salvar o data.frame como um
 arquivo CSV:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bf</span>,</span>
 <span>          file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">my_dir</span>, <span class="st">"BrazilianFauna.csv"</span><span class="op">)</span>,</span>
 <span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
@@ -331,7 +399,7 @@ arquivo CSV:</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>

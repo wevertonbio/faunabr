@@ -144,6 +144,8 @@ passos com faunabr</a></p>
 <span>                   data_version <span class="op">=</span> <span class="st">"latest"</span>, <span class="co">#Versão mais recente</span></span>
 <span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#Versão resumida</span></span>
 <span><span class="co">#&gt; Loading version 1.3</span></span></code></pre></div>
+<p>Aqui, vamos utilizar os dados baixados em português
+(<code>translate = FALSE</code> em <code><a href="../reference/get_faunabr.html">get_faunabr()</a></code>).</p>
 </div>
 <div class="section level2">
 <h2 id="obter-polígonos-espaciais-da-distribuição-de-espécies">Obter polígonos espaciais da distribuição de espécies<a class="anchor" aria-label="anchor" href="#obter-pol%C3%ADgonos-espaciais-da-distribui%C3%A7%C3%A3o-de-esp%C3%A9cies"></a>
@@ -157,7 +159,7 @@ Podemos escolher obter o SpatVector dos estados e/ou países.</p>
 <code class="sourceCode R"><span><span class="co">#Espécies de exemplo</span></span>
 <span><span class="va">spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Panthera onca"</span>, <span class="st">"Mazama jucunda"</span><span class="op">)</span></span>
 <span><span class="co">#Obter polígonos espaciais</span></span>
-<span><span class="va">spp_spt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_spat_occ.html">fauna_spat_occ</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>, species <span class="op">=</span> <span class="va">spp</span>, state <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span><span class="va">spp_spt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_spat_occ.html">fauna_spat_occ</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">spp</span>, state <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                          country <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Getting states of Panthera onca</span></span>
 <span><span class="co">#&gt; Getting countries of Panthera onca</span></span>
@@ -238,7 +240,7 @@ longitude e outra informando a latitude. Vamos verificar se há registros
 fora das áreas naturais de ocorrência das espécies considerando estados
 e países:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">occ_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_faunabr.html">filter_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">df</span>, occ <span class="op">=</span> <span class="va">occurrences</span>,</span>
+<code class="sourceCode R"><span><span class="va">occ_check</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_faunabr.html">filter_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, occ <span class="op">=</span> <span class="va">occurrences</span>,</span>
 <span>                    by_state <span class="op">=</span> <span class="cn">TRUE</span>, buffer_state <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>                    by_country <span class="op">=</span> <span class="cn">TRUE</span>, buffer_country <span class="op">=</span> <span class="fl">20</span>,</span>
 <span>                    value <span class="op">=</span> <span class="st">"flag&amp;clean"</span>, keep_columns <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -256,7 +258,8 @@ mapa interativo dos registros sinalizados:</p>
 <span>    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"mapview"</span><span class="op">)</span></span>
 <span><span class="op">}</span></span>
 <span><span class="co">#Carregar pacote</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/r-spatial/mapview" class="external-link">mapview</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rspatial.org/" class="external-link">terra</a></span><span class="op">)</span></span></code></pre></div>
 <p>Vamos verificar os registros de <em>Panthera onca</em>, plotando os
 registros e o mapa obtido anteriormente. Os pontos verdes representam os
 registros que passaram no teste dos estados, ou seja, registros dentro
@@ -305,7 +308,7 @@ teste.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>

@@ -160,6 +160,10 @@ of Fauna do Brasil data available in a directory.</li>
 <li>
 <code><a href="../reference/load_faunabr.html">load_faunabr()</a></code>: load Fauna do Brasil database.</li>
 <li>
+<code><a href="../reference/translate_faunabr.html">translate_faunabr()</a></code>: translates information in the
+“lifeForm”, “origin”, “habitat”, “taxonRank” and “taxonomicStatus”
+columns between Portuguese and English.</li>
+<li>
 <code><a href="../reference/fauna_attributes.html">fauna_attributes()</a></code>: display all the options available
 to filter species by its characteristics.</li>
 <li>
@@ -223,14 +227,16 @@ the most recent version of the data:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/get_faunabr.html">get_faunabr</a></span><span class="op">(</span>output_dir <span class="op">=</span> <span class="va">my_dir</span>, <span class="co">#directory to save the data</span></span>
 <span>            data_version <span class="op">=</span> <span class="st">"latest"</span>, <span class="co">#get the most recent version available</span></span>
+<span>            translate <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co">#translate data to English</span></span>
 <span>            overwrite <span class="op">=</span> <span class="cn">T</span><span class="op">)</span> <span class="co">#Overwrite data, if it exists</span></span></code></pre></div>
 <p>The function will take a few seconds to download the data and a few
 minutes to merge the datasets into a single data.frame. Upon successful
 completion, you will find a folder named with the version of Fauna do
 Brasil. This folder contains the downloaded raw dataset (TXT files in
 Portuguese) and a file named <strong>CompleteBrazilianFauna.gz</strong>.
-The latter represents the finalized dataset, merged and translated into
-English.</p>
+The latter represents the finalized dataset. By default, the data is
+translated into English, but you can keep the original Portuguese
+version by setting <code>translate = FALSE</code>.</p>
 <p>You also have the option to download an older, specific version of
 the Fauna do Brasil dataset. To explore the available versions, please
 refer to <a href="https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil" class="external-link">this
@@ -276,7 +282,7 @@ version by default.</p>
 <span><span class="co">#&gt; [10] "genus"               "lifeForm"            "habitat"</span></span>
 <span><span class="co">#&gt; [13] "states"              "countryCode"         "origin" </span></span>
 <span><span class="co">#&gt; [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"          </span></span>
-<span><span class="co">#&gt; [19] "taxonRank"           "id"</span></span></code></pre></div>
+<span><span class="co">#&gt; [19] "taxonRank"           "id"                  "language"</span></span></code></pre></div>
 <p>Note that the complete version has 12 more columns:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Complete version</span></span>
@@ -300,10 +306,69 @@ version by default.</p>
 <span><span class="co">#&gt; [25] "habitat"                  "origin"</span></span>
 <span><span class="co">#&gt; [27] "states"                   "countryCode"    </span></span>
 <span><span class="co">#&gt; [29] "modified"                 "bibliographicCitation"                              </span></span>
-<span><span class="co">#&gt; [31] "relationshipOfResource"                                </span></span></code></pre></div>
+<span><span class="co">#&gt; [31] "relationshipOfResource"   "language"                             </span></span></code></pre></div>
+<div class="section level3">
+<h3 id="translate-information">Translate information<a class="anchor" aria-label="anchor" href="#translate-information"></a>
+</h3>
+<p>By default, the data downloaded from <a href="http://fauna.jbrj.gov.br/fauna" class="external-link">Catálogo Taxonômico da Fauna do
+Brasil</a> is translated into English, unless you set
+<code>translate = FALSE</code> in <code><a href="../reference/get_faunabr.html">get_faunabr()</a></code> function.
+However, you can use the <code><a href="../reference/translate_faunabr.html">translate_faunabr()</a></code> function to
+translate the loaded data between English and Portuguese:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co">#Translate from English to Portuguese</span></span>
+<span><span class="va">bf_portuguese</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/translate_faunabr.html">translate_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, to <span class="op">=</span> <span class="st">"pt_br"</span><span class="op">)</span></span>
+<span><span class="co"># See lifeforms (in portuguese)</span></span>
+<span><span class="fu"><a href="../reference/fauna_attributes.html">fauna_attributes</a></span><span class="op">(</span><span class="va">bf_portuguese</span>, <span class="st">"lifeForm"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  $lifeForm</span></span>
+<span><span class="co">#&gt;                 lifeForm</span></span>
+<span><span class="co">#&gt; 1               colonial</span></span>
+<span><span class="co">#&gt; 2               comensal</span></span>
+<span><span class="co">#&gt; 3           ectoparasito</span></span>
+<span><span class="co">#&gt; 4        ectoparasitoide</span></span>
+<span><span class="co">#&gt; 5           endoparasito</span></span>
+<span><span class="co">#&gt; 6        endoparasitoide</span></span>
+<span><span class="co">#&gt; 7              epibionte</span></span>
+<span><span class="co">#&gt; 8              eussocial</span></span>
+<span><span class="co">#&gt; 9              herbivoro</span></span>
+<span><span class="co">#&gt; 10      hiperparasitoide</span></span>
+<span><span class="co">#&gt; 11             inquilino</span></span>
+<span><span class="co">#&gt; 12                mutual</span></span>
+<span><span class="co">#&gt; 13           polinizador</span></span>
+<span><span class="co">#&gt; 14              predador</span></span>
+<span><span class="co">#&gt; 15                sessil</span></span>
+<span><span class="co">#&gt; 16 vida_livre_individual</span></span>
+<span></span>
+<span><span class="co">#Translate from Portuguese to English</span></span>
+<span><span class="va">bf_english</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/translate_faunabr.html">translate_faunabr</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_portuguese</span>, to <span class="op">=</span> <span class="st">"en"</span><span class="op">)</span></span>
+<span><span class="co">#See life forms(in English)</span></span>
+<span><span class="fu"><a href="../reference/fauna_attributes.html">fauna_attributes</a></span><span class="op">(</span><span class="va">bf_english</span>, <span class="st">"lifeForm"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;  $lifeForm</span></span>
+<span><span class="co">#&gt;                  lifeForm</span></span>
+<span><span class="co">#&gt; 1                colonial</span></span>
+<span><span class="co">#&gt; 2               commensal</span></span>
+<span><span class="co">#&gt; 3            ectoparasite</span></span>
+<span><span class="co">#&gt; 4          ectoparasitoid</span></span>
+<span><span class="co">#&gt; 5            endoparasite</span></span>
+<span><span class="co">#&gt; 6          endoparasitoid</span></span>
+<span><span class="co">#&gt; 7                epibiont</span></span>
+<span><span class="co">#&gt; 8                eusocial</span></span>
+<span><span class="co">#&gt; 9  free_living_individual</span></span>
+<span><span class="co">#&gt; 10              herbivore</span></span>
+<span><span class="co">#&gt; 11        hyperparasitoid</span></span>
+<span><span class="co">#&gt; 12              inquiline</span></span>
+<span><span class="co">#&gt; 13            mutualistic</span></span>
+<span><span class="co">#&gt; 14              polynizer</span></span>
+<span><span class="co">#&gt; 15               predator</span></span>
+<span><span class="co">#&gt; 16                sessile</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="save-data">Save data<a class="anchor" aria-label="anchor" href="#save-data"></a>
+</h2>
 <p>If you want to save the datasets to open with an external editor
 (e.g. Excel), you can save the data.frame as a CSV file:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/write.table.html" class="external-link">write.csv</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bf</span>,</span>
 <span>          file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">my_dir</span>, <span class="st">"BrazilianFauna.csv"</span><span class="op">)</span>,</span>
 <span>          row.names <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div>
@@ -325,7 +390,7 @@ version by default.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>

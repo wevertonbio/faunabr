@@ -151,6 +151,8 @@ passos com faunabr</a></p>
 <span>                   data_version <span class="op">=</span> <span class="st">"latest"</span>, <span class="co">#Versão mais recente</span></span>
 <span>                   type <span class="op">=</span> <span class="st">"short"</span><span class="op">)</span> <span class="co">#Versão resumida</span></span>
 <span><span class="co">#&gt; Loading version 1.3</span></span></code></pre></div>
+<p>Aqui, vamos utilizar os dados baixados em português
+(<code>translate = FALSE</code> em <code><a href="../reference/get_faunabr.html">get_faunabr()</a></code>.</p>
 </div>
 <div class="section level2">
 <h2 id="obtendo-uma-matriz-de-presença-ausência">Obtendo uma matriz de presença-ausência<a class="anchor" aria-label="anchor" href="#obtendo-uma-matriz-de-presen%C3%A7a-aus%C3%AAncia"></a>
@@ -164,7 +166,7 @@ de espécies em cada local.</p>
 nativos do Brasil:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Selecionar espécies de mamíferos nativos do Brasil:</span></span>
-<span><span class="va">br_mammals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_fauna.html">select_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fauna_data</span>,</span>
+<span><span class="va">br_mammals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/select_fauna.html">select_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>,</span>
 <span>                           include_subspecies <span class="op">=</span> <span class="cn">FALSE</span>, phylum <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>                           class <span class="op">=</span> <span class="st">"Mammalia"</span>,</span>
 <span>                           order <span class="op">=</span> <span class="st">"all"</span>, family <span class="op">=</span> <span class="st">"all"</span>,</span>
@@ -173,7 +175,7 @@ nativos do Brasil:</p>
 <span>                           habitat <span class="op">=</span> <span class="st">"all"</span>, filter_habitat <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           states <span class="op">=</span> <span class="st">"all"</span>, filter_states <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           country <span class="op">=</span> <span class="st">"BR"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
-<span>                           origin <span class="op">=</span> <span class="st">"all"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"accepted"</span><span class="op">)</span></span>
+<span>                           origin <span class="op">=</span> <span class="st">"all"</span>, taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
 <span><span class="co">#PAM em Estados do Brasil</span></span>
 <span><span class="va">pam_mammals</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_pam.html">fauna_pam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">br_mammals</span>, by_state <span class="op">=</span> <span class="cn">TRUE</span>, </span>
 <span>                         by_country <span class="op">=</span> <span class="cn">FALSE</span>,</span>
@@ -232,7 +234,7 @@ estiver definido como <em>TRUE</em> a função retornará um plot do mapa:
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
       </footer>
