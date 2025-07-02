@@ -48,7 +48,7 @@ Fauna do Brasil provides information on the brazilian federal states and countri
 #Example species
 spp <- c("Panthera onca", "Mazama jucunda")
 #Get spatial polygons
-spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
+spp_spt <- fauna_spat_occ(data = bf, species = spp, state = TRUE,
                           country = TRUE, state_and_country = TRUE,
                           verbose = TRUE)
 #> Getting states of Panthera onca

@@ -112,3 +112,19 @@
 #'   do Brasil.}
 #' }
 "country_codes"
+
+#' Helpers for translating data
+#'
+#' @description
+#' A list of data.frames used by \code{faunabr::translate_faunabr()} function.
+#' \code{faunabr::map_translation}.
+#'
+#' @usage data(map_translation)
+#'
+#' @format A \code{list} with 5 data.frames ("lifeForm", "origin", "habitat",
+#' "taxonRank", and "taxonomicStatus"). Each data.frame has 2 columns:
+#' \describe{
+#'   \item{pt_br}{The attribute in Brazilian Portuguese.}
+#'   \item{en}{The attribute in English.}
+#' }
+"map_translation"

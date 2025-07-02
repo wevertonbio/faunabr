@@ -203,9 +203,10 @@ select_fauna <- function(data, include_subspecies = FALSE,
   #Start to filter...
     #Taxon Rank
     if(!include_subspecies) {
-      d <- subset(data, data$taxonRank == "species") }
+      d <- subset(data, data$taxonRank %in% c("species", "especie")) }
     if(include_subspecies) {
-      d <- subset(data, data$taxonRank %in% c("species", "subspecies")) }
+      d <- subset(data, data$taxonRank %in% c("species", "especie",
+                                              "subspecies", "sub_especie")) }
 
     #phylum
     if(all(phylum != "all")) {

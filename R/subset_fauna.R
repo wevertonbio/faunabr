@@ -47,10 +47,10 @@ subset_fauna <- function(data,
   #Taxon Rank
   #Taxon Rank
   if(include_subspecies){
-    ss <- "subspecies"
+    ss <- c("subspecies", "sub_especie")
   } else {ss <- NULL}
 
-  tr <- c("species", ss)
+  tr <- c("species", "especie", ss)
 
   data <- data[data$taxonRank %in% tr,]
 

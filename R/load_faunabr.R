@@ -16,7 +16,7 @@
 #' Default: "UTF-8".
 #' @details
 #' The parameter type accepts two arguments. If type = short, it will load a
-#' data.frame with the 19 columns needed to run the other functions of the
+#' data.frame with the 20 columns needed to run the other functions of the
 #' package: species, subspecies, scientificName, acceptedName, kingdom, phylum,
 #' class, order, family, genus, lifeForm, habitat, states, countryCode, origin,
 #' taxonomicStatus, nomenclaturalStatus, vernacularName, and taxonRank.
@@ -119,13 +119,14 @@ load_faunabr <- function(data_dir, data_version = "latest",
                              data.table = FALSE,
                              encoding = encoding,
                              select = c("species", "subspecies",
-                                           "scientificName", "acceptedName",
-                                           "kingdom", "phylum", "class", "order",
-                                           "family", "genus", "lifeForm",
-                                           "habitat", "states", "countryCode",
-                                           "origin", "taxonomicStatus",
-                                           "nomenclaturalStatus",
-                                           "vernacularName", "taxonRank", "id"),
+                                        "scientificName", "acceptedName",
+                                        "kingdom", "phylum", "class", "order",
+                                        "family", "genus", "lifeForm",
+                                        "habitat", "states", "countryCode",
+                                        "origin", "taxonomicStatus",
+                                        "nomenclaturalStatus",
+                                        "vernacularName", "taxonRank", "id",
+                                        "language"),
                              na.strings = ""))
   }
 }

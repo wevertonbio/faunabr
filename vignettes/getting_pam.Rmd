@@ -48,9 +48,10 @@ bf <- load_faunabr(data_dir = my_dir,
 The `fauna_pam()` function facilitates the utilization of species distribution information in Fauna do Brazil to generate a PAM. Each site represents a brazilian state or a country. In addition to the PAM, the function also provides a summary and a SpatVector containing the number of species in each site.
 
 As an example, lets obtain a PAM consisting of all mammal species natives to Brazil:
+
 ```{r}
 #Select native species of mammals with confirmed occurrence in Brazil
-br_mammals <- select_fauna(data = fauna_data,
+br_mammals <- select_fauna(data = bf,
                            include_subspecies = FALSE, phylum = "all",
                            class = "Mammalia",
                            order = "all", family = "all",
@@ -60,6 +61,7 @@ br_mammals <- select_fauna(data = fauna_data,
                            states = "all", filter_states = "in",
                            country = "BR", filter_country = "in",
                            origin = "all", taxonomicStatus = "accepted")
+
 #Get presence-absence matrix in states and countries
 pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE,
                          by_country = FALSE,
@@ -67,6 +69,7 @@ pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE,
                          return_richness_summary = TRUE,
                          return_spatial_richness = TRUE,
                          return_plot = TRUE)
+
 #Visualize (as tibble) the PAM for the first 5 species and 7 sites
 tibble::tibble(pam_mammals$PAM[1:7, 1:5])
 #> # A tibble: 7 × 5
@@ -81,6 +84,7 @@ tibble::tibble(pam_mammals$PAM[1:7, 1:5])
 #> 7 SC                           0                         1                    0                          0
 ```
 Since return_richness_summary is set to TRUE, the function also returns a data frame containing the number of species per site.
+
 ```{r}
 #Visualize (as tibble) the richness summary table
 tibble::tibble(pam_mammals$Richness_summary[1:7,])
@@ -97,6 +101,7 @@ tibble::tibble(pam_mammals$Richness_summary[1:7,])
 ```
 
 If return_spatial_richness is set to TRUE, the function will return a SpatVector containing the number of species per site. Additionally, when return_plot is also set to TRUE, the function returns a plot.
+
 ```{r IMG09, eval=TRUE, echo = FALSE}
 knitr::include_graphics("vignettes_img/IMG05.png")
 ```

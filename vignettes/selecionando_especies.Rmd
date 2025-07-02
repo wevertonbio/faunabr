@@ -34,7 +34,10 @@ bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_fa
 #> Loading version 1.3
 ```
 
+Aqui, vamos utilizar os dados baixados em português (`translate = FALSE` em `get_faunabr()`).
+
 ## Como selecionar uma lista de espécies?
+
 Um dos principais objetivos deste pacote é auxiliar na seleção de uma lista de espécies com base na classificação taxonômica, características e distribuição. Especificamente, você pode filtrar por:
 
 * filo, classe, ordem, família e gênero;
@@ -52,26 +55,26 @@ fauna_at <- fauna_attributes(data = bf,
 head(fauna_at$lifeForm)
 #>          lifeForm
 #> 1        colonial
-#> 2       commensal
-#> 3    ectoparasite
-#> 4 ectoparasiteIDE
-#> 5    endoparasite
-#> 6  endoparasiteid
+#> 2       comensal
+#> 3    ectoparasito
+#> 4 ectoparasitoide
+#> 5    endoparasito
+#> 6  endoparasitoide
 
 head(fauna_at$habitat)
-#>         habitat
-#> 1      arboreal
-#> 2 cavernicolous
-#> 3     fossorial
-#> 4    freshwater
-#> 5     hyporheic
-#> 6        marine
+#> habitat
+#> 1          agua_doce
+#> 2 aguas_subterraneas
+#> 3            arboreo
+#> 4        cavernicola
+#> 5          fossorial
+#> 6         hiporreico
 
 head(fauna_at$origin)
 #>         origin
-#> 1  cryptogenic
-#> 2       exotic
-#> 3       native
+#> 1 criptogenica
+#> 2      exotica
+#> 3       nativa
 ```
 
 Como exemplo, vamos considerar o cenário em que desejamos obter uma lista de todos os insetos arbóreos nativos com ocorrências confirmadas no Rio de Janeiro:
@@ -84,12 +87,12 @@ insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
-                           habitat = "arboreal", filter_habitat = "in",
+                           habitat = "arboreo", filter_habitat = "in",
                            states = "RJ", #Rio de Janeiro
                            filter_states = "in", #Que ocorrem NO RJ
                            country = "all", filter_country = "in",
-                           origin = "native",
-                           taxonomicStatus = "accepted")
+                           origin = "nativa",
+                           taxonomicStatus = "nome_aceito")
 nrow(insects_rj)
 #> [1] 114
 ```
@@ -118,12 +121,12 @@ insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            family = "all",
                            genus = "all",
                            lifeForm = "all", filter_lifeForm = "in",
-                           habitat = "arboreal", filter_habitat = "in",
+                           habitat = "arboreo", filter_habitat = "in",
                            states = "RJ", #Rio de Janeiro
                            filter_states = "only", #Com ocorrência APENAS no RJ
                            country = "all", filter_country = "in",
-                           origin = "native",
-                           taxonomicStatus = "accepted")
+                           origin = "nativa",
+                           taxonomicStatus = "nome_aceito")
 nrow(insects_rj_only)
 #> [1] 22
 unique(insects_rj_only$states)
@@ -146,8 +149,8 @@ insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            states = c("PR", "SC", "RS"), #Estados do Sul do Brasil
                            filter_states = "in", #EM qualquer um dos estados
                            country = "all", filter_country = "in",
-                           origin = "native",
-                           taxonomicStatus = "accepted")
+                           origin = "nativa",
+                           taxonomicStatus = "nome_aceito")
 nrow(insects_south)
 #> [1] 11461
 
@@ -179,8 +182,8 @@ insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            states = c("PR", "SC", "RS"), 
                            filter_states = "and", #PR & SC & RS
                            country = "all", filter_country = "in",
-                           origin = "native",
-                           taxonomicStatus = "accepted")
+                           origin = "nativa",
+                           taxonomicStatus = "nome_aceito")
 nrow(insects_south_and)
 #> [1] 1924
 
@@ -212,8 +215,8 @@ insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            states = c("PR", "SC", "RS"), 
                            filter_states = "only", #Apenas no PR & SC & RS
                            country = "all", filter_country = "in",
-                           origin = "native",
-                           taxonomicStatus = "accepted")
+                           origin = "nativa",
+                           taxonomicStatus = "nome_aceito")
 nrow(insects_south_only)
 #> [1] 134
 
@@ -224,13 +227,14 @@ unique(insects_south_only$states)
 Agora, o filtro retornou apenas 134 espécies, todas ocorrendo em PR, SC e RS; sem registros de ocorrências em qualquer outro estado.
 
 ## Checagem de nomes científicos e subseleção de espécies
+
 ### Extraindo o nome binomial
 Além de selecionar uma lista de espécies com base em suas características, o pacote também inclui uma função para subselecionar espécies por nome. A função funciona exclusivamente com nomes binomiais (Gênero + Epíteto específico), como *Panthera onca*, e não funciona com nomes científicos completos (incluindo Autor ou Epíteto infraespecífico), como *Panthera onca (Linnaeus, 1758)*.
 
 Se você tiver uma lista de espécies com nomes científicos completos, pode extrair os nomes binomiais usando a função `get_binomial()`. Não se preocupe com espaços excessivos entre as palavras, a função removerá quaisquer espaços extras dos nomes.
 
 ```{r}
-complete_names <- c("Pantera onça (Linnaeus, 1758)",
+complete_names <- c("Pantera onca (Linnaeus, 1758)",
                     "Zonotrichia capensis subtorquata Swainson, 1837",
                     "Mazama bororo Duarte, 1996",
                     "Mazama jucunda Thomas, 1913",
@@ -240,7 +244,7 @@ complete_names <- c("Pantera onça (Linnaeus, 1758)",
 #Araucaria angustifolia (uma planta) foi usada apenas como um exemplo que será utilizado para ilustrar a próxima função
 binomial_names <- extract_binomial(species_names = complete_names)
 binomial_names
-#> [1] "Pantera onça"                         "Zonotrichia capensis" 
+#> [1] "Pantera onca"                         "Zonotrichia capensis" 
 #> [3] "Mazama bororo"                        "Mazama jucunda" 
 #> [5] "Arrenurus tumulosus"                  "Araucaria angustifolia" 
 ```
@@ -255,19 +259,19 @@ checked_names <- check_fauna_names(data = bf,
                              include_subspecies = FALSE,
                              max_distance = 0.1)
 tibble::tibble(checked_names) #Exibir tabela como tibble
-#> # A tibble: 6 × 8
-#>   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #> family
-#>   <chr>                <chr>    <chr>             <dbl> <chr>           <chr>        #> <chr> 
-#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted   Zonotrichia… #> Passe…
-#> 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #> Cervi…
-#> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted   Mazama jucu… #> Cervi…
-#> 4 Arrenurus (Incertae… Correct  Arrenurus tum…        0 accepted   Arrenurus t… #> Arren…
-#> 5 Pantera onça         Probabl… Panthera onca         2 accepted   Panthera on… #> Felid…
-#> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
-
+#> # A tibble: 6 x 9
+#>   input_name               Spelling           Suggested_name       Distance taxonomicStatus nomenclaturalStatus acceptedName   family        matches
+#>   <chr>                    <chr>              <chr>                   <dbl> <chr>           <chr>               <chr>          <chr>         <chr>  
+#> 1 "Zonotrichia capensis"   Correct            Zonotrichia capensis        0 nome_aceito     NA                  NA             Passerellidae single 
+#> 2 "Mazama bororo"          Correct            Mazama bororo               0 sinonimo        NA                  Mazama jucunda Cervidae      single 
+#> 3 "Mazama jucunda"         Correct            Mazama jucunda              0 nome_aceito     NA                  NA             Cervidae      single 
+#> 4 "Arrenurus tumulosus"    Correct            Arrenurus tumulosus         0 nome_aceito     NA                  NA             Arrenuridae   single 
+#> 5 "Pantera onca"           Probably_incorrect Panthera onca               2 nome_aceito     NA                  NA             Felidae       single 
+#> 6 "Araucaria angustifolia" Not_found          NA                         NA NA              NA                  NA             NA            none   
 ```
+
 Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus tumulosus* estão escritos corretamente e são nomes aceitos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
-No caso de *Pantera onça*, a ortografia parece estar potencialmente incorreta (já que o nome não foi encontrado no banco de dados); no entanto, um nome semelhante, *Panthera onca*, é sugerido pela função. A coluna 'Distance' indica a distância de edição de Levenshtein entre a entrada e o nome sugerido.
+No caso de *Pantera onca*, a ortografia parece estar potencialmente incorreta (já que o nome não foi encontrado no banco de dados); no entanto, um nome semelhante, *Panthera onca*, é sugerido pela função. A coluna 'Distance' indica a distância de edição de Levenshtein entre a entrada e o nome sugerido.
 *Araucaria angustifolia* foi marcada como Not_found (como esperado, dado que *Araucaria angustifolia* não é um animal!). Consequentemente, o nome não foi localizado no banco de dados e não havia nomes comparáveis disponíveis.
 
 ### Subselecionando espécies
@@ -284,14 +288,14 @@ accepteds <- na.omit(accepteds) #Remove NAs
 my_sp <- subset_fauna(data = bf, species = accepteds,
                       include_subspecies = FALSE)
 tibble::tibble(my_sp)
-#> # A tibble: 4 × 19
-#>   species       subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
-#>   <chr>         <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
-#> 1 Panthera onca ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
-#> 2 Arrenurus (I… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      ""    
-#> 3 Mazama jucun… ""         Mazama jucund… ""           Animal… Chord… Mamm… Arti… Cervi… Maza… "herbiv… "terre… BA;ES… brazil      #> "nati…
-#> 4 Zonotrichia … ""         Zonotrichia c… ""           Animal… Chord… Aves  Pass… Passe… Zono… "free_l… ""      AL;AP… brazil      #> "nati…
-#> # ℹ 4 more variables: taxonomicStatus <chr>, nomenclaturalStatus <chr>, vernacularName <chr>, taxonRank <chr>
+# A tibble: 4 x 21
+#>   species           subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode origin
+#>   <chr>             <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       <chr> 
+#> 1 Panthera onca     NA         Panthera onca~ NA           Animal~ Chord~ Mamm~ Carn~ Felid~ Pant~ "vida_l~ "terre~ AC;AM~ AR;BO;BR;B~ nativa
+#> 2 Arrenurus tumulo~ NA         Arrenurus (In~ NA           Animal~ Arthr~ Arac~ Trom~ Arren~ Arre~ ""       ""      NA     NA          NA    
+#> 3 Mazama jucunda    NA         Mazama jucund~ NA           Animal~ Chord~ Mamm~ Arti~ Cervi~ Maza~ "herbiv~ "terre~ BA;ES~ BR          nativa
+#> 4 Zonotrichia cape~ NA         Zonotrichia c~ NA           Animal~ Chord~ Aves  Pass~ Passe~ Zono~ ""       ""      NA     NA          nativa  
+# i 5 more variables: nomenclaturalStatus <chr>, vernacularName <chr>, taxonRank <chr>, id <int>, language <chr>
 ```
 Também podemos incluir subespécies e/ou variedades:
 
@@ -321,14 +325,15 @@ tibble::tibble(my_sp2) #print data.frame as tibble
 ```
 
 ### Obtendo sinônimos
+
 Podemos obter todos os sinônimos de uma lista de espécies. Isso pode ser particularmente útil, por exemplo, ao buscar registros de uma espécie e todos os seus sinônimos (conforme listado na Fauna do Brasil) em bancos de dados online como o GBIF. Para isso, utilize a função `fauna_synonym()`. Como exemplo, vamos buscar os sinônimos de três espécies:
 ```{r}
 spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
 spp_syn <- fauna_synonym(data = bf, species = spp)
 spp_syn
 #>           acceptedName               synonym     taxonomicStatus
-#> 49343     Panthera onca                  <NA>       accepted
-#> 60523    Mazama jucunda         Mazama bororo             synonym
-#> 61168 Subulo gouzoubira    Mazama gouazoubira             synonym
+#> 49343     Panthera onca                  <NA>    nome_aceito
+#> 60523    Mazama jucunda         Mazama bororo    sinonimo
+#> 61168 Subulo gouzoubira    Mazama gouazoubira    sinonimo
 ```
 Podemos ver que *Mazama jucunda* possui o sinônimo *Mazama bororo*; enquanto *Subulo gouzoubira* possui o sinônimo *Mazama gouazoubira*. *Panthera onca* não possui nenhum sinônimo listado na base de dados.

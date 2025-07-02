@@ -7,84 +7,84 @@ firstup <- function(x) {
   x
 }
 
-#Translate origin, habitat, lifeform, taxonomicStatus and nomenclaturalStatus
-translate_lifeform <- function(text) {
-  # Aplicar gsub para traduzir e converter para letras minúsculas cada forma de vida em português
-  new_lifeform <- gsub("VIDA_LIVRE_INDIVIDUAL", "free_living_individual", text, ignore.case = TRUE)
-  new_lifeform <- gsub("COLONIAL", "colonial", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("SESSIL", "sessile", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("HERBIVORO", "herbivore", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("EUSSOCIAL", "eusocial", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("PREDADOR", "predator", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ENDOPARASITOIDE", "endoparasitoid", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ECTOPARASITOIDE", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("HIPERPARASITOIDE", "hyperparasitoid", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ECTOPARASITO", "ectoparasite", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ENDOPARASITO", "endoparasite", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("COMENSAL", "commensal", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("EPIBIONTE", "epibiont", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("POLINIZADOR", "polynizer", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("INQUILINO", "inquiline", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("MUTUAL", "mutualistic", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("endoparasiteid", "endoparasitoid", new_lifeform, ignore.case = TRUE)
-  new_lifeform <- gsub("ectoparasiteid", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
-  return(new_lifeform)
-}
-
-translate_origins <- function(text) {
-  # Aplicar gsub para traduzir e converter para letras minúsculas cada origem
-  text[text == ""] <- NA
-  new_origins <- gsub("NATIVA", "native", text, ignore.case = TRUE)
-  new_origins <- gsub("INTRODUZIDA", "introduced", new_origins, ignore.case = TRUE)
-  new_origins <- gsub("CRIPTOGENICA", "cryptogenic", new_origins, ignore.case = TRUE)
-  new_origins <- gsub("DOMESTICADA", "domesticated", new_origins, ignore.case = TRUE)
-  new_origins <- gsub("INVASORA", "invasive", new_origins, ignore.case = TRUE)
-  return(new_origins)
-}
-
-translate_habitat <- function(text) {
-  # Aplicar gsub para traduzir e converter para letras minúsculas cada categoria de habitat
-  text[text == ""] <- NA
-  new_habitat <- gsub("AGUA_DOCE", "freshwater", text, ignore.case = TRUE)
-  new_habitat <- gsub("MARINHO", "marine", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("TERRESTRE", "terrestrial", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("ARBOREO", "arboreal", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("FOSSORIAL", "fossorial", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("CAVERNICOLA", "cavernicolous", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("AGUAS_SUBTERRANEAS", "subterranean waters", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("NIDICOLA", "nidicolous", new_habitat, ignore.case = TRUE)
-  new_habitat <- gsub("HIPORREICO", "hyporheic", new_habitat, ignore.case = TRUE)
-  return(new_habitat)}
-
-translate_taxonrank <- function(rank_vector) {
-  # Converter o vetor para caracteres (strings) e tratar NA como um valor especial
-  rank_vector <- as.character(rank_vector)
-
-  # Realizar as substituições diretamente
-  rank_vector[rank_vector == "FILO"] <- "phylum"
-  rank_vector[rank_vector == "CLASSE"] <- "class"
-  rank_vector[rank_vector == "ORDEM"] <- "order"
-  rank_vector[rank_vector == "SUB_ORDEM"] <- "suborder"
-  rank_vector[rank_vector == "FAMILIA"] <- "family"
-  rank_vector[rank_vector == "SUB_FAMILIA"] <- "subfamily"
-  rank_vector[rank_vector == "TRIBO"] <- "tribe"
-  rank_vector[rank_vector == "GENERO"] <- "genus"
-  rank_vector[rank_vector == "SUB_GENERO"] <- "subgenus"
-  rank_vector[rank_vector == "ESPECIE"] <- "species"
-  rank_vector[rank_vector == "SUB_ESPECIE"] <- "subspecies"
-  rank_vector[rank_vector == "SUB_CLASSE"] <- "subclass"
-  rank_vector[rank_vector == "INFRA_ORDEM"] <- "infraorder"
-  rank_vector[rank_vector == "SUPER_FAMILIA"] <- "superfamily"
-  rank_vector[rank_vector == "SUPER_CLASSE"] <- "superclass"
-  rank_vector[rank_vector == "SUB_TRIBO"] <- "subtribe"
-  rank_vector[rank_vector == "SUPER_ORDEM"] <- "superorder"
-  rank_vector[rank_vector == "INFRA_CLASSE"] <- "infraclass"
-
-  # Substituir NA por "unknown"
-  rank_vector[is.na(rank_vector)] <- "unknown"
-
-  return(rank_vector)
-}
+# #Translate origin, habitat, lifeform, taxonomicStatus and nomenclaturalStatus
+# translate_lifeform <- function(text) {
+#   # Aplicar gsub para traduzir e converter para letras minúsculas cada forma de vida em português
+#   new_lifeform <- gsub("VIDA_LIVRE_INDIVIDUAL", "free_living_individual", text, ignore.case = TRUE)
+#   new_lifeform <- gsub("COLONIAL", "colonial", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("SESSIL", "sessile", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("HERBIVORO", "herbivore", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("EUSSOCIAL", "eusocial", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("PREDADOR", "predator", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("ENDOPARASITOIDE", "endoparasitoid", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("ECTOPARASITOIDE", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("HIPERPARASITOIDE", "hyperparasitoid", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("ECTOPARASITO", "ectoparasite", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("ENDOPARASITO", "endoparasite", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("COMENSAL", "commensal", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("EPIBIONTE", "epibiont", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("POLINIZADOR", "polynizer", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("INQUILINO", "inquiline", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("MUTUAL", "mutualistic", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("endoparasiteid", "endoparasitoid", new_lifeform, ignore.case = TRUE)
+#   new_lifeform <- gsub("ectoparasiteid", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
+#   return(new_lifeform)
+# }
+#
+# translate_origins <- function(text) {
+#   # Aplicar gsub para traduzir e converter para letras minúsculas cada origem
+#   text[text == ""] <- NA
+#   new_origins <- gsub("NATIVA", "native", text, ignore.case = TRUE)
+#   new_origins <- gsub("INTRODUZIDA", "introduced", new_origins, ignore.case = TRUE)
+#   new_origins <- gsub("CRIPTOGENICA", "cryptogenic", new_origins, ignore.case = TRUE)
+#   new_origins <- gsub("DOMESTICADA", "domesticated", new_origins, ignore.case = TRUE)
+#   new_origins <- gsub("INVASORA", "invasive", new_origins, ignore.case = TRUE)
+#   return(new_origins)
+# }
+#
+# translate_habitat <- function(text) {
+#   # Aplicar gsub para traduzir e converter para letras minúsculas cada categoria de habitat
+#   text[text == ""] <- NA
+#   new_habitat <- gsub("AGUA_DOCE", "freshwater", text, ignore.case = TRUE)
+#   new_habitat <- gsub("MARINHO", "marine", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("TERRESTRE", "terrestrial", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("ARBOREO", "arboreal", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("FOSSORIAL", "fossorial", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("CAVERNICOLA", "cavernicolous", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("AGUAS_SUBTERRANEAS", "subterranean waters", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("NIDICOLA", "nidicolous", new_habitat, ignore.case = TRUE)
+#   new_habitat <- gsub("HIPORREICO", "hyporheic", new_habitat, ignore.case = TRUE)
+#   return(new_habitat)}
+#
+# translate_taxonrank <- function(rank_vector) {
+#   # Converter o vetor para caracteres (strings) e tratar NA como um valor especial
+#   rank_vector <- as.character(rank_vector)
+#
+#   # Realizar as substituições diretamente
+#   rank_vector[rank_vector == "FILO"] <- "phylum"
+#   rank_vector[rank_vector == "CLASSE"] <- "class"
+#   rank_vector[rank_vector == "ORDEM"] <- "order"
+#   rank_vector[rank_vector == "SUB_ORDEM"] <- "suborder"
+#   rank_vector[rank_vector == "FAMILIA"] <- "family"
+#   rank_vector[rank_vector == "SUB_FAMILIA"] <- "subfamily"
+#   rank_vector[rank_vector == "TRIBO"] <- "tribe"
+#   rank_vector[rank_vector == "GENERO"] <- "genus"
+#   rank_vector[rank_vector == "SUB_GENERO"] <- "subgenus"
+#   rank_vector[rank_vector == "ESPECIE"] <- "species"
+#   rank_vector[rank_vector == "SUB_ESPECIE"] <- "subspecies"
+#   rank_vector[rank_vector == "SUB_CLASSE"] <- "subclass"
+#   rank_vector[rank_vector == "INFRA_ORDEM"] <- "infraorder"
+#   rank_vector[rank_vector == "SUPER_FAMILIA"] <- "superfamily"
+#   rank_vector[rank_vector == "SUPER_CLASSE"] <- "superclass"
+#   rank_vector[rank_vector == "SUB_TRIBO"] <- "subtribe"
+#   rank_vector[rank_vector == "SUPER_ORDEM"] <- "superorder"
+#   rank_vector[rank_vector == "INFRA_CLASSE"] <- "infraclass"
+#
+#   # Substituir NA por "unknown"
+#   rank_vector[is.na(rank_vector)] <- "unknown"
+#
+#   return(rank_vector)
+# }
 
 #Extract string between patterns
 extract_between <- function(str, left, right) {
@@ -164,7 +164,7 @@ extract_year <- function(sn) {
 
 
 merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
-                       encoding = "UTF-8", verbose = TRUE) {
+                       translate = TRUE, encoding = "UTF-8", verbose = TRUE) {
 
   #Set folder
   if(is.null(path_data)) {
@@ -358,17 +358,30 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   #Fix states
   df_final$states <- gsub("BR-", "", df_final$states)
 
-  #Translate and put in lower case
-  df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
-  df_final$lifeForm[df_final$lifeForm == ""] <- NA
-  df_final$origin <- translate_origins(df_final$origin)
-  df_final$habitat <- translate_habitat(df_final$habitat)
-  df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
-  df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME_ACEITO"] <- "accepted"
-  df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
-  df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
-  #df_final$countryCode <- tolower(df_final$countryCode)
-  df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
+  # #Translate and put in lower case
+  # df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
+  # df_final$lifeForm[df_final$lifeForm == ""] <- NA
+  # df_final$origin <- translate_origins(df_final$origin)
+  # df_final$habitat <- translate_habitat(df_final$habitat)
+  # df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
+  # df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME_ACEITO"] <- "accepted"
+  # df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
+  # df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
+  # #df_final$countryCode <- tolower(df_final$countryCode)
+  # df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
+
+  #Add language
+  df_final$language <- "pt_br"
+
+  if(translate){ #Translate
+    df_final <- translate_faunabr(df_final, to = "en")} else {
+      #Or put columns to lower
+      df_final$lifeForm <- tolower(df_final$lifeForm)
+      df_final$origin <- tolower(df_final$origin)
+      df_final$habitat <- tolower(df_final$habitat)
+      df_final$taxonRank <- tolower(df_final$taxonRank)
+      df_final$taxonomicStatus <- tolower(df_final$taxonomicStatus)
+    }
 
 
   #Solve incongruencies?

@@ -27,6 +27,7 @@ O pacote *faunabr* oferece um conjunto de funções desenvolvidas para acessar, 
 + `get_faunabr()`: baixa a versão mais recente ou uma versão anterior do banco de dados da Fauna do Brasil.
 + `fauna_version()`: verifica se você possui a versão mais recente dos dados da Fauna do Brasil disponível em um diretório.
 + `load_faunabr()`: carrega o banco de dados da Fauna do Brasil para o R.
++ `translate_faunabr()`: traduz os dados de "forma de vida (lifeForm)", "origem (origin)", "habitat", "ranking taxonômico (taxonRank)" e "Status Taxonômico (taxonomicStatus)" entre Português e Inglês.
 + `fauna_attributes()`: exibe todas as opções disponíveis para filtrar espécies de acordo com suas características.
 + `select_fauna()`: filtra espécies com base em suas características e distribuição.
 + `extract_binomial()`: extrai o nome binomial (Gênero + epíteto específico) de um nome científico completo (Gênero + epíteto específico + Autor + Ano)
@@ -69,16 +70,18 @@ Agora você pode utilizar a função `get_faunabr` para obter a versão mais rec
 ```{r, results='hide', message=FALSE, warning=FALSE}
 get_faunabr(output_dir = my_dir, #Pasta para salvar os dados
             data_version = "latest", #Obter a versão mais recente
+            translate = FALSE, #Manter versão original em português
             overwrite = T) #Sobrescrever dados, se eles já existirem
 ```
 
-A função levará alguns segundos para baixar os dados e alguns minutos para mesclar os conjuntos de dados em um único data.frame. Após a conclusão bem-sucedida, você encontrará uma pasta nomeada com a versão do Fauna do Brasil. Esta pasta contém o conjunto de dados bruto baixado (arquivos TXT em português) e um arquivo chamado **CompleteBrazilianFauna.gz**. Este último representa o conjunto de dados finalizado, mesclado e traduzido para inglês.
+A função levará alguns segundos para baixar os dados e alguns minutos para mesclar os conjuntos de dados em um único `data.frame.` Após a conclusão bem-sucedida, você encontrará uma pasta nomeada com a versão do Fauna do Brasil. Esta pasta contém o conjunto de dados bruto baixado (arquivos TXT em português) e um arquivo chamado **CompleteBrazilianFauna.gz**. Este último representa o conjunto de dados final mesclado. Por padrão, os dados são traduzidos para o inglês, mas aqui mantemos a versão original em português definindo `translate = TRUE`.
 
-Você também tem a opção de baixar uma versão mais antiga específica do conjunto de dados da Fauna do Brasil. Para explorar as versões disponíveis, consulte [este link](https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil). Para baixar uma versão específica, basta substituir 'latest' pelo número da versão desejada. Por exemplo:
+Você também tem a opção de baixar uma versão mais antiga específica do conjunto de dados da Fauna do Brasil. Para explorar as versões disponíveis, consulte [este link](https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil). Para baixar uma versão específica, basta substituir `latest` pelo número da versão desejada. Por exemplo:
 
 ```{r, results='hide', message=FALSE, warning=FALSE}
 get_faunabr(output_dir = my_dir, #Pasta para salvar os dados
             data_version = "1.10", #Versão 1.10, publicada em 01-02-2024
+            translate = FALSE, #Manter versão original em português
             overwrite = T) #Sobrescrever dados, se eles já existirem
 ```
 
@@ -96,7 +99,7 @@ fauna_version(data_dir = my_dir)
 
 ## Carregando os dados
 Para utilizar as outras funções do pacote, você precisa carregar os dados em seu ambiente R. Para isso, utilize a função `load_faunabr()`. Por padrão, a função buscará automaticamente pela versão mais recente disponível no seu diretório. No entanto, você tem a opção de especificar uma versão particular usando o parâmetro *data_version*.
-Além disso, você pode escolher entre duas versões dos dados: a versão resumida 'short' (contendo as 19 colunas necessárias para executar as outras funções do pacote) ou a versão completa 'completa' (com todas as 31 colunas originais). A função importa a versão 'short' por padrão.
+Além disso, você pode escolher entre duas versões dos dados: a versão resumida 'short' (contendo as 21 colunas necessárias para executar as outras funções do pacote) ou a versão completa 'completa' (com todas as 32 colunas originais). A função importa a versão 'short' por padrão.
 
 ```{r}
 #Short version
@@ -111,9 +114,9 @@ colnames(bf) #Ver colunas da versão resumida
 #> [10] "genus"               "lifeForm"            "habitat"
 #> [13] "states"              "countryCode"         "origin" 
 #> [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"       
-#> [19] "taxonRank"           "id"
+#> [19] "taxonRank"           "id"                  "language"
 ```
-Note que a versão completa possui 12 colunas adicionais:
+Note que a versão completa possui 11 colunas adicionais:
 
 ```{r}
 #Complete version
@@ -137,9 +140,62 @@ colnames(bf_complete) #Ver colunas da versão completa
 #> [25] "habitat"                  "origin"
 #> [27] "states"                   "countryCode"    
 #> [29] "modified"                 "bibliographicCitation"               
-#> [31] "relationshipOfResource"                                
+#> [31] "relationshipOfResource"   "language"                        
 ```
 
+## Traduzir atributos
+
+Por padrão, os dados baixados do [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) são traduzidos para o inglês, a menos que você defina `translate = FALSE` na função `get_faunabr()`. No entanto, é possível usar a função `translate_faunabr()` para traduzir os dados carregados entre inglês e português:
+
+```{r}
+# Traduzir do português para o inglês
+bf_ingles <- translate_faunabr(data = bf, to = "en")
+# Ver formas de vida (em ingles)
+fauna_attributes(bf_ingles, "lifeForm")
+#>  $lifeForm
+#>                  lifeForm
+#> 1                colonial
+#> 2               commensal
+#> 3            ectoparasite
+#> 4          ectoparasitoid
+#> 5            endoparasite
+#> 6          endoparasitoid
+#> 7                epibiont
+#> 8                eusocial
+#> 9  free_living_individual
+#> 10              herbivore
+#> 11        hyperparasitoid
+#> 12              inquiline
+#> 13            mutualistic
+#> 14              polynizer
+#> 15               predator
+#> 16                sessile
+
+# Traduzir do inglês para o português
+bf_portugues <- translate_faunabr(data = bf_ingles, to = "pt_br")
+#Ver formas de vida disponíveis em portugues novamente
+fauna_attributes(bf_portugues, "lifeForm")
+#>  $lifeForm
+#>                 lifeForm
+#> 1               colonial
+#> 2               comensal
+#> 3           ectoparasito
+#> 4        ectoparasitoide
+#> 5           endoparasito
+#> 6        endoparasitoide
+#> 7              epibionte
+#> 8              eussocial
+#> 9              herbivoro
+#> 10      hiperparasitoide
+#> 11             inquilino
+#> 12                mutual
+#> 13           polinizador
+#> 14              predador
+#> 15                sessil
+#> 16 vida_livre_individual
+```
+
+## Salvar dados
 Se você deseja salvar os conjuntos de dados para abrir com um editor externo (por exemplo, Excel), você pode salvar o data.frame como um arquivo CSV:
 ```{r, eval=FALSE, warning=FALSE, message=FALSE, }
 write.csv(x = bf,

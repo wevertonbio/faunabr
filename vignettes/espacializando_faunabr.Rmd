@@ -31,6 +31,7 @@ bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_fa
                    type = "short") #Versão resumida
 #> Loading version 1.3
 ```
+Aqui, vamos utilizar os dados baixados em português (`translate = FALSE` em `get_faunabr()`).
 
 ## Obter polígonos espaciais da distribuição de espécies
 Fauna do Brasil fornece informações sobre os estados brasileiros e países com ocorrências confirmadas das espécies. A função `get_spat_occ()` extrai essas informações e retorna polígonos espaciais (SpatVectors) que representam a distribuição da espécie. Podemos escolher obter o SpatVector dos estados e/ou países.
@@ -39,7 +40,7 @@ Fauna do Brasil fornece informações sobre os estados brasileiros e países com
 #Espécies de exemplo
 spp <- c("Panthera onca", "Mazama jucunda")
 #Obter polígonos espaciais
-spp_spt <- fauna_spat_occ(data = fauna_data, species = spp, state = TRUE,
+spp_spt <- fauna_spat_occ(data = bf, species = spp, state = TRUE,
                           country = TRUE, verbose = TRUE)
 #> Getting states of Panthera onca
 #> Getting countries of Panthera onca
@@ -110,7 +111,7 @@ Os dados de entrada com registros devem ser um dataframe com pelo menos 3 coluna
 Vamos verificar se há registros fora das áreas naturais de ocorrência das espécies considerando estados e países:
 
 ```{r}
-occ_check <- filter_faunabr(data = df, occ = occurrences,
+occ_check <- filter_faunabr(data = bf, occ = occurrences,
                     by_state = TRUE, buffer_state = 20,
                     by_country = TRUE, buffer_country = 20,
                     value = "flag&clean", keep_columns = TRUE,
@@ -129,6 +130,7 @@ if(!require(mapview)){
 }
 #Carregar pacote
 library(mapview)
+library(terra)
 ```
 
 Vamos verificar os registros de *Panthera onca*, plotando os registros e o mapa obtido anteriormente. Os pontos verdes representam os registros que passaram no teste dos estados, ou seja, registros dentro dos estados com ocorrência confirmada da espécie. Os pontos vermelhos são os registros que caem fora dos estados. Os pontos cinzas são registros que não foram testados porque estão fora do Brasil.
@@ -159,6 +161,7 @@ mapview(pol_spp$`Panthera onca`$countries,
           col.regions = c("red", "green"),
           layer.name = "Inside country?")
 ```
+
 ```{r IMG04, eval=TRUE, echo = FALSE, fig.pos="H", out.width="90%"}
 knitr::include_graphics("vignettes_img/IMG04.png")
 ```

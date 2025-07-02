@@ -16,6 +16,9 @@
 #' information is updated based on unique data from subspecies.
 #' For example, if a subspecies occurs in a certain state, it implies that the
 #' species also occurs in that state.
+#' @param translate (logical) whether to translate the original dataset
+#' ("lifeForm", "origin", "habitat", and "taxonRank") from Portuguese to English.
+#' Default is TRUE.
 #' @param overwrite (logical) If TRUE, data is overwritten. Default = TRUE.
 #' @param verbose (logical) Whether to display messages during function
 #' execution. Set to TRUE to enable display, or FALSE to run silently.
@@ -29,9 +32,10 @@
 #' The merged data.frame is then saved as a file in the specified output
 #' directory. The data is saved in a format that allows easy loading using the
 #' \code{\link{load_faunabr}} function for further analysis in R.
+#'
 #' @usage get_faunabr(output_dir, data_version = "latest",
-#'                  solve_discrepancies = TRUE, overwrite = TRUE,
-#'                  verbose = TRUE)
+#'                  solve_discrepancies = TRUE, translate = TRUE,
+#'                  overwrite = TRUE, verbose = TRUE)
 #' @export
 #'
 #' @importFrom httr GET write_disk
@@ -39,9 +43,11 @@
 #' @importFrom utils unzip
 #' @importFrom utils read.csv
 #' @importFrom data.table fwrite
+#'
 #' @references
 #' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
 #' https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil
+#'
 #' @examples
 #' \dontrun{
 #' #Creating a folder in a temporary directory
@@ -50,11 +56,11 @@
 #' my_dir <- file.path(file.path(tempdir(), "faunabr"))
 #' dir.create(my_dir)
 #' #Download, merge and save data
-#' get_faunabr(output_dir = my_dir, data_version = "latest",
-#'             solve_discrepancies = TRUE, overwrite = TRUE, verbose = TRUE)
+#' get_faunabr(output_dir = my_dir)
 #' }
 get_faunabr <- function(output_dir, data_version = "latest",
                         solve_discrepancies = TRUE,
+                        translate = TRUE,
                         overwrite = TRUE,
                         verbose = TRUE) {
   #Set folder
@@ -136,6 +142,7 @@ get_faunabr <- function(output_dir, data_version = "latest",
 
   #Merge data
   merge_data(path_data = path_data, version_data = version_data_numeric,
+             translate = translate,
              solve_discrepancies = solve_discrepancies, verbose = verbose)
 
   #Print final message

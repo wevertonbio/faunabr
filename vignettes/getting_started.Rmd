@@ -27,6 +27,7 @@ The faunabr package provides a suite of functions designed to retrieve, filter, 
 + `get_faunabr()`: download the latest or an older version of Fauna do Brasil database.
 + `fauna_version()`: check if you have the latest version of Fauna do Brasil data available in a directory.
 + `load_faunabr()`: load Fauna do Brasil database.
++ `translate_faunabr()`: translates information in the "lifeForm", "origin", "habitat", "taxonRank" and "taxonomicStatus" columns between Portuguese and English.
 + `fauna_attributes()`: display all the options available to filter species by its characteristics.
 + `select_fauna()`: filter species based on its characteristics and distribution.
 + `extract_binomial()`: extract the binomial name (Genus + specific epithet) from a Scientific Name.
@@ -69,10 +70,11 @@ You can now utilize the `get_faunabr` function to retrieve the most recent versi
 ```{r, results='hide', message=FALSE, warning=FALSE}
 get_faunabr(output_dir = my_dir, #directory to save the data
             data_version = "latest", #get the most recent version available
+            translate = TRUE, #translate data to English
             overwrite = T) #Overwrite data, if it exists
 ```
 
-The function will take a few seconds to download the data and a few minutes to merge the datasets into a single data.frame. Upon successful completion, you will find a folder named with the version of Fauna do Brasil. This folder contains the downloaded raw dataset (TXT files in Portuguese) and a file named **CompleteBrazilianFauna.gz**. The latter represents the finalized dataset, merged and translated into English.
+The function will take a few seconds to download the data and a few minutes to merge the datasets into a single data.frame. Upon successful completion, you will find a folder named with the version of Fauna do Brasil. This folder contains the downloaded raw dataset (TXT files in Portuguese) and a file named **CompleteBrazilianFauna.gz**. The latter represents the finalized dataset. By default, the data is translated into English, but you can keep the original Portuguese version by setting `translate = FALSE`.
 
 You also have the option to download an older, specific version of the Fauna do Brasil dataset. To explore the available versions, please refer to [this link](https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil). For downloading a particular version, simply replace 'latest' with the desired version number. For example:
 
@@ -111,8 +113,9 @@ colnames(bf) #See variables from short version
 #> [10] "genus"               "lifeForm"            "habitat"
 #> [13] "states"              "countryCode"         "origin" 
 #> [16] "taxonomicStatus"     "nomenclaturalStatus" "vernacularName"          
-#> [19] "taxonRank"           "id"
+#> [19] "taxonRank"           "id"                  "language"
 ```
+
 Note that the complete version has 12 more columns:
 
 ```{r}
@@ -137,8 +140,61 @@ colnames(bf_complete) #See variables from complete version
 #> [25] "habitat"                  "origin"
 #> [27] "states"                   "countryCode"    
 #> [29] "modified"                 "bibliographicCitation"                              
-#> [31] "relationshipOfResource"                                
+#> [31] "relationshipOfResource"   "language"                             
 ```
+
+### Translate information
+By default, the data downloaded from [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is translated into English, unless you set `translate = FALSE` in `get_faunabr()` function. However, you can use the `translate_faunabr()` function to translate the loaded data between English and Portuguese:
+```{r}
+#Translate from English to Portuguese
+bf_portuguese <- translate_faunabr(data = bf, to = "pt_br")
+# See lifeforms (in portuguese)
+fauna_attributes(bf_portuguese, "lifeForm")
+#>  $lifeForm
+#>                 lifeForm
+#> 1               colonial
+#> 2               comensal
+#> 3           ectoparasito
+#> 4        ectoparasitoide
+#> 5           endoparasito
+#> 6        endoparasitoide
+#> 7              epibionte
+#> 8              eussocial
+#> 9              herbivoro
+#> 10      hiperparasitoide
+#> 11             inquilino
+#> 12                mutual
+#> 13           polinizador
+#> 14              predador
+#> 15                sessil
+#> 16 vida_livre_individual
+
+#Translate from Portuguese to English
+bf_english <- translate_faunabr(data = fauna_portuguese, to = "en")
+#See life forms(in English)
+fauna_attributes(bf_english, "lifeForm")
+#>  $lifeForm
+#>                  lifeForm
+#> 1                colonial
+#> 2               commensal
+#> 3            ectoparasite
+#> 4          ectoparasitoid
+#> 5            endoparasite
+#> 6          endoparasitoid
+#> 7                epibiont
+#> 8                eusocial
+#> 9  free_living_individual
+#> 10              herbivore
+#> 11        hyperparasitoid
+#> 12              inquiline
+#> 13            mutualistic
+#> 14              polynizer
+#> 15               predator
+#> 16                sessile
+
+```
+
+## Save data
 
 If you want to save the datasets to open with an external editor (e.g. Excel), you can save the data.frame as a CSV file:
 ```{r, eval=FALSE, warning=FALSE, message=FALSE, }

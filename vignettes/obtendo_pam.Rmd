@@ -33,14 +33,17 @@ bf <- load_faunabr(data_dir = my_dir, #Pasta onde foi salvo o arquivo com get_fa
 #> Loading version 1.3
 ```
 
+Aqui, vamos utilizar os dados baixados em português (`translate = FALSE` em `get_faunabr()`.
+
 ## Obtendo uma matriz de presença-ausência
 
 A função `fauna_pam()` facilita a utilização das informações de distribuição de espécies no Fauna do Brasil para gerar uma PAM. Cada local representa um estado brasileiro ou um país. Além da PAM, a função também fornece um resumo e um SpatVector contendo o número de espécies em cada local.
 
 Como exemplo, vamos obter uma PAM com todas as espécies de mamíferos nativos do Brasil:
+
 ```{r}
 #Selecionar espécies de mamíferos nativos do Brasil:
-br_mammals <- select_fauna(data = fauna_data,
+br_mammals <- select_fauna(data = bf,
                            include_subspecies = FALSE, phylum = "all",
                            class = "Mammalia",
                            order = "all", family = "all",
@@ -49,7 +52,7 @@ br_mammals <- select_fauna(data = fauna_data,
                            habitat = "all", filter_habitat = "in",
                            states = "all", filter_states = "in",
                            country = "BR", filter_country = "in",
-                           origin = "all", taxonomicStatus = "accepted")
+                           origin = "all", taxonomicStatus = "nome_aceito")
 #PAM em Estados do Brasil
 pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, 
                          by_country = FALSE,

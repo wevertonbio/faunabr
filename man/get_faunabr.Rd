@@ -5,8 +5,8 @@
 \title{Download the latest version of Catálogo Taxonômico da Fauna do Brasil}
 \usage{
 get_faunabr(output_dir, data_version = "latest",
-                 solve_discrepancies = TRUE, overwrite = TRUE,
-                 verbose = TRUE)
+                 solve_discrepancies = TRUE, translate = TRUE,
+                 overwrite = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{output_dir}{(character) a directory to save the data downloaded from
@@ -22,6 +22,10 @@ subspecies  information. When set to TRUE (default), species
 information is updated based on unique data from subspecies.
 For example, if a subspecies occurs in a certain state, it implies that the
 species also occurs in that state.}
+
+\item{translate}{(logical) whether to translate the original dataset
+("lifeForm", "origin", "habitat", and "taxonRank") from Portuguese to English.
+Default is TRUE.}
 
 \item{overwrite}{(logical) If TRUE, data is overwritten. Default = TRUE.}
 
@@ -51,8 +55,7 @@ and saves this data.frame in the specified directory.
 my_dir <- file.path(file.path(tempdir(), "faunabr"))
 dir.create(my_dir)
 #Download, merge and save data
-get_faunabr(output_dir = my_dir, data_version = "latest",
-            solve_discrepancies = TRUE, overwrite = TRUE, verbose = TRUE)
+get_faunabr(output_dir = my_dir)
 }
 }
 \references{
