@@ -75,6 +75,11 @@ get_faunabr <- function(output_dir, data_version = "latest",
     path_data <- output_dir
   }
 
+  if(!file.exists(output_dir)){
+    dir.create(output_dir)
+    warning("'output_dir' does not exists. Creating folder:\n" , output_dir)
+  }
+
   if (!is.character(data_version)) {
     stop(paste0("Argument data_version must be a character, not ",
                 class(data_version)))
