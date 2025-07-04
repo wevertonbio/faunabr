@@ -221,7 +221,7 @@ no Rio de Janeiro:</p>
 <span>                           filter_states <span class="op">=</span> <span class="st">"in"</span>, <span class="co">#Que ocorrem NO RJ</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"nativa"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"valido"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_rj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 114</span></span></code></pre></div>
 <p>O filtro retornou 114 espécies que atendem aos critérios
@@ -254,7 +254,7 @@ no Rio de Janeiro, e não em nenhum outro estado, modifique o parâmetro
 <span>                           filter_states <span class="op">=</span> <span class="st">"only"</span>, <span class="co">#Com ocorrência APENAS no RJ</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"nativa"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"valido"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_rj_only</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 22</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">insects_rj_only</span><span class="op">$</span><span class="va">states</span><span class="op">)</span></span>
@@ -279,7 +279,7 @@ Santa Catarina (SC) e Rio Grande do Sul (RS):</p>
 <span>                           filter_states <span class="op">=</span> <span class="st">"in"</span>, <span class="co">#EM qualquer um dos estados</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"nativa"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"valido"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 11461</span></span>
 <span></span>
@@ -314,7 +314,7 @@ ocorrências confirmadas em todos os três estados, podemos usar
 <span>                           filter_states <span class="op">=</span> <span class="st">"and"</span>, <span class="co">#PR &amp; SC &amp; RS</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"nativa"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"valido"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south_and</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1924</span></span>
 <span></span>
@@ -350,7 +350,7 @@ estados, sem ocorrências em outros lugares, podemos usar
 <span>                           filter_states <span class="op">=</span> <span class="st">"only"</span>, <span class="co">#Apenas no PR &amp; SC &amp; RS</span></span>
 <span>                           country <span class="op">=</span> <span class="st">"all"</span>, filter_country <span class="op">=</span> <span class="st">"in"</span>,</span>
 <span>                           origin <span class="op">=</span> <span class="st">"nativa"</span>,</span>
-<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"nome_aceito"</span><span class="op">)</span></span>
+<span>                           taxonomicStatus <span class="op">=</span> <span class="st">"valido"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rspatial.github.io/terra/reference/dimensions.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">insects_south_only</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 134</span></span>
 <span></span>
@@ -411,17 +411,17 @@ anteriormente:</p>
 <span>                             max_distance <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">checked_names</span><span class="op">)</span> <span class="co">#Exibir tabela como tibble</span></span>
 <span><span class="co">#&gt; # A tibble: 6 x 9</span></span>
-<span><span class="co">#&gt;   input_name               Spelling           Suggested_name       Distance taxonomicStatus nomenclaturalStatus acceptedName   family        matches</span></span>
+<span><span class="co">#&gt;   input_name               Spelling           Suggested_name       Distance taxonomicStatus nomenclaturalStatus validName   family        matches</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;                    &lt;chr&gt;              &lt;chr&gt;                   &lt;dbl&gt; &lt;chr&gt;           &lt;chr&gt;               &lt;chr&gt;          &lt;chr&gt;         &lt;chr&gt;  </span></span>
-<span><span class="co">#&gt; 1 "Zonotrichia capensis"   Correct            Zonotrichia capensis        0 nome_aceito     NA                  NA             Passerellidae single </span></span>
+<span><span class="co">#&gt; 1 "Zonotrichia capensis"   Correct            Zonotrichia capensis        0 valido    NA                  NA             Passerellidae single </span></span>
 <span><span class="co">#&gt; 2 "Mazama bororo"          Correct            Mazama bororo               0 sinonimo        NA                  Mazama jucunda Cervidae      single </span></span>
-<span><span class="co">#&gt; 3 "Mazama jucunda"         Correct            Mazama jucunda              0 nome_aceito     NA                  NA             Cervidae      single </span></span>
-<span><span class="co">#&gt; 4 "Arrenurus tumulosus"    Correct            Arrenurus tumulosus         0 nome_aceito     NA                  NA             Arrenuridae   single </span></span>
-<span><span class="co">#&gt; 5 "Pantera onca"           Probably_incorrect Panthera onca               2 nome_aceito     NA                  NA             Felidae       single </span></span>
+<span><span class="co">#&gt; 3 "Mazama jucunda"         Correct            Mazama jucunda              0 valido     NA                  NA             Cervidae      single </span></span>
+<span><span class="co">#&gt; 4 "Arrenurus tumulosus"    Correct            Arrenurus tumulosus         0 valido     NA                  NA             Arrenuridae   single </span></span>
+<span><span class="co">#&gt; 5 "Pantera onca"           Probably_incorrect Panthera onca               2 valido     NA                  NA             Felidae       single </span></span>
 <span><span class="co">#&gt; 6 "Araucaria angustifolia" Not_found          NA                         NA NA              NA                  NA             NA            none   </span></span></code></pre></div>
 <p>Podemos ver que <em>Zonotrichia capensis</em>, <em>Mazama
 jucunda</em> e <em>Arrenurus tumulosus</em> estão escritos corretamente
-e são nomes aceitos. <em>Mazama bororo</em> está escrito corretamente,
+e são nomes validos. <em>Mazama bororo</em> está escrito corretamente,
 mas é um sinônimo de <em>Mazama jucunda</em>. No caso de <em>Pantera
 onca</em>, a ortografia parece estar potencialmente incorreta (já que o
 nome não foi encontrado no banco de dados); no entanto, um nome
@@ -442,18 +442,18 @@ recomendamos fortemente o uso das funções <code>get_binomial()</code> e
 <code>check_names()</code> previamente. Isso garante que você esteja
 trabalhando exclusivamente com espécies presentes no banco de dados da
 Fauna do Brasil. Para ver como a função funciona, vamos usar os nomes
-aceitos em <em>checked_names</em> criados anteriormente:</p>
+validos em <em>checked_names</em> criados anteriormente:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">#Obter apenas nomes aceitos</span></span>
-<span><span class="va">accepteds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">checked_names</span><span class="op">$</span><span class="va">acceptedName</span><span class="op">)</span></span>
-<span><span class="va">accepteds</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">accepteds</span><span class="op">)</span> <span class="co">#Remove NAs</span></span>
+<code class="sourceCode R"><span><span class="co">#Obter apenas nomes validos</span></span>
+<span><span class="va">valids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="va">checked_names</span><span class="op">$</span><span class="va">validName</span><span class="op">)</span></span>
+<span><span class="va">valids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rspatial.github.io/terra/reference/na.omit.html" class="external-link">na.omit</a></span><span class="op">(</span><span class="va">valids</span><span class="op">)</span> <span class="co">#Remove NAs</span></span>
 <span></span>
 <span><span class="co">#Subselecionar especies</span></span>
-<span><span class="va">my_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepteds</span>,</span>
+<span><span class="va">my_sp</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">valids</span>,</span>
 <span>                      include_subspecies <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">my_sp</span><span class="op">)</span></span>
 <span><span class="co"># A tibble: 4 x 21</span></span>
-<span><span class="co">#&gt;   species           subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode origin</span></span>
+<span><span class="co">#&gt;   species           subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode origin</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;             &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt; </span></span>
 <span><span class="co">#&gt; 1 Panthera onca     NA         Panthera onca~ NA           Animal~ Chord~ Mamm~ Carn~ Felid~ Pant~ "vida_l~ "terre~ AC;AM~ AR;BO;BR;B~ nativa</span></span>
 <span><span class="co">#&gt; 2 Arrenurus tumulo~ NA         Arrenurus (In~ NA           Animal~ Arthr~ Arac~ Trom~ Arren~ Arre~ ""       ""      NA     NA          NA    </span></span>
@@ -462,11 +462,11 @@ aceitos em <em>checked_names</em> criados anteriormente:</p>
 <span><span class="co"># i 5 more variables: nomenclaturalStatus &lt;chr&gt;, vernacularName &lt;chr&gt;, taxonRank &lt;chr&gt;, id &lt;int&gt;, language &lt;chr&gt;</span></span></code></pre></div>
 <p>Também podemos incluir subespécies e/ou variedades:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">my_sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">accepteds</span>,</span>
+<code class="sourceCode R"><span><span class="va">my_sp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/subset_fauna.html">subset_fauna</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">valids</span>,</span>
 <span>                      include_subspecies <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html" class="external-link">tibble</a></span><span class="op">(</span><span class="va">my_sp2</span><span class="op">)</span> <span class="co">#print data.frame as tibble</span></span>
 <span><span class="co">#&gt; # A tibble: 14 × 19</span></span>
-<span><span class="co">#&gt;    species      subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #&gt; origin</span></span>
+<span><span class="co">#&gt;    species      subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode #&gt; origin</span></span>
 <span><span class="co">#&gt;    &lt;chr&gt;        &lt;chr&gt;      &lt;chr&gt;          &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;       #&gt; &lt;chr&gt; </span></span>
 <span><span class="co">#&gt;  1 Panthera on… ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #&gt; "nati…</span></span>
 <span><span class="co">#&gt;  2 Arrenurus (… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #&gt;    </span></span>
@@ -498,8 +498,8 @@ três espécies:</p>
 <code class="sourceCode R"><span><span class="va">spp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Panthera onca"</span>, <span class="st">"Mazama jucunda"</span>, <span class="st">"Subulo gouzoubira"</span><span class="op">)</span></span>
 <span><span class="va">spp_syn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fauna_synonym.html">fauna_synonym</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bf</span>, species <span class="op">=</span> <span class="va">spp</span><span class="op">)</span></span>
 <span><span class="va">spp_syn</span></span>
-<span><span class="co">#&gt;           acceptedName               synonym     taxonomicStatus</span></span>
-<span><span class="co">#&gt; 49343     Panthera onca                  &lt;NA&gt;    nome_aceito</span></span>
+<span><span class="co">#&gt;               validName               synonym   taxonomicStatus</span></span>
+<span><span class="co">#&gt; 49343     Panthera onca                  &lt;NA&gt;    valido</span></span>
 <span><span class="co">#&gt; 60523    Mazama jucunda         Mazama bororo    sinonimo</span></span>
 <span><span class="co">#&gt; 61168 Subulo gouzoubira    Mazama gouazoubira    sinonimo</span></span></code></pre></div>
 <p>Podemos ver que <em>Mazama jucunda</em> possui o sinônimo <em>Mazama

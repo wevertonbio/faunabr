@@ -144,12 +144,12 @@ is NA.</p></li>
 <li><p>Distance: The integer Levenshtein edit distance. It represents the number
 of single-character edits (insertions, deletions, or substitutions) required
 to transform the input_name into the Suggested_name.</p></li>
-<li><p>taxonomicStatus: the taxonomic status of the species name ("Accepted" or
-"Synonym").</p></li>
+<li><p>taxonomicStatus: the taxonomic status of the species name ("valid" or
+"synonym").</p></li>
 <li><p>nomenclaturalStatus: the nomenclatural status of the species name. This
 information is not available for all species.</p></li>
-<li><p>acceptedName: If the species name is not accepted or incorrect, the
-accepted name of the specie. If the species name is accepted and correct,
+<li><p>validName: If the species name is not valid or incorrect, the
+valid name of the specie. If the species name is valid and correct,
 the same as input_name and Suggested_name.</p></li>
 <li><p>family: the family of the specie.</p></li>
 </ul></div>
@@ -170,10 +170,10 @@ https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil</
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2         Mazama jucunda            Correct Mazama jucunda        0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3           Pantera onça Probably_incorrect  Panthera onca        2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 Araucaria angustifolia          Not_found           &lt;NA&gt;       NA</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   taxonomicStatus nomenclaturalStatus   acceptedName   family matches</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   taxonomicStatus nomenclaturalStatus      validName   family matches</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1         synonym                &lt;NA&gt; Mazama jucunda Cervidae  single</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        accepted                &lt;NA&gt; Mazama jucunda Cervidae  single</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        accepted                &lt;NA&gt;  Panthera onca  Felidae  single</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           valid                &lt;NA&gt; Mazama jucunda Cervidae  single</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3           valid                &lt;NA&gt;  Panthera onca  Felidae  single</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4            &lt;NA&gt;                &lt;NA&gt;           &lt;NA&gt;     &lt;NA&gt;    none</span>
 </code></pre></div>
     </div>
