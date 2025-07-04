@@ -35,12 +35,12 @@ is NA.
 \item Distance: The integer Levenshtein edit distance. It represents the number
 of single-character edits (insertions, deletions, or substitutions) required
 to transform the input_name into the Suggested_name.
-\item taxonomicStatus: the taxonomic status of the species name ("Accepted" or
-"Synonym").
+\item taxonomicStatus: the taxonomic status of the species name ("valid" or
+"synonym").
 \item nomenclaturalStatus: the nomenclatural status of the species name. This
 information is not available for all species.
-\item acceptedName: If the species name is not accepted or incorrect, the
-accepted name of the specie. If the species name is accepted and correct,
+\item validName: If the species name is not valid or incorrect, the
+valid name of the specie. If the species name is valid and correct,
 the same as input_name and Suggested_name.
 \item family: the family of the specie.
 }

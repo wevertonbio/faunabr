@@ -92,7 +92,7 @@ insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #Que ocorrem NO RJ
                            country = "all", filter_country = "in",
                            origin = "nativa",
-                           taxonomicStatus = "nome_aceito")
+                           taxonomicStatus = "valido")
 nrow(insects_rj)
 #> [1] 114
 ```
@@ -126,7 +126,7 @@ insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #Com ocorrência APENAS no RJ
                            country = "all", filter_country = "in",
                            origin = "nativa",
-                           taxonomicStatus = "nome_aceito")
+                           taxonomicStatus = "valido")
 nrow(insects_rj_only)
 #> [1] 22
 unique(insects_rj_only$states)
@@ -150,7 +150,7 @@ insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #EM qualquer um dos estados
                            country = "all", filter_country = "in",
                            origin = "nativa",
-                           taxonomicStatus = "nome_aceito")
+                           taxonomicStatus = "valido")
 nrow(insects_south)
 #> [1] 11461
 
@@ -183,7 +183,7 @@ insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "and", #PR & SC & RS
                            country = "all", filter_country = "in",
                            origin = "nativa",
-                           taxonomicStatus = "nome_aceito")
+                           taxonomicStatus = "valido")
 nrow(insects_south_and)
 #> [1] 1924
 
@@ -216,7 +216,7 @@ insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #Apenas no PR & SC & RS
                            country = "all", filter_country = "in",
                            origin = "nativa",
-                           taxonomicStatus = "nome_aceito")
+                           taxonomicStatus = "valido")
 nrow(insects_south_only)
 #> [1] 134
 
@@ -260,36 +260,36 @@ checked_names <- check_fauna_names(data = bf,
                              max_distance = 0.1)
 tibble::tibble(checked_names) #Exibir tabela como tibble
 #> # A tibble: 6 x 9
-#>   input_name               Spelling           Suggested_name       Distance taxonomicStatus nomenclaturalStatus acceptedName   family        matches
+#>   input_name               Spelling           Suggested_name       Distance taxonomicStatus nomenclaturalStatus validName   family        matches
 #>   <chr>                    <chr>              <chr>                   <dbl> <chr>           <chr>               <chr>          <chr>         <chr>  
-#> 1 "Zonotrichia capensis"   Correct            Zonotrichia capensis        0 nome_aceito     NA                  NA             Passerellidae single 
+#> 1 "Zonotrichia capensis"   Correct            Zonotrichia capensis        0 valido    NA                  NA             Passerellidae single 
 #> 2 "Mazama bororo"          Correct            Mazama bororo               0 sinonimo        NA                  Mazama jucunda Cervidae      single 
-#> 3 "Mazama jucunda"         Correct            Mazama jucunda              0 nome_aceito     NA                  NA             Cervidae      single 
-#> 4 "Arrenurus tumulosus"    Correct            Arrenurus tumulosus         0 nome_aceito     NA                  NA             Arrenuridae   single 
-#> 5 "Pantera onca"           Probably_incorrect Panthera onca               2 nome_aceito     NA                  NA             Felidae       single 
+#> 3 "Mazama jucunda"         Correct            Mazama jucunda              0 valido     NA                  NA             Cervidae      single 
+#> 4 "Arrenurus tumulosus"    Correct            Arrenurus tumulosus         0 valido     NA                  NA             Arrenuridae   single 
+#> 5 "Pantera onca"           Probably_incorrect Panthera onca               2 valido     NA                  NA             Felidae       single 
 #> 6 "Araucaria angustifolia" Not_found          NA                         NA NA              NA                  NA             NA            none   
 ```
 
-Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus tumulosus* estão escritos corretamente e são nomes aceitos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
+Podemos ver que *Zonotrichia capensis*, *Mazama jucunda* e *Arrenurus tumulosus* estão escritos corretamente e são nomes validos. *Mazama bororo* está escrito corretamente, mas é um sinônimo de *Mazama jucunda*.
 No caso de *Pantera onca*, a ortografia parece estar potencialmente incorreta (já que o nome não foi encontrado no banco de dados); no entanto, um nome semelhante, *Panthera onca*, é sugerido pela função. A coluna 'Distance' indica a distância de edição de Levenshtein entre a entrada e o nome sugerido.
 *Araucaria angustifolia* foi marcada como Not_found (como esperado, dado que *Araucaria angustifolia* não é um animal!). Consequentemente, o nome não foi localizado no banco de dados e não havia nomes comparáveis disponíveis.
 
 ### Subselecionando espécies
 
 Para obter informações sobre espécies do banco de dados Fauna do Brasil a partir de uma lista de espécies pré-definida, utilize a função `subset_species()`. Para obter um desempenho ideal, recomendamos fortemente o uso das funções `get_binomial()` e `check_names()` previamente. Isso garante que você esteja trabalhando exclusivamente com espécies presentes no banco de dados da Fauna do Brasil.
-Para ver como a função funciona, vamos usar os nomes aceitos em *checked_names* criados anteriormente:
+Para ver como a função funciona, vamos usar os nomes validos em *checked_names* criados anteriormente:
 
 ```{r}
-#Obter apenas nomes aceitos
-accepteds <- unique(checked_names$acceptedName)
-accepteds <- na.omit(accepteds) #Remove NAs
+#Obter apenas nomes validos
+valids <- unique(checked_names$validName)
+valids <- na.omit(valids) #Remove NAs
 
 #Subselecionar especies
-my_sp <- subset_fauna(data = bf, species = accepteds,
+my_sp <- subset_fauna(data = bf, species = valids,
                       include_subspecies = FALSE)
 tibble::tibble(my_sp)
 # A tibble: 4 x 21
-#>   species           subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode origin
+#>   species           subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode origin
 #>   <chr>             <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       <chr> 
 #> 1 Panthera onca     NA         Panthera onca~ NA           Animal~ Chord~ Mamm~ Carn~ Felid~ Pant~ "vida_l~ "terre~ AC;AM~ AR;BO;BR;B~ nativa
 #> 2 Arrenurus tumulo~ NA         Arrenurus (In~ NA           Animal~ Arthr~ Arac~ Trom~ Arren~ Arre~ ""       ""      NA     NA          NA    
@@ -300,11 +300,11 @@ tibble::tibble(my_sp)
 Também podemos incluir subespécies e/ou variedades:
 
 ```{r}
-my_sp2 <- subset_fauna(data = bf, species = accepteds,
+my_sp2 <- subset_fauna(data = bf, species = valids,
                       include_subspecies = TRUE)
 tibble::tibble(my_sp2) #print data.frame as tibble
 #> # A tibble: 14 × 19
-#>    species      subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
+#>    species      subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
 #>    <chr>        <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
 #>  1 Panthera on… ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
 #>  2 Arrenurus (… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #>    
@@ -331,8 +331,8 @@ Podemos obter todos os sinônimos de uma lista de espécies. Isso pode ser parti
 spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
 spp_syn <- fauna_synonym(data = bf, species = spp)
 spp_syn
-#>           acceptedName               synonym     taxonomicStatus
-#> 49343     Panthera onca                  <NA>    nome_aceito
+#>               validName               synonym   taxonomicStatus
+#> 49343     Panthera onca                  <NA>    valido
 #> 60523    Mazama jucunda         Mazama bororo    sinonimo
 #> 61168 Subulo gouzoubira    Mazama gouazoubira    sinonimo
 ```

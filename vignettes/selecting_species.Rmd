@@ -92,7 +92,7 @@ insects_rj <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #Select IN Rio de Janeiro
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 nrow(insects_rj)
 #> [1] 114
 ```
@@ -126,7 +126,7 @@ insects_rj_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #Select ONLY in Rio de Janeiro
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 nrow(insects_rj_only)
 #> [1] 22
 unique(insects_rj_only$states)
@@ -150,7 +150,7 @@ insects_south <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "in", #IN any of these states
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 nrow(insects_south)
 #> [1] 11461
 
@@ -183,7 +183,7 @@ insects_south_and <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "and", #in PR AND SC AND RS
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 nrow(insects_south_and)
 #> [1] 1924
 
@@ -216,7 +216,7 @@ insects_south_only <- select_fauna(data = bf, include_subspecies = FALSE,
                            filter_states = "only", #ONLY in PR, SC and RS
                            country = "all", filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 nrow(insects_south_only)
 #> [1] 134
 
@@ -260,36 +260,36 @@ checked_names <- check_fauna_names(data = bf,
                              max_distance = 0.1)
 tibble::tibble(checked_names) #print data.frame as tibble
 #> # A tibble: 6 × 8
-#>   input_name           Spelling Suggested_name Distance taxonomicStatus acceptedName #> family
+#>   input_name           Spelling Suggested_name Distance taxonomicStatus validName #> family
 #>   <chr>                <chr>    <chr>             <dbl> <chr>           <chr>        #> <chr> 
-#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 accepted   Zonotrichia… #> Passe…
+#> 1 Zonotrichia capensis Correct  Zonotrichia c…        0 valid   Zonotrichia… #> Passe…
 #> 2 Mazama bororo        Correct  Mazama bororo         0 synonym         Mazama jucu… #> Cervi…
-#> 3 Mazama jucunda       Correct  Mazama jucunda        0 accepted   Mazama jucu… #> Cervi…
-#> 4 Arrenurus (Incertae… Correct  Arrenurus tum…        0 accepted   Arrenurus t… #> Arren…
-#> 5 Pantera onça         Probabl… Panthera onca         2 accepted   Panthera on… #> Felid…
+#> 3 Mazama jucunda       Correct  Mazama jucunda        0 valid   Mazama jucu… #> Cervi…
+#> 4 Arrenurus (Incertae… Correct  Arrenurus tum…        0 valid   Arrenurus t… #> Arren…
+#> 5 Pantera onça         Probabl… Panthera onca         2 valid   Panthera on… #> Felid…
 #> 6 Araucaria angustifo… Not_fou… NA                   NA NA              NA           NA 
 
 ```
-We can see that *Zonotrichia capensis*, *Mazama jucunda*, and *Arrenurus tumulosus* are spelling correctly and are accepted names. *Mazama bororo*  is spelling correctly, but it is a synonym of *Mazama jucunda*.
+We can see that *Zonotrichia capensis*, *Mazama jucunda*, and *Arrenurus tumulosus* are spelling correctly and are valid names. *Mazama bororo*  is spelling correctly, but it is a synonym of *Mazama jucunda*.
 In the case of *Pantera onça*, the spelling appears to be potentially incorrect (as the name wasn't found in the database); however, a similar name, *Panthera onca*, is suggested by the function. The 'Distance' column indicates the Levenshtein edit distance between the input and the suggested name.
 The spelling of *Araucaria angustifolia* was flagged as Not_found (as expected, given that *Araucaria angustifolia* is not an animal!). Consequently, the name was not located in the database, and there were no comparable names available.
 
 ### Subsetting species
 
 To retrieve species information from the Fauna do Brasil database, employ the `subset_species()` function. For optimal performance, we highly recommend utilizing the `get_binomial()` and `check_names()` functions beforehand. This ensures that you're exclusively working with species present in the Fauna do Brasil database.
-To see how the function works, let's use the accepted names in *checked_names* created previously:
+To see how the function works, let's use the valid names in *checked_names* created previously:
 
 ```{r}
-#Get only accepted names
-accepteds <- unique(checked_names$acceptedName)
-accepteds <- na.omit(accepteds) #Remove NA
+#Get only valid names
+valids <- unique(checked_names$validName)
+valids <- na.omit(valids) #Remove NA
 
 #Subset species
-my_sp <- subset_fauna(data = bf, species = accepteds,
+my_sp <- subset_fauna(data = bf, species = valids,
                       include_subspecies = FALSE)
 tibble::tibble(my_sp) #print data.frame as tibble
 #> # A tibble: 4 × 19
-#>   species       subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
+#>   species       subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
 #>   <chr>         <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
 #> 1 Panthera onca ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
 #> 2 Arrenurus (I… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      ""    
@@ -300,11 +300,11 @@ tibble::tibble(my_sp) #print data.frame as tibble
 We can also include subspecies and/or varieties:
 
 ```{r}
-my_sp2 <- subset_fauna(data = bf, species = accepteds,
+my_sp2 <- subset_fauna(data = bf, species = valids,
                       include_subspecies = TRUE)
 tibble::tibble(my_sp2) #print data.frame as tibble
 #> # A tibble: 14 × 19
-#>    species      subspecies scientificName acceptedName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
+#>    species      subspecies scientificName validName kingdom phylum class order family genus lifeForm habitat states countryCode #> origin
 #>    <chr>        <chr>      <chr>          <chr>        <chr>   <chr>  <chr> <chr> <chr>  <chr> <chr>    <chr>   <chr>  <chr>       #> <chr> 
 #>  1 Panthera on… ""         Panthera onca… ""           Animal… Chord… Mamm… Carn… Felid… Pant… "free_l… "terre… AC;AM… argentina;… #> "nati…
 #>  2 Arrenurus (… ""         Arrenurus (In… ""           Animal… Arthr… Arac… Trom… Arren… Arre… ""       ""      NA     brazil      "" #>    
@@ -330,8 +330,8 @@ We can retrieve all synonyms of a species list. This can be particularly useful,
 spp <- c("Panthera onca", "Mazama jucunda", "Subulo gouzoubira")
 spp_syn <- fauna_synonym(data = bf, species = spp)
 spp_syn
-#>           acceptedName               synonym     taxonomicStatus
-#> 49343     Panthera onca                  <NA>       accepted
+#>           validName               synonym        taxonomicStatus
+#> 49343     Panthera onca                  <NA>             valid
 #> 60523    Mazama jucunda         Mazama bororo             synonym
 #> 61168 Subulo gouzoubira    Mazama gouazoubira             synonym
 ```

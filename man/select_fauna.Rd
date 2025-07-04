@@ -11,7 +11,7 @@ select_fauna(data, include_subspecies = FALSE, phylum = "all",
                       habitat = "all", filter_habitat = "in",
                       states = "all", filter_states = "in",
                       country = "all", filter_country = "in",
-                      origin = "all", taxonomicStatus = "accepted")
+                      origin = "all", taxonomicStatus = "valid")
 }
 \arguments{
 \item{data}{(data.frame) the data.frame imported with the
@@ -68,8 +68,8 @@ be "native", "introduced", "cryptogenic", "domesticaded" and "invasora".
 Default = "all".}
 
 \item{taxonomicStatus}{(character) The taxonomic status for filtering the
-dataset. It can be "accepted", "synonym" or "all".
-Default = "accepted".}
+dataset. It can be "valid", "synonym" or "all".
+Default = "valid".}
 }
 \value{
 A new dataframe with the filtered species.
@@ -119,10 +119,10 @@ aves_br_ar <- select_fauna(data = fauna_data, include_subspecies = FALSE,
                            lifeForm = "all", filter_lifeForm = "in",
                            habitat = "all", filter_habitat = "in",
                            states = "all", filter_states = "in",
-                           country = c("brazil", "argentina"),
+                           country = c("BR", "AR"),
                            filter_country = "in",
                            origin = "native",
-                           taxonomicStatus = "accepted")
+                           taxonomicStatus = "valid")
 }
 \references{
 Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:

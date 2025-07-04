@@ -25,12 +25,12 @@
 #' - Distance: The integer Levenshtein edit distance. It represents the number
 #' of single-character edits (insertions, deletions, or substitutions) required
 #' to transform the input_name into the Suggested_name.
-#' - taxonomicStatus: the taxonomic status of the species name ("Accepted" or
-#' "Synonym").
+#' - taxonomicStatus: the taxonomic status of the species name ("valid" or
+#' "synonym").
 #' - nomenclaturalStatus: the nomenclatural status of the species name. This
 #' information is not available for all species.
-#' - acceptedName: If the species name is not accepted or incorrect, the
-#' accepted name of the specie. If the species name is accepted and correct,
+#' - validName: If the species name is not valid or incorrect, the
+#' valid name of the specie. If the species name is valid and correct,
 #' the same as input_name and Suggested_name.
 #' - family: the family of the specie.
 #' @usage check_fauna_names(data, species, max_distance = 0.1,
@@ -113,18 +113,18 @@ check_fauna_names <- function(data, species, max_distance = 0.1,
   #Get information about Family, taxonomic and nomenclatural status
   d_info <- subset(data, species %in% spp$Suggested_name)
   d_info <- d_info[c("species", "taxonomicStatus", "nomenclaturalStatus",
-                     "acceptedName", "family")]
+                     "validName", "family")]
   #Merge info
   spp_info <- merge(spp, d_info, by.x ="Suggested_name", by.y = "species",
                     all = TRUE, sort = FALSE)
   #Organize columns
   spp_info <- unique(spp_info[, c("input_name", "Spelling", "Suggested_name",
                            "Distance", "taxonomicStatus",
-                           "nomenclaturalStatus", "acceptedName", "family")])
-  spp_info$acceptedName[which(spp_info$taxonomicStatus %in% c("accepted", "nome_aceito") &
-                                is.na(spp_info$acceptedName))] <-
-    spp_info$Suggested_name[which(spp_info$taxonomicStatus %in% c("accepted", "nome_aceito") &
-                                    is.na(spp_info$acceptedName))]
+                           "nomenclaturalStatus", "validName", "family")])
+  spp_info$validName[which(spp_info$taxonomicStatus %in% c("valid", "valido") &
+                                is.na(spp_info$validName))] <-
+    spp_info$Suggested_name[which(spp_info$taxonomicStatus %in% c("valid", "valido") &
+                                    is.na(spp_info$validName))]
   #Identify if there is single or multiple or none matches
   spp_info$matches <- ifelse(stats::ave(spp_info$input_name,
                                  spp_info$input_name, FUN = length) > 1,

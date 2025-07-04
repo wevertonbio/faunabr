@@ -11,8 +11,8 @@
 #'   \item{species}{Species names}
 #'   \item{subspecies}{Subspecies names}
 #'   \item{scientificName}{Complete scientific name of the species}
-#'   \item{acceptedName}{Accepted name of the species (NA when the name in
-#'   species is already an accepted name)}
+#'   \item{validName}{Valid name of the species (NA when the name in
+#'   species is already a valid name)}
 #'   \item{kingdom}{Kingdom to which species belongs (Animalia)}
 #'   \item{phylum}{Phylum to which species belongs}
 #'   \item{class}{Class to which species belongs}
@@ -28,7 +28,7 @@
 #'   \item{origin}{Indicates whether the species is native, introduced,
 #'   domesticated, cryptogenic or invasive}
 #'   \item{taxonomicStatus}{Indicates the level of recognition and acceptance
-#'   of the species (accepted or synonym)}
+#'   of the species (valid or synonym)}
 #'   \item{nomenclaturalStatus}{Indicates the legitimacy and validity of the
 #'   species name (original_combination, changed_combination, etc.)}
 #'   \item{vernacularName}{Locally or culturally used name for the species}

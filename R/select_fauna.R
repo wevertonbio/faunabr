@@ -41,8 +41,8 @@
 #' be "native", "introduced", "cryptogenic", "domesticaded" and "invasora".
 #' Default = "all".
 #' @param taxonomicStatus (character) The taxonomic status for filtering the
-#' dataset. It can be "accepted", "synonym" or "all".
-#' Default = "accepted".
+#' dataset. It can be "valid", "synonym" or "all".
+#' Default = "valid".
 #'
 #' @details It's possible to choose 4 ways to filter by lifeform, by habitat,
 #' by states and by country:
@@ -80,7 +80,7 @@
 #'                       habitat = "all", filter_habitat = "in",
 #'                       states = "all", filter_states = "in",
 #'                       country = "all", filter_country = "in",
-#'                       origin = "all", taxonomicStatus = "accepted")
+#'                       origin = "all", taxonomicStatus = "valid")
 #' @export
 #' @references
 #' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
@@ -98,10 +98,10 @@
 #'                            lifeForm = "all", filter_lifeForm = "in",
 #'                            habitat = "all", filter_habitat = "in",
 #'                            states = "all", filter_states = "in",
-#'                            country = c("brazil", "argentina"),
+#'                            country = c("BR", "AR"),
 #'                            filter_country = "in",
 #'                            origin = "native",
-#'                            taxonomicStatus = "accepted")
+#'                            taxonomicStatus = "valid")
 select_fauna <- function(data, include_subspecies = FALSE,
                          phylum = "all", class = "all", order = "all",
                          family = "all",
@@ -111,7 +111,7 @@ select_fauna <- function(data, include_subspecies = FALSE,
                          states = "all", filter_states = "in",
                          country = "all", filter_country = "in",
                          origin = "all",
-                         taxonomicStatus = "accepted") {
+                         taxonomicStatus = "valid") {
   if (missing(data)) {
     stop("Argument data is not defined")
   }

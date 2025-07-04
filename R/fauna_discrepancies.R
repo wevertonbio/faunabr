@@ -37,21 +37,22 @@ fauna_discrepancies <- function(data) {
     stop("Any discrepancies have already been resolved in this dataset")
   }
 
-  #Get subspecies with accepted names
-  ind_spp <- which(data$taxonRank == "subspecies" &
-                     data$taxonomicStatus == "accepted")
+  #Get subspecies with valid names
+  ind_spp <- which(data$taxonRank %in% c("subspecies", "sub_especie") &
+                     data$taxonomicStatus %in% c("valid", "valido"))
   spp_var <- data[ind_spp, "species"]
   #Create temporarily column with binomial species name
   spp_var_bin <- extract_binomial(spp_var)
   data$species_bin <-  extract_binomial(data$species)
   #Get only species that exists as Species in dataframe
   spp_var_yes <- intersect(data$species_bin[which(
-    data$taxonRank == "species" & data$taxonomicStatus == "accepted")],
+    data$taxonRank %in% c("species", "especie") &
+      data$taxonomicStatus %in% c("valid", "valido"))],
     spp_var_bin)
   #Other species
   spp_var_no <- na.omit(setdiff(na.omit(spp_var_bin),
                                 data$species_bin[which(
-                                  data$taxonRank == "species")]))
+                                  data$taxonRank %in% c("species", "especie"))]))
 
   #Get dataframe to update
   d_upt <- subset(data, data$species_bin %in% spp_var_yes)
@@ -71,7 +72,10 @@ fauna_discrepancies <- function(data) {
   if(length(spp_var_no) > 0) {
     df_no_species <- data[data$species_bin %in% na.omit(spp_var_no),]
     #Change taxonrank
-    df_no_species$taxonRank <- "Species"
+    if(data$language == "en"){
+    df_no_species$taxonRank <- "species"} else {
+      df_no_species$taxonRank <- "especie"
+    }
     #Create new id
     df_no_species$id <- sample(setdiff(1:50000, data$id), nrow(df_no_species))
     #Subset columns

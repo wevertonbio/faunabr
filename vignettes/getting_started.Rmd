@@ -108,7 +108,7 @@ bf <- load_faunabr(data_dir = my_dir,
 #> Loading version 393.401
 colnames(bf) #See variables from short version
 #>  [1] "species"             "subspecies"          "scientificName"       
-#>  [4] "acceptedName"        "kingdom"             "phylum"
+#>  [4] "validName"           "kingdom"             "phylum"
 #>  [7] "class"               "order"               "family" 
 #> [10] "genus"               "lifeForm"            "habitat"
 #> [13] "states"              "countryCode"         "origin" 
@@ -127,8 +127,8 @@ bf_complete <- load_faunabr(data_dir = my_dir,
 colnames(bf_complete) #See variables from complete version
 #>  [1] "id"                       "taxonID"                 
 #>  [3] "species"                  "subspecies"       
-#>  [5] "scientificName"           "acceptedName"                   
-#>  [7] "acceptedNameUsage"        "parentNameUsage"                             
+#>  [5] "scientificName"           "validName"                   
+#>  [7] "validNameUsage"           "parentNameUsage"                             
 #>  [9] "namePublishedInYear"      "higherClassification"      
 #> [11] "kingdom"                  "phylum"                                   
 #> [13] "class"                    "order"                                   

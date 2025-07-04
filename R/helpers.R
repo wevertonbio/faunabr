@@ -370,6 +370,13 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   # #df_final$countryCode <- tolower(df_final$countryCode)
   # df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
 
+  #Replace accepted_name with valid in taxonomicStatus
+  df_final$taxonomicStatus[df_final$taxonomicStatus == "NOME_ACEITO"] <- "valido"
+
+  #Change name of acceptedName to validName
+  colnames(df_final)[colnames(df_final) == "acceptedName"] <- "validName"
+  colnames(df_final)[colnames(df_final) == "acceptedNameUsage"] <- "validNameUsage"
+
   #Add language
   df_final$language <- "pt_br"
 

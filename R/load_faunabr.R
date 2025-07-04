@@ -17,7 +17,7 @@
 #' @details
 #' The parameter type accepts two arguments. If type = short, it will load a
 #' data.frame with the 20 columns needed to run the other functions of the
-#' package: species, subspecies, scientificName, acceptedName, kingdom, phylum,
+#' package: species, subspecies, scientificName, validName, kingdom, phylum,
 #' class, order, family, genus, lifeForm, habitat, states, countryCode, origin,
 #' taxonomicStatus, nomenclaturalStatus, vernacularName, and taxonRank.
 #' If type = complete, it will load a data.frame with all 31 variables available
@@ -119,7 +119,7 @@ load_faunabr <- function(data_dir, data_version = "latest",
                              data.table = FALSE,
                              encoding = encoding,
                              select = c("species", "subspecies",
-                                        "scientificName", "acceptedName",
+                                        "scientificName", "validName",
                                         "kingdom", "phylum", "class", "order",
                                         "family", "genus", "lifeForm",
                                         "habitat", "states", "countryCode",

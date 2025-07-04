@@ -52,7 +52,7 @@ br_mammals <- select_fauna(data = bf,
                            habitat = "all", filter_habitat = "in",
                            states = "all", filter_states = "in",
                            country = "BR", filter_country = "in",
-                           origin = "all", taxonomicStatus = "nome_aceito")
+                           origin = "all", taxonomicStatus = "valido")
 #PAM em Estados do Brasil
 pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE, 
                          by_country = FALSE,

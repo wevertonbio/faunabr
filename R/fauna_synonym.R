@@ -59,15 +59,15 @@ fauna_synonym <- function(data, species,
   #Get match
   order <- setdiff(species, no_match)
 
-  res <- unique(data[which(extract_binomial(data$acceptedName) %in% species),
-                     c("acceptedName", "species", "taxonomicStatus")])
+  res <- unique(data[which(extract_binomial(data$validName) %in% species),
+                     c("validName", "species", "taxonomicStatus")])
 
   #Get species withou synonyms
-  no_syn <- setdiff(species, res$acceptedName)
+  no_syn <- setdiff(species, res$validName)
   if(length(no_syn) > 0){
     res_no_syn <- data[data$species %in% no_syn,
-                       c("acceptedName", "species", "taxonomicStatus")]
-    res_no_syn$acceptedName <- res_no_syn$species
+                       c("validName", "species", "taxonomicStatus")]
+    res_no_syn$validName <- res_no_syn$species
     res_no_syn$species <- NA
     res <- rbind(res, res_no_syn)
   }
@@ -75,12 +75,12 @@ fauna_synonym <- function(data, species,
 
   if(nrow(res) > 0) {
     #Reorder
-    res <- res[order(match(res$acceptedName, order)), ]
+    res <- res[order(match(res$validName, order)), ]
 
     #Change name of the column
     colnames(res)[2] <- "synonym"
 
-    #Remove accepted names
+    #Remove valid names
     res <- subset(res, !(res$synonym %in% species))
 
     return(res) } else {

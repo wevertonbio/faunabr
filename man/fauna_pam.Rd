@@ -62,7 +62,7 @@ br_mammals <- select_fauna(data = fauna_data,
                            habitat = "all", filter_habitat = "in",
                            states = "all", filter_states = "in",
                            country = "BR", filter_country = "only",
-                           origin = "all", taxonomicStatus = "accepted")
+                           origin = "all", taxonomicStatus = "valid")
 #Get presence-absence matrix in states
 pam_mammals <- fauna_pam(data = br_mammals, by_state = TRUE,
                          by_country = FALSE,

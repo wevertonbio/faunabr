@@ -42,9 +42,7 @@ translate_column_terms <- function(text, map_df, to = "pt_br", sep = ";") {
   return(translated_vector)
 }
 
-
-
-#### Create dataframes with translations ####
+# #### Create dataframes with translations ####
 # mapa_traducao_lifeform <- data.frame(
 #   pt_br = c(
 #     "vida_livre_individual", "colonial", "sessil", "herbivoro",
@@ -155,10 +153,10 @@ translate_column_terms <- function(text, map_df, to = "pt_br", sep = ";") {
 #   stringsAsFactors = FALSE
 # )
 #
-# mapa_traducao_taxonomicStatus <- data.frame(pt_br = c("nome_aceito", "sinonimo"),
-#                                             en = c("accepted", "synonym")
+# mapa_traducao_taxonomicStatus <- data.frame(pt_br = c("valido", "sinonimo"),
+#                                             en = c("valid", "synonym")
 #                                             )
-
+#
 # #Save in list
 # l <- list(lifeForm = mapa_traducao_lifeform,
 #           origin = mapa_traducao_origins,
