@@ -1,6 +1,7 @@
 ^faunabr\.Rproj$
 ^\.Rproj\.user$
 ^LICENSE\.md$
+LICENSE
 ^README\.Rmd$
 ^\.github$
 ^_pkgdown\.yml$
