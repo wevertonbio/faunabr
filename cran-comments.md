@@ -1,3 +1,10 @@
+## Resubmission faunabr 1.0.0
+> Please omit "+ file LICENSE" and the file itself which is part of R
+anyway. It is only used to specify additional restrictions to the GPL
+such as attribution requirements.
+
+* Fixed.
+
 ##  Submission faunabr 1.0.0
 This is the first submission of version 1.0.0.
 
