@@ -52,6 +52,16 @@ distribution in brazilian states and/or countries
 
 ## Installation
 
+### Install stable version from CRAN
+
+To install the stable version of `faunabr` use:
+
+``` r
+install.packages("faunabr")
+```
+
+<br>
+
 ### Install development version from GitHub
 
 You can install the development version of faunabr from
