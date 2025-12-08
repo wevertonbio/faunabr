@@ -36,9 +36,11 @@ jobs:
       - uses: r-lib/actions/setup-pandoc@v2
 
       # Set path to PROJ_LIB in macOS
-      - name: Define PROJ_LIB (macOS)
+      - name: Install and define PROJ_LIB (macOS)
         if: runner.os == 'macOS'
-        run: echo "PROJ_LIB=$(brew --prefix)/share/proj" >> $GITHUB_ENV
+        run: |
+          brew install gdal proj geos
+          echo "PROJ_LIB=$(brew --prefix proj)/share/proj" >> $GITHUB_ENV
 
       - uses: r-lib/actions/setup-r@v2
         with:
