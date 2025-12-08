@@ -278,10 +278,10 @@ registros que não foram testados porque estão fora do Brasil.</p>
 <span>        layer.name <span class="op">=</span> <span class="st">"States with confirmed occurrences"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_state"</span>, layer.name <span class="op">=</span> <span class="st">"Inside state?"</span>,</span>
 <span>          col.regions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img/IMG03.png" width="90%"> Podemos observar o
-mesmo com os países: os pontos verdes representam registros que passaram
-no teste e os pontos vermelhos representam registros que não passaram no
-teste.</p>
+<p><img src="vignettes_img/IMG03.png" class="r-plt" width="90%">
+Podemos observar o mesmo com os países: os pontos verdes representam
+registros que passaram no teste e os pontos vermelhos representam
+registros que não passaram no teste.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">#Plot interativo</span></span>
 <span><span class="fu">mapview</span><span class="op">(</span><span class="va">pol_spp</span><span class="op">$</span><span class="va">`Panthera onca`</span><span class="op">$</span><span class="va">countries</span>,</span>
@@ -289,7 +289,7 @@ teste.</p>
 <span>  <span class="fu">mapview</span><span class="op">(</span><span class="va">panthera_occ</span>, zcol <span class="op">=</span> <span class="st">"inside_country"</span>,</span>
 <span>          col.regions <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"red"</span>, <span class="st">"green"</span><span class="op">)</span>,</span>
 <span>          layer.name <span class="op">=</span> <span class="st">"Inside country?"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="vignettes_img/IMG04.png" width="90%"></p>
+<p><img src="vignettes_img/IMG04.png" class="r-plt" width="90%"></p>
 </div>
   </div>
 
@@ -308,7 +308,7 @@ teste.</p>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
       </footer>
