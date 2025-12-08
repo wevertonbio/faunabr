@@ -168,7 +168,7 @@ data.frame"))
   sp_info <- unique(data.table::rbindlist(sp_info))
   occ_info <- merge(occ_info, sp_info, by = "species")
   occ_info <- terra::vect(occ_info, geom = c("x", "y"),
-                          crs = "+init=epsg:4326")
+                          crs = "EPSG:4326")
 
 
   #Load data

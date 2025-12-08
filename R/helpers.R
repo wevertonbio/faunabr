@@ -501,7 +501,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # occurrences <- bind_rows(occurrences, fake)
 
 # #Plot records to see
-# pts <- vect(occurrences, geom = c(x = "x",y = "y"), crs = "+init=epsg:4326")
+# pts <- vect(occurrences, geom = c(x = "x",y = "y"), crs = "EPSG:4326")
 # mapview::mapview(pts, zcol = "species", burst = T)
 #
 # # #Data set key
@@ -606,7 +606,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 # usethis::use_data(states, overwrite = TRUE)
 
 # states <- geobr::read_state() %>% vect()
-# crs(states) <- "+init=epsg:4326"
+# crs(states) <- "EPSG:4326"
 # states <- terra::wrap(states)
 # usethis::use_data(states, overwrite = TRUE)
 
