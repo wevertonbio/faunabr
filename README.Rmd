@@ -16,6 +16,9 @@ The [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) i
 
 The faunabr package provides a suite of functions designed to retrieve, filter, and spatialize data from the Fauna do Brasil dataset.
 
+## Package citation
+Trindade, W. C. F. (2025). faunabr: An R package to explore taxonomic data and map species distributions using the Catálogo Taxonômico da Fauna do Brasil. Zoologia (Curitiba), 42, e25027. [https://doi.org/10.1590/s1984-4689.v42.e25027](https://doi.org/10.1590/s1984-4689.v42.e25027).
+
 ## Overview of functions
 
 ### Download and import Fauna do Brasil Dataset
