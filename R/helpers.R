@@ -265,8 +265,11 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   #Create columns with name of the specie and accepted name
   which_is_species <- which(df_final3$taxonRank %in% c("ESPECIE", "SUB_ESPECIE"))
   which_is_subspecies <- which(df_final3$taxonRank == "SUB_ESPECIE")
+  # Create column
+  df_final3$species <- NA
   df_final3$species[which_is_species] <- paste(df_final3$genus[which_is_species],
                                                 df_final3$specificEpithet[which_is_species])
+  df_final3$subspecies <- NA
   df_final3$subspecies[df_final3$taxonRank == "SUB_ESPECIE"] <- paste(df_final3$species[which_is_subspecies],
                                                                       df_final3$infraspecificEpithet[which_is_subspecies])
 
