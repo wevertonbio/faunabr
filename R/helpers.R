@@ -263,20 +263,25 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   df_final3 <- merge(df_final2, dist_final, by = "id", all = TRUE)
 
   #Create columns with name of the specie and accepted name
-  which_is_species <- which(df_final3$taxonRank %in% c("ESPECIE", "SUB_ESPECIE"))
-  which_is_subspecies <- which(df_final3$taxonRank == "SUB_ESPECIE")
+  which_is_species <- which(df_final3$taxonRank %in%
+                              c("ESPECIE", "SUB_ESPECIE",
+                                "species", "subspecies"))
+  which_is_subspecies <- which(df_final3$taxonRank %in%
+                                 c("SUB_ESPECIE", "subspecies"))
   # Create column
   df_final3$species <- NA
   df_final3$species[which_is_species] <- paste(df_final3$genus[which_is_species],
                                                 df_final3$specificEpithet[which_is_species])
   df_final3$subspecies <- NA
-  df_final3$subspecies[df_final3$taxonRank == "SUB_ESPECIE"] <- paste(df_final3$species[which_is_subspecies],
+  df_final3$subspecies[df_final3$taxonRank %in%
+                         c("SUB_ESPECIE", "subspecies")] <- paste(df_final3$species[which_is_subspecies],
                                                                       df_final3$infraspecificEpithet[which_is_subspecies])
 
   #Accepted name when is synonymn
   df_final3$acceptedName <- NA
-  sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE") &
-                  df_final3$taxonomicStatus == "SINONIMO" &
+  sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE",
+                                             "species", "subspecies") &
+                  df_final3$taxonomicStatus %in% c("SINONIMO", "synonym") &
                     !is.na(df_final3$acceptedNameUsage))
   df_final3[sp_syn, "acceptedName"] <- sapply(df_final3[sp_syn, "acceptedNameUsage"],
                                               extract_species)
@@ -374,7 +379,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   # df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
 
   #Replace accepted_name with valid in taxonomicStatus
-  df_final$taxonomicStatus[df_final$taxonomicStatus == "NOME_ACEITO"] <- "valido"
+  df_final$taxonomicStatus[df_final$taxonomicStatus %in% c("NOME_ACEITO", "accepted")] <- "valido"
 
   #Change name of acceptedName to validName
   colnames(df_final)[colnames(df_final) == "acceptedName"] <- "validName"
