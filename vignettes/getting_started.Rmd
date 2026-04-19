@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Introduction
 ### What is Fauna do Brasil?
-The [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized morphological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.
+The [Catálogo Taxonômico da Fauna do Brasil](https://fauna.jbrj.gov.br/fauna) is the result of the collaborative efforts of over 500 zoologists, each specializing in various animal groups native to Brazil. This comprehensive database offers detailed and standardized morphological descriptions, nomenclatural information, geographic distribution, and identification keys for both native and non-native animals found in Brazil.
 
 The faunabr package provides a suite of functions designed to retrieve, filter, and spatialize data from the Fauna do Brasil dataset.
 
@@ -144,7 +144,7 @@ colnames(bf_complete) #See variables from complete version
 ```
 
 ### Translate information
-By default, the data downloaded from [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) is translated into English, unless you set `translate = FALSE` in `get_faunabr()` function. However, you can use the `translate_faunabr()` function to translate the loaded data between English and Portuguese:
+By default, the data downloaded from [Catálogo Taxonômico da Fauna do Brasil](https://fauna.jbrj.gov.br/fauna) is translated into English, unless you set `translate = FALSE` in `get_faunabr()` function. However, you can use the `translate_faunabr()` function to translate the loaded data between English and Portuguese:
 ```{r}
 #Translate from English to Portuguese
 bf_portuguese <- translate_faunabr(data = bf, to = "pt_br")

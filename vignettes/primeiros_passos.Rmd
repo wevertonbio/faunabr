@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 ## Introdução
 ### O que é a Fauna do Brasil?
-O [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) é resultado do esforço colaborativo de mais de 500 zoólogos especializados em diversos grupos de animais nativos do Brasil. Este banco de dados oferece descrições morfológicas detalhadas e padronizadas, informações sobre nomenclatura, distribuição geográfica e chaves de identificação para animais tanto nativos quanto não nativos encontrados no Brasil.
+O [Catálogo Taxonômico da Fauna do Brasil](https://fauna.jbrj.gov.br/fauna) é resultado do esforço colaborativo de mais de 500 zoólogos especializados em diversos grupos de animais nativos do Brasil. Este banco de dados oferece descrições morfológicas detalhadas e padronizadas, informações sobre nomenclatura, distribuição geográfica e chaves de identificação para animais tanto nativos quanto não nativos encontrados no Brasil.
 
 O pacote *faunabr* oferece um conjunto de funções desenvolvidas para acessar, filtrar e espacializar da Fauna do Brasil.
 
@@ -145,7 +145,7 @@ colnames(bf_complete) #Ver colunas da versão completa
 
 ## Traduzir atributos
 
-Por padrão, os dados baixados do [Catálogo Taxonômico da Fauna do Brasil](http://fauna.jbrj.gov.br/fauna) são traduzidos para o inglês, a menos que você defina `translate = FALSE` na função `get_faunabr()`. No entanto, é possível usar a função `translate_faunabr()` para traduzir os dados carregados entre inglês e português:
+Por padrão, os dados baixados do [Catálogo Taxonômico da Fauna do Brasil](https://fauna.jbrj.gov.br/fauna) são traduzidos para o inglês, a menos que você defina `translate = FALSE` na função `get_faunabr()`. No entanto, é possível usar a função `translate_faunabr()` para traduzir os dados carregados entre inglês e português:
 
 ```{r}
 # Traduzir do português para o inglês
