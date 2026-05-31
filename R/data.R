@@ -93,7 +93,7 @@
 #'   \item{y}{Latitude}
 #'   \item{source}{record downloaded from GBIF or fake data}
 #' }
-#' @references GBIF, 2024. florabr R package: Records of plant species. https://doi.org/10.15468/DD.QPGEB7
+#' @references GBIF, 2024. GBIF Occurrence Download. https://doi.org/10.15468/DD.QPGEB7
 "occurrences"
 
 #' Country Codes and Names
