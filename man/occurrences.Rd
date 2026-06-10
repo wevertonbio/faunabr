@@ -21,6 +21,6 @@ A dataset containing records of 2 species downloaded from GBIF, with
 additional fake data. The records were obtained with \code{plantR::rgbif2}
 }
 \references{
-GBIF, 2024. florabr R package: Records of plant species. https://doi.org/10.15468/DD.QPGEB7
+GBIF, 2024. GBIF Occurrence Download. https://doi.org/10.15468/DD.QPGEB7
 }
 \keyword{datasets}
