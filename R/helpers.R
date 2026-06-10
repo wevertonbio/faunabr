@@ -242,20 +242,44 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   #Organize information
   #Local
   Local <- dist[,c("id","locality","countryCode")]
+
   #Group location of same species
-  grouped <- split(Local, Local$id)
-  summarized <- lapply(grouped, function(group) {
-    if(!is.na(group$locality)){
-    paste(group$locality, collapse = ";")} else {group$locality}
-    })
-  Local_final <- data.frame(
-    id = as.numeric(names(summarized)),
-    locality = unlist(summarized)
-  )
-  #Merge distribution data again
-  dist_final <- dist[, c("id", "countryCode", "origin")]
-  dist_final <- merge(dist_final, Local_final, by = "id")
-  dist_final <- unique(dist_final[,colnames(dist_final)])
+  dist_final <- aggregate(cbind(locality, countryCode, origin) ~ id,
+                            data = dist,
+                            FUN = paste_unique,
+                            na.action = stats::na.pass)
+
+  # unique_id <- unique(Local$id)
+  # Local_final <- pblapply(unique_id, function(x){
+  #   lx <- Local[Local$id == x,]
+  #   unique_local <- unique(lx$locality)
+  #   unique_local <- if(all(is.na(unique_local))){NA} else {
+  #     paste(unique_local[!is.na(unique_local)], collapse = ";")}
+  #   unique_country <- unique(lx$countryCode)
+  #   unique_country <- if(all(is.na(unique_country))){NA} else {
+  #     paste(unique_country[!is.na(unique_country)], collapse = ";")}
+  #   data.frame(id = x,
+  #              locality = unique_local,
+  #              countryCode = unique_country)
+  # })
+
+
+  # #Group location of same species
+  # grouped <- split(Local, Local$id)
+  # summarized <- lapply(grouped, function(group) {
+  #   if(any(!is.na(group$locality))){
+  #   paste(group$locality, collapse = ";")
+  #   } else if(all(is.na(group$locality))){NA } else {group$locality}
+  #   })
+  # Local_final <- data.frame(
+  #   id = as.numeric(names(summarized)),
+  #   locality = unlist(summarized)
+  # )
+
+  # #Merge distribution data again
+  # dist_final <- dist[, c("id", "countryCode", "origin")]
+  # dist_final <- merge(dist_final, Local_final, by = "id")
+  # dist_final <- unique(dist_final[,colnames(dist_final)])
 
   #Merge all information
   df_final1 <- merge(taxon, vernacular_final, by = "id", all = TRUE)
@@ -310,8 +334,12 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 
 
   #Extract year
-  df_final4$namePublishedInYear <- sapply(df_final4$scientificName,
-                                          extract_year)
+  if("namePublishedInYear" %in% colnames(df_final4)){
+    df_final4$namePublishedInYear <- as.numeric(df_final4$namePublishedInYear)
+  } else {
+    df_final4$namePublishedInYear <- sapply(df_final4$scientificName,
+                                            extract_year)
+  }
 
   #Remove {} from acceptednameUsage usage
   df_final4$acceptedNameUsage <- gsub("\\{|\\}", "", df_final4$acceptedNameUsage)
@@ -357,11 +385,13 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   #Get index for more complex fixing
   index_fix <- !grepl("BR", df_final$countryCode) & !is.na(df_final$states)
   countries_fix <- df_final$countryCode[index_fix]
-  countries_fixed <- sapply(countries_fix, function(x) {
-    paste(sort(c("BR", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
+  if(length(countries_fix) > 0){
+    countries_fixed <- sapply(countries_fix, function(x) {
+      paste(sort(c("BR", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
     }, USE.NAMES = FALSE)
-  df_final$countryCode[index_fix] <- countries_fixed
-  #df_final[index_fix,] %>% View()
+    df_final$countryCode[index_fix] <- countries_fixed
+    #df_final[index_fix,] %>% View()
+  }
 
   #Fix states
   df_final$states <- gsub("BR-", "", df_final$states)
@@ -411,6 +441,15 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
           row.names = FALSE,
           compress = "gzip")
 
+}
+
+paste_unique <- function(x) {
+  valores_validos <- unique(x[!is.na(x)])
+  if (length(valores_validos) == 0) {
+    return(NA)
+  } else {
+    return(paste(valores_validos, collapse = ";"))
+  }
 }
 
 # ####Generate data to examples #####
