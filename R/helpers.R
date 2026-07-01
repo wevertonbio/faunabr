@@ -7,85 +7,6 @@ firstup <- function(x) {
   x
 }
 
-# #Translate origin, habitat, lifeform, taxonomicStatus and nomenclaturalStatus
-# translate_lifeform <- function(text) {
-#   # Aplicar gsub para traduzir e converter para letras minúsculas cada forma de vida em português
-#   new_lifeform <- gsub("VIDA_LIVRE_INDIVIDUAL", "free_living_individual", text, ignore.case = TRUE)
-#   new_lifeform <- gsub("COLONIAL", "colonial", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("SESSIL", "sessile", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("HERBIVORO", "herbivore", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("EUSSOCIAL", "eusocial", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("PREDADOR", "predator", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("ENDOPARASITOIDE", "endoparasitoid", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("ECTOPARASITOIDE", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("HIPERPARASITOIDE", "hyperparasitoid", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("ECTOPARASITO", "ectoparasite", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("ENDOPARASITO", "endoparasite", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("COMENSAL", "commensal", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("EPIBIONTE", "epibiont", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("POLINIZADOR", "polynizer", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("INQUILINO", "inquiline", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("MUTUAL", "mutualistic", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("endoparasiteid", "endoparasitoid", new_lifeform, ignore.case = TRUE)
-#   new_lifeform <- gsub("ectoparasiteid", "ectoparasitoid", new_lifeform, ignore.case = TRUE)
-#   return(new_lifeform)
-# }
-#
-# translate_origins <- function(text) {
-#   # Aplicar gsub para traduzir e converter para letras minúsculas cada origem
-#   text[text == ""] <- NA
-#   new_origins <- gsub("NATIVA", "native", text, ignore.case = TRUE)
-#   new_origins <- gsub("INTRODUZIDA", "introduced", new_origins, ignore.case = TRUE)
-#   new_origins <- gsub("CRIPTOGENICA", "cryptogenic", new_origins, ignore.case = TRUE)
-#   new_origins <- gsub("DOMESTICADA", "domesticated", new_origins, ignore.case = TRUE)
-#   new_origins <- gsub("INVASORA", "invasive", new_origins, ignore.case = TRUE)
-#   return(new_origins)
-# }
-#
-# translate_habitat <- function(text) {
-#   # Aplicar gsub para traduzir e converter para letras minúsculas cada categoria de habitat
-#   text[text == ""] <- NA
-#   new_habitat <- gsub("AGUA_DOCE", "freshwater", text, ignore.case = TRUE)
-#   new_habitat <- gsub("MARINHO", "marine", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("TERRESTRE", "terrestrial", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("ARBOREO", "arboreal", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("FOSSORIAL", "fossorial", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("CAVERNICOLA", "cavernicolous", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("AGUAS_SUBTERRANEAS", "subterranean waters", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("NIDICOLA", "nidicolous", new_habitat, ignore.case = TRUE)
-#   new_habitat <- gsub("HIPORREICO", "hyporheic", new_habitat, ignore.case = TRUE)
-#   return(new_habitat)}
-#
-# translate_taxonrank <- function(rank_vector) {
-#   # Converter o vetor para caracteres (strings) e tratar NA como um valor especial
-#   rank_vector <- as.character(rank_vector)
-#
-#   # Realizar as substituições diretamente
-#   rank_vector[rank_vector == "FILO"] <- "phylum"
-#   rank_vector[rank_vector == "CLASSE"] <- "class"
-#   rank_vector[rank_vector == "ORDEM"] <- "order"
-#   rank_vector[rank_vector == "SUB_ORDEM"] <- "suborder"
-#   rank_vector[rank_vector == "FAMILIA"] <- "family"
-#   rank_vector[rank_vector == "SUB_FAMILIA"] <- "subfamily"
-#   rank_vector[rank_vector == "TRIBO"] <- "tribe"
-#   rank_vector[rank_vector == "GENERO"] <- "genus"
-#   rank_vector[rank_vector == "SUB_GENERO"] <- "subgenus"
-#   rank_vector[rank_vector == "ESPECIE"] <- "species"
-#   rank_vector[rank_vector == "SUB_ESPECIE"] <- "subspecies"
-#   rank_vector[rank_vector == "SUB_CLASSE"] <- "subclass"
-#   rank_vector[rank_vector == "INFRA_ORDEM"] <- "infraorder"
-#   rank_vector[rank_vector == "SUPER_FAMILIA"] <- "superfamily"
-#   rank_vector[rank_vector == "SUPER_CLASSE"] <- "superclass"
-#   rank_vector[rank_vector == "SUB_TRIBO"] <- "subtribe"
-#   rank_vector[rank_vector == "SUPER_ORDEM"] <- "superorder"
-#   rank_vector[rank_vector == "INFRA_CLASSE"] <- "infraclass"
-#
-#   # Substituir NA por "unknown"
-#   rank_vector[is.na(rank_vector)] <- "unknown"
-#
-#   return(rank_vector)
-# }
-
 #Extract string between patterns
 extract_between <- function(str, left, right) {
   inicio <- regexpr(left, str) + attr(regexpr(left, str), "match.length")
@@ -162,286 +83,486 @@ extract_year <- function(sn) {
   }
 }
 
-
 merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
                        translate = TRUE, encoding = "UTF-8", verbose = TRUE) {
-
-  #Set folder
+  # 1. Folder and Version Configuration
   if(is.null(path_data)) {
-    stop(paste("Argument path_data is not defined, this is necessary for",
-               "\n saving data"))
+    stop("Argument path_data is not defined, this is necessary for saving data")
   }
 
-  #Print message
   if(verbose) {
-    message("Data will be saved in ", path_data, "\n") }
+    message("Data will be saved in ", path_data, "\n")
+  }
 
-  #Get latest available version if version was not set
   if(version_data == "latest") {
-    all_dirs <- list.dirs(path = path_data, recursive = FALSE,
-                          full.names = FALSE)
-    dir_versions <- stats::na.omit(as.numeric(all_dirs)) #Actual version
-    #Get highest version
-    if(length(dir_versions) > 0) {
-      high_version <- max(dir_versions)
-      version_data <- high_version } else {
-        version_data <- 0
-      } }
+    all_dirs <- list.dirs(path = path_data, recursive = FALSE, full.names = FALSE)
+    dir_versions <- stats::na.omit(as.numeric(all_dirs))
+    version_data <- if(length(dir_versions) > 0) max(dir_versions) else 0
+  }
 
-  #Taxon
-  taxon <- utils::read.csv(file.path(path_data, version_data, "taxon.txt"),
-                           header=TRUE, sep = "\t",
-                           encoding = encoding, na.strings = "")
-  #Remove accents
-  taxon$higherClassification <- iconv(taxon$higherClassification,
-                                      to="ASCII//TRANSLIT")
-
-  #Vernacular name
-  vernacular <- utils::read.csv(file.path(path_data, version_data,
-                                          "vernacularname.txt"),
-                                header=TRUE, sep = "\t",
-                                encoding = encoding, na.strings = "")
-  #Remove accents
-  vernacular$vernacularName <- iconv(vernacular$vernacularName,
-                                     to="ASCII//TRANSLIT")
-
-  #Group vernacular names from same species
-  grouped <- split(vernacular, vernacular$id)
-  summarized <- lapply(grouped, function(group) {
-    paste(group$vernacularName, collapse = ", ")
-  })
-  vernacular_final <- data.frame(
-    id = as.numeric(names(summarized)),
-    vernacularName = unlist(summarized)
-  )
-
-  ###Species Profile
-  spProfile <- utils::read.csv(file.path(path_data, version_data,
-                                         "speciesprofile.txt"),
-                               header=TRUE, sep = "\t",
-                               encoding = encoding, na.strings = "")
-  #Remove accents
-  spProfile$lifeForm <- iconv(spProfile$lifeForm, to="ASCII//TRANSLIT")
-  spProfile$habitat <- iconv(spProfile$habitat, to="ASCII//TRANSLIT")
+  # Definition of the target directory to read files from
+  target_dir <- file.path(path_data, version_data)
 
 
-  ###Distribution and Location
-  dist <- utils::read.csv(file.path(path_data, version_data,
-                                    "distribution.txt"),
-                          header=TRUE, sep = "\t",
-                          encoding = encoding, na.strings = "")
-  # #Remove accents
-  # dist$occurrenceRemarks <- iconv(dist$occurrenceRemarks,
-  #                                 to="ASCII//TRANSLIT")
-  #Extrair informações para novas coluna
+  # 2. Ultra-fast File Reading with fread
+  if(verbose) message("Reading files...")
 
-    #origin
-  dist$origin <- dist$establishmentMeans
+  taxon <- data.table::fread(file.path(target_dir, "taxon.txt"), sep = "\t",
+                             encoding = encoding, na.strings = c("", "NA"))
 
+  vernacular <- data.table::fread(file.path(target_dir, "vernacularname.txt"), sep = "\t",
+                                  encoding = encoding, na.strings = c("", "NA"))
 
-  #Organize information
-  #Local
-  Local <- dist[,c("id","locality","countryCode")]
+  spProfile <- data.table::fread(file.path(target_dir, "speciesprofile.txt"), sep = "\t",
+                                 encoding = encoding, na.strings = c("", "NA"))
 
-  #Group location of same species
-  dist_final <- aggregate(cbind(locality, countryCode, origin) ~ id,
-                            data = dist,
-                            FUN = paste_unique,
-                            na.action = stats::na.pass)
+  dist <- data.table::fread(file.path(target_dir, "distribution.txt"), sep = "\t",
+                            encoding = encoding, na.strings = c("", "NA"))
 
-  # unique_id <- unique(Local$id)
-  # Local_final <- pblapply(unique_id, function(x){
-  #   lx <- Local[Local$id == x,]
-  #   unique_local <- unique(lx$locality)
-  #   unique_local <- if(all(is.na(unique_local))){NA} else {
-  #     paste(unique_local[!is.na(unique_local)], collapse = ";")}
-  #   unique_country <- unique(lx$countryCode)
-  #   unique_country <- if(all(is.na(unique_country))){NA} else {
-  #     paste(unique_country[!is.na(unique_country)], collapse = ";")}
-  #   data.frame(id = x,
-  #              locality = unique_local,
-  #              countryCode = unique_country)
-  # })
+  rr <- data.table::fread(file.path(target_dir, "resourcerelationship.txt"), sep = "\t",
+                          encoding = encoding, na.strings = c("", "NA"))
 
 
-  # #Group location of same species
-  # grouped <- split(Local, Local$id)
-  # summarized <- lapply(grouped, function(group) {
-  #   if(any(!is.na(group$locality))){
-  #   paste(group$locality, collapse = ";")
-  #   } else if(all(is.na(group$locality))){NA } else {group$locality}
-  #   })
-  # Local_final <- data.frame(
-  #   id = as.numeric(names(summarized)),
-  #   locality = unlist(summarized)
-  # )
-
-  # #Merge distribution data again
-  # dist_final <- dist[, c("id", "countryCode", "origin")]
-  # dist_final <- merge(dist_final, Local_final, by = "id")
-  # dist_final <- unique(dist_final[,colnames(dist_final)])
-
-  #Merge all information
-  df_final1 <- merge(taxon, vernacular_final, by = "id", all = TRUE)
-  df_final2 <- merge(df_final1, spProfile, by = "id", all = TRUE)
-  df_final3 <- merge(df_final2, dist_final, by = "id", all = TRUE)
-
-  #Create columns with name of the specie and accepted name
-  which_is_species <- which(df_final3$taxonRank %in%
-                              c("ESPECIE", "SUB_ESPECIE",
-                                "species", "subspecies"))
-  which_is_subspecies <- which(df_final3$taxonRank %in%
-                                 c("SUB_ESPECIE", "subspecies"))
-  # Create column
-  df_final3$species <- NA
-  df_final3$species[which_is_species] <- paste(df_final3$genus[which_is_species],
-                                                df_final3$specificEpithet[which_is_species])
-  df_final3$subspecies <- NA
-  df_final3$subspecies[df_final3$taxonRank %in%
-                         c("SUB_ESPECIE", "subspecies")] <- paste(df_final3$species[which_is_subspecies],
-                                                                      df_final3$infraspecificEpithet[which_is_subspecies])
-
-  #Accepted name when is synonymn
-  df_final3$acceptedName <- NA
-  sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE",
-                                             "species", "subspecies") &
-                  df_final3$taxonomicStatus %in% c("SINONIMO", "synonym") &
-                    !is.na(df_final3$acceptedNameUsage))
-  df_final3[sp_syn, "acceptedName"] <- sapply(df_final3[sp_syn, "acceptedNameUsage"],
-                                              extract_species)
-
-  #resourcerelationship
-  rr <- utils::read.csv(file.path(path_data, version_data,
-                                 "resourcerelationship.txt"),
-                       header=TRUE, sep = "\t",
-                       encoding = encoding, na.strings = "")
-
-  #Group resourcerelationship of same species
-  grouped <- split(rr, rr$id)
-  summarized_relatedResourceID <- lapply(grouped, function(group) {
-    paste(group$relatedResourceID, collapse = ";")
-    })
-  summarized_relationshipOfResource <- lapply(grouped, function(group) {
-    paste(group$relationshipOfResource, collapse = ";")
-  })
-
-  rr_final <- data.frame(
-    id = as.numeric(names(summarized_relatedResourceID)),
-    relatedResourceID = unlist(summarized_relatedResourceID),
-    relationshipOfResource = unlist(summarized_relationshipOfResource)
-  )
-  df_final4 <- merge(df_final3, rr_final, by = "id", all = TRUE)
+  # 3. Text Processing (Accent Removal) by Reference
+  taxon[, higherClassification := iconv(higherClassification, to="ASCII//TRANSLIT")]
+  vernacular[, vernacularName := iconv(vernacularName, to="ASCII//TRANSLIT")]
+  spProfile[, `:=`(lifeForm = iconv(lifeForm, to="ASCII//TRANSLIT"),
+                   habitat = iconv(habitat, to="ASCII//TRANSLIT"))]
 
 
-  #Extract year
-  if("namePublishedInYear" %in% colnames(df_final4)){
-    df_final4$namePublishedInYear <- as.numeric(df_final4$namePublishedInYear)
+  # 4. Optimized Aggregations with data.table (Replaces split + lapply)
+  if(verbose) message("Aggregating secondary tables...")
+
+  # Vernacular: Group common names by ID
+  vernacular_final <- vernacular[, .(vernacularName = paste(vernacularName, collapse = ", ")), by = id]
+
+  # Distribution: Group geographic data and origins
+  dist[, origin := establishmentMeans]
+
+  # Define location columns based on what exists in the file
+  loc_col <- intersect(c("locationID", "locality"), colnames(dist))[1]
+
+  # Fast distribution aggregation collapsing unique non-NA values
+  dist_final <- dist[, .(
+    states = paste(unique(data.table::na.omit(.SD[[loc_col]])), collapse = ";"),
+    countryCode = paste(unique(data.table::na.omit(countryCode)), collapse = ";"),
+    origin = paste(unique(data.table::na.omit(origin)), collapse = ";")
+  ), by = id]
+
+  # Resource Relationship: Group relationships by ID
+  rr_final <- rr[, .(
+    relatedResourceID = paste(relatedResourceID, collapse = ";"),
+    relationshipOfResource = paste(relationshipOfResource, collapse = ";")
+  ), by = id]
+
+
+  # 5. Efficient Table Merges
+  if(verbose) message("Performing table joins (merges)...")
+
+  # Configure primary keys to optimize joins
+  data.table::setkey(taxon, id)
+  data.table::setkey(vernacular_final, id)
+  data.table::setkey(spProfile, id)
+  data.table::setkey(dist_final, id)
+  data.table::setkey(rr_final, id)
+
+  # Sequential table merges via data.table syntax
+  df_final <- vernacular_final[taxon, on = "id"]
+  df_final <- spProfile[df_final, on = "id"]
+  df_final <- dist_final[df_final, on = "id"]
+  df_final <- rr_final[df_final, on = "id"]
+
+
+  # 6. New Column Creation by Reference (No data copying)
+  if(verbose) message("Processing taxonomic columns...")
+
+  # Species and subspecies columns
+  df_final[, `:=`(species = as.character(NA), subspecies = as.character(NA))]
+
+  df_final[taxonRank %in% c("ESPECIE", "SUB_ESPECIE", "species", "subspecies"),
+           species := paste(genus, specificEpithet)]
+
+  df_final[taxonRank %in% c("SUB_ESPECIE", "subspecies"),
+           subspecies := paste(species, infraspecificEpithet)]
+
+  # Accepted name for synonyms
+  df_final[, validName := as.character(NA)]
+  sp_syn_idx <- df_final[, taxonRank %in% c("ESPECIE" , "SUB_ESPECIE", "species", "subspecies") &
+                           taxonomicStatus %in% c("SINONIMO", "synonym") &
+                           !is.na(acceptedNameUsage)]
+
+  if(any(sp_syn_idx)) {
+    # Applies custom user function: extract_species
+    df_final[sp_syn_idx, validName := sapply(acceptedNameUsage, extract_species)]
+  }
+
+  # Publication year
+  if("namePublishedInYear" %in% colnames(df_final)){
+    df_final[, namePublishedInYear := as.numeric(namePublishedInYear)]
   } else {
-    df_final4$namePublishedInYear <- sapply(df_final4$scientificName,
-                                            extract_year)
+    df_final[, namePublishedInYear := sapply(scientificName, extract_year)]
   }
 
-  #Remove {} from acceptednameUsage usage
-  df_final4$acceptedNameUsage <- gsub("\\{|\\}", "", df_final4$acceptedNameUsage)
-  df_final4$acceptedNameUsage[which(df_final4$acceptedNameUsage == "")] <- NA
-  df_final4$acceptedName <- gsub("\\{|\\}", "", df_final4$acceptedName)
-  df_final4$acceptedName[which(df_final4$acceptedName == "")] <- NA
-
-  #Order columns
-  df_final <- df_final4[,c(c("id", "taxonID","species", "subspecies",
-                             "scientificName",
-                             "acceptedName",
-                             "acceptedNameUsage",
-                             "parentNameUsage",
-                             "namePublishedInYear",
-                             "higherClassification", "kingdom",
-                             "phylum", "class", "order", "family", "genus",
-                             "specificEpithet",
-                             "infraspecificEpithet", "taxonRank",
-                             "scientificNameAuthorship",
-                             "taxonomicStatus", "nomenclaturalStatus",
-                             "vernacularName", "lifeForm",
-                             "habitat", "origin",
-                             "locality",
-                             "countryCode", "modified", "bibliographicCitation",
-                             "relationshipOfResource"))]
-
-  #Sort information and separe using ;
-  df_final$lifeForm <- vapply(df_final$lifeForm, FUN.VALUE = character(1),
-                             function(x){
-                               paste(sort(unlist(strsplit(x, split = " \\| "))),collapse = ";")
-                             }, USE.NAMES = FALSE)
-  df_final$habitat <- vapply(df_final$habitat, FUN.VALUE = character(1),
-                            function(x){
-                              paste(sort(unlist(strsplit(x, split = " \\| "))),collapse = ";")
-                            }, USE.NAMES = FALSE)
+  # Cleaning brackets {} from usage columns
+  df_final[, acceptedNameUsage := gsub("\\{|\\}", "", acceptedNameUsage)]
+  df_final[acceptedNameUsage == "", acceptedNameUsage := NA]
+  df_final[, validName := gsub("\\{|\\}", "", validName)]
+  df_final[validName == "", validName := NA]
 
 
-  #Rename columns
-  colnames(df_final)[colnames(df_final) == "locality"] <- "states"
+  # 7. String Formatting and Standardization
+  # Uses vectorized operations instead of slow vapply loops
+  df_final[, lifeForm := sapply(strsplit(lifeForm, " \\| "), function(x) paste(sort(x), collapse = ";"))]
+  df_final[, habitat := sapply(strsplit(habitat, " \\| "), function(x) paste(sort(x), collapse = ";"))]
 
-  #Fix countries
-  df_final$countryCode[is.na(df_final$countryCode) & !is.na(df_final$states)] <- "BR"
-  #Get index for more complex fixing
-  index_fix <- !grepl("BR", df_final$countryCode) & !is.na(df_final$states)
-  countries_fix <- df_final$countryCode[index_fix]
-  if(length(countries_fix) > 0){
-    countries_fixed <- sapply(countries_fix, function(x) {
+  # Country and state adjustments
+  df_final[is.na(countryCode) & states != "", countryCode := "BR"]
+
+  # Complex country code corrections
+  index_fix <- df_final[, !grepl("BR", countryCode) & states != ""]
+  if(any(index_fix)) {
+    df_final[index_fix, countryCode := sapply(countryCode, function(x) {
       paste(sort(c("BR", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
-    }, USE.NAMES = FALSE)
-    df_final$countryCode[index_fix] <- countries_fixed
-    #df_final[index_fix,] %>% View()
+    })]
   }
 
-  #Fix states
-  df_final$states <- gsub("BR-", "", df_final$states)
+  df_final[, states := gsub("BR-", "", states)]
+  df_final[taxonomicStatus %in% c("NOME_ACEITO", "accepted"), taxonomicStatus := "valido"]
+  data.table::setnames(df_final, "acceptedNameUsage", "validNameUsage")
 
-  # #Translate and put in lower case
-  # df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
-  # df_final$lifeForm[df_final$lifeForm == ""] <- NA
-  # df_final$origin <- translate_origins(df_final$origin)
-  # df_final$habitat <- translate_habitat(df_final$habitat)
-  # df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
-  # df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME_ACEITO"] <- "accepted"
-  # df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
-  # df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
-  # #df_final$countryCode <- tolower(df_final$countryCode)
-  # df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
-
-  #Replace accepted_name with valid in taxonomicStatus
-  df_final$taxonomicStatus[df_final$taxonomicStatus %in% c("NOME_ACEITO", "accepted")] <- "valido"
-
-  #Change name of acceptedName to validName
-  colnames(df_final)[colnames(df_final) == "acceptedName"] <- "validName"
-  colnames(df_final)[colnames(df_final) == "acceptedNameUsage"] <- "validNameUsage"
-
-  #Add language
-  df_final$language <- "pt_br"
-
-  if(translate){ #Translate
-    df_final <- translate_faunabr(df_final, to = "en")} else {
-      #Or put columns to lower
-      df_final$lifeForm <- tolower(df_final$lifeForm)
-      df_final$origin <- tolower(df_final$origin)
-      df_final$habitat <- tolower(df_final$habitat)
-      df_final$taxonRank <- tolower(df_final$taxonRank)
-      df_final$taxonomicStatus <- tolower(df_final$taxonomicStatus)
-    }
+  df_final[, language := "pt_br"]
 
 
-  #Solve incongruencies?
+  # 8. Translations and Discrepancies
+  if(translate){
+    # If translate_faunabr accepts data.table, it runs directly.
+    # If it strictly requires a pure data.frame, we convert back afterwards.
+    df_final <- translate_faunabr(df_final, to = "en")
+    if(!data.table::is.data.table(df_final)) data.table::setDT(df_final)
+  } else {
+    cols_to_lower <- c("lifeForm", "origin", "habitat", "taxonRank", "taxonomicStatus")
+    df_final[, (cols_to_lower) := lapply(.SD, tolower), .SDcols = cols_to_lower]
+  }
+
   if(solve_discrepancies){
-    df_final <- fauna_discrepancies(df_final)
+    df_final <- fauna_discrepancies2(df_final)
+    if(!data.table::is.data.table(df_final)) data.table::setDT(df_final)
   }
 
-  #Save as gzip format
+
+  # 9. Final Column Ordering and File Saving
+  select_columns <- intersect(c("id", "taxonID","species", "subspecies", "scientificName",
+                                "validName", "validNameUsage", "parentNameUsage", "namePublishedInYear",
+                                "higherClassification", "kingdom", "phylum", "class", "order", "family", "genus",
+                                "specificEpithet", "infraspecificEpithet", "taxonRank", "scientificNameAuthorship",
+                                "taxonomicStatus", "nomenclaturalStatus", "vernacularName", "lifeForm",
+                                "habitat", "origin", "states", "countryCode", "modified", "bibliographicCitation",
+                                "relationshipOfResource"),
+                              colnames(df_final))
+
+  df_final <- df_final[, ..select_columns]
+
+  if(verbose) message("Saving final compressed file...")
   data.table::fwrite(df_final,
-          file = file.path(path_data, version_data,
-                           "CompleteBrazilianFauna.gz"),
-          row.names = FALSE,
-          compress = "gzip")
+                     file = file.path(target_dir, "CompleteBrazilianFauna.gz"),
+                     row.names = FALSE,
+                     compress = "gzip")
+
+  if(verbose) message("Done!")
 
 }
+
+# merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
+#                        translate = TRUE, encoding = "UTF-8", verbose = TRUE) {
+#
+#   #Set folder
+#   if(is.null(path_data)) {
+#     stop(paste("Argument path_data is not defined, this is necessary for",
+#                "\n saving data"))
+#   }
+#
+#   #Print message
+#   if(verbose) {
+#     message("Data will be saved in ", path_data, "\n") }
+#
+#   #Get latest available version if version was not set
+#   if(version_data == "latest") {
+#     all_dirs <- list.dirs(path = path_data, recursive = FALSE,
+#                           full.names = FALSE)
+#     dir_versions <- stats::na.omit(as.numeric(all_dirs)) #Actual version
+#     #Get highest version
+#     if(length(dir_versions) > 0) {
+#       high_version <- max(dir_versions)
+#       version_data <- high_version } else {
+#         version_data <- 0
+#       } }
+#
+#   #Taxon
+#   taxon <- utils::read.csv(file.path(path_data, version_data, "taxon.txt"),
+#                            header=TRUE, sep = "\t",
+#                            encoding = encoding, na.strings = "")
+#   #Remove accents
+#   taxon$higherClassification <- iconv(taxon$higherClassification,
+#                                       to="ASCII//TRANSLIT")
+#
+#   #Vernacular name
+#   vernacular <- utils::read.csv(file.path(path_data, version_data,
+#                                           "vernacularname.txt"),
+#                                 header=TRUE, sep = "\t",
+#                                 encoding = encoding, na.strings = "")
+#   #Remove accents
+#   vernacular$vernacularName <- iconv(vernacular$vernacularName,
+#                                      to="ASCII//TRANSLIT")
+#
+#   #Group vernacular names from same species
+#   grouped <- split(vernacular, vernacular$id)
+#   summarized <- lapply(grouped, function(group) {
+#     paste(group$vernacularName, collapse = ", ")
+#   })
+#   vernacular_final <- data.frame(
+#     id = as.numeric(names(summarized)),
+#     vernacularName = unlist(summarized)
+#   )
+#
+#   ###Species Profile
+#   spProfile <- utils::read.csv(file.path(path_data, version_data,
+#                                          "speciesprofile.txt"),
+#                                header=TRUE, sep = "\t",
+#                                encoding = encoding, na.strings = "")
+#   #Remove accents
+#   spProfile$lifeForm <- iconv(spProfile$lifeForm, to="ASCII//TRANSLIT")
+#   spProfile$habitat <- iconv(spProfile$habitat, to="ASCII//TRANSLIT")
+#
+#
+#   ###Distribution and Location
+#   dist <- utils::read.csv(file.path(path_data, version_data,
+#                                     "distribution.txt"),
+#                           header=TRUE, sep = "\t",
+#                           encoding = encoding, na.strings = "")
+#   # #Remove accents
+#   # dist$occurrenceRemarks <- iconv(dist$occurrenceRemarks,
+#   #                                 to="ASCII//TRANSLIT")
+#   #Extrair informações para novas coluna
+#
+#     #origin
+#   dist$origin <- dist$establishmentMeans
+#
+#
+#   #Organize information
+#   to_get <- intersect(c("id", "locality", "locationID", "countryCode"),
+#                       colnames(dist))
+#   #Local
+#   Local <- dist[, to_get]
+#
+#   #Group location of same species
+#   if("locationID" %in% colnames(dist)){
+#     dist_final <- aggregate(cbind(locationID, countryCode, origin) ~ id,
+#                             data = dist,
+#                             FUN = paste_unique,
+#                             na.action = stats::na.pass)
+#
+#   } else if ("locality" %in% colnames(dist)){
+#     dist_final <- aggregate(cbind(locality, countryCode, origin) ~ id,
+#                             data = dist,
+#                             FUN = paste_unique,
+#                             na.action = stats::na.pass)
+#   }
+#
+#   # unique_id <- unique(Local$id)
+#   # Local_final <- pblapply(unique_id, function(x){
+#   #   lx <- Local[Local$id == x,]
+#   #   unique_local <- unique(lx$locality)
+#   #   unique_local <- if(all(is.na(unique_local))){NA} else {
+#   #     paste(unique_local[!is.na(unique_local)], collapse = ";")}
+#   #   unique_country <- unique(lx$countryCode)
+#   #   unique_country <- if(all(is.na(unique_country))){NA} else {
+#   #     paste(unique_country[!is.na(unique_country)], collapse = ";")}
+#   #   data.frame(id = x,
+#   #              locality = unique_local,
+#   #              countryCode = unique_country)
+#   # })
+#
+#
+#   # #Group location of same species
+#   # grouped <- split(Local, Local$id)
+#   # summarized <- lapply(grouped, function(group) {
+#   #   if(any(!is.na(group$locality))){
+#   #   paste(group$locality, collapse = ";")
+#   #   } else if(all(is.na(group$locality))){NA } else {group$locality}
+#   #   })
+#   # Local_final <- data.frame(
+#   #   id = as.numeric(names(summarized)),
+#   #   locality = unlist(summarized)
+#   # )
+#
+#   # #Merge distribution data again
+#   # dist_final <- dist[, c("id", "countryCode", "origin")]
+#   # dist_final <- merge(dist_final, Local_final, by = "id")
+#   # dist_final <- unique(dist_final[,colnames(dist_final)])
+#
+#   #Merge all information
+#   df_final1 <- merge(taxon, vernacular_final, by = "id", all = TRUE)
+#   df_final2 <- merge(df_final1, spProfile, by = "id", all = TRUE)
+#   df_final3 <- merge(df_final2, dist_final, by = "id", all = TRUE)
+#
+#   #Create columns with name of the specie and accepted name
+#   which_is_species <- which(df_final3$taxonRank %in%
+#                               c("ESPECIE", "SUB_ESPECIE",
+#                                 "species", "subspecies"))
+#   which_is_subspecies <- which(df_final3$taxonRank %in%
+#                                  c("SUB_ESPECIE", "subspecies"))
+#   # Create column
+#   df_final3$species <- NA
+#   df_final3$species[which_is_species] <- paste(df_final3$genus[which_is_species],
+#                                                 df_final3$specificEpithet[which_is_species])
+#   df_final3$subspecies <- NA
+#   df_final3$subspecies[df_final3$taxonRank %in%
+#                          c("SUB_ESPECIE", "subspecies")] <- paste(df_final3$species[which_is_subspecies],
+#                                                                       df_final3$infraspecificEpithet[which_is_subspecies])
+#
+#   #Accepted name when is synonymn
+#   df_final3$acceptedName <- NA
+#   sp_syn <- which(df_final3$taxonRank %in% c("ESPECIE" , "SUB_ESPECIE",
+#                                              "species", "subspecies") &
+#                   df_final3$taxonomicStatus %in% c("SINONIMO", "synonym") &
+#                     !is.na(df_final3$acceptedNameUsage))
+#   df_final3[sp_syn, "acceptedName"] <- sapply(df_final3[sp_syn, "acceptedNameUsage"],
+#                                               extract_species)
+#
+#   #resourcerelationship
+#   rr <- utils::read.csv(file.path(path_data, version_data,
+#                                  "resourcerelationship.txt"),
+#                        header=TRUE, sep = "\t",
+#                        encoding = encoding, na.strings = "")
+#
+#   #Group resourcerelationship of same species
+#   grouped <- split(rr, rr$id)
+#   summarized_relatedResourceID <- lapply(grouped, function(group) {
+#     paste(group$relatedResourceID, collapse = ";")
+#     })
+#   summarized_relationshipOfResource <- lapply(grouped, function(group) {
+#     paste(group$relationshipOfResource, collapse = ";")
+#   })
+#
+#   rr_final <- data.frame(
+#     id = as.numeric(names(summarized_relatedResourceID)),
+#     relatedResourceID = unlist(summarized_relatedResourceID),
+#     relationshipOfResource = unlist(summarized_relationshipOfResource)
+#   )
+#   df_final4 <- merge(df_final3, rr_final, by = "id", all = TRUE)
+#
+#
+#   #Extract year
+#   if("namePublishedInYear" %in% colnames(df_final4)){
+#     df_final4$namePublishedInYear <- as.numeric(df_final4$namePublishedInYear)
+#   } else {
+#     df_final4$namePublishedInYear <- sapply(df_final4$scientificName,
+#                                             extract_year)
+#   }
+#
+#   #Remove {} from acceptednameUsage usage
+#   df_final4$acceptedNameUsage <- gsub("\\{|\\}", "", df_final4$acceptedNameUsage)
+#   df_final4$acceptedNameUsage[which(df_final4$acceptedNameUsage == "")] <- NA
+#   df_final4$acceptedName <- gsub("\\{|\\}", "", df_final4$acceptedName)
+#   df_final4$acceptedName[which(df_final4$acceptedName == "")] <- NA
+#
+#   #Order columns
+#   select_columns <- intersect(c("id", "taxonID","species", "subspecies",
+#                                 "scientificName",
+#                                 "acceptedName",
+#                                 "acceptedNameUsage",
+#                                 "parentNameUsage",
+#                                 "namePublishedInYear",
+#                                 "higherClassification", "kingdom",
+#                                 "phylum", "class", "order", "family", "genus",
+#                                 "specificEpithet",
+#                                 "infraspecificEpithet", "taxonRank",
+#                                 "scientificNameAuthorship",
+#                                 "taxonomicStatus", "nomenclaturalStatus",
+#                                 "vernacularName", "lifeForm",
+#                                 "habitat", "origin",
+#                                 "locality", "locationID",
+#                                 "countryCode", "modified", "bibliographicCitation",
+#                                 "relationshipOfResource"),
+#                               colnames(df_final4))
+#   df_final <- df_final4[, select_columns]
+#
+#   #Sort information and separe using ;
+#   df_final$lifeForm <- vapply(df_final$lifeForm, FUN.VALUE = character(1),
+#                              function(x){
+#                                paste(sort(unlist(strsplit(x, split = " \\| "))),collapse = ";")
+#                              }, USE.NAMES = FALSE)
+#   df_final$habitat <- vapply(df_final$habitat, FUN.VALUE = character(1),
+#                             function(x){
+#                               paste(sort(unlist(strsplit(x, split = " \\| "))),collapse = ";")
+#                             }, USE.NAMES = FALSE)
+#
+#
+#   #Rename columns
+#   colnames(df_final)[colnames(df_final) %in% c("locality", "locationID")] <- "states"
+#
+#   #Fix countries
+#   df_final$countryCode[is.na(df_final$countryCode) & !is.na(df_final$states)] <- "BR"
+#   #Get index for more complex fixing
+#   index_fix <- !grepl("BR", df_final$countryCode) & !is.na(df_final$states)
+#   countries_fix <- df_final$countryCode[index_fix]
+#   if(length(countries_fix) > 0){
+#     countries_fixed <- sapply(countries_fix, function(x) {
+#       paste(sort(c("BR", unlist(strsplit(x, ";", fixed = TRUE)))), collapse = ";")
+#     }, USE.NAMES = FALSE)
+#     df_final$countryCode[index_fix] <- countries_fixed
+#     #df_final[index_fix,] %>% View()
+#   }
+#
+#   #Fix states
+#   df_final$states <- gsub("BR-", "", df_final$states)
+#
+#   # #Translate and put in lower case
+#   # df_final$lifeForm <- translate_lifeform(df_final$lifeForm)
+#   # df_final$lifeForm[df_final$lifeForm == ""] <- NA
+#   # df_final$origin <- translate_origins(df_final$origin)
+#   # df_final$habitat <- translate_habitat(df_final$habitat)
+#   # df_final$taxonRank <- translate_taxonrank(df_final$taxonRank)
+#   # df_final$taxonomicStatus[df_final$taxonomicStatus=="NOME_ACEITO"] <- "accepted"
+#   # df_final$taxonomicStatus[df_final$taxonomicStatus=="SINONIMO"] <- "synonym"
+#   # df_final$nomenclaturalStatus <- tolower(df_final$nomenclaturalStatus)
+#   # #df_final$countryCode <- tolower(df_final$countryCode)
+#   # df_final$origin[df_final$origin=="EXOTICA"] <- "exotic"
+#
+#   #Replace accepted_name with valid in taxonomicStatus
+#   df_final$taxonomicStatus[df_final$taxonomicStatus %in% c("NOME_ACEITO", "accepted")] <- "valido"
+#
+#   #Change name of acceptedName to validName
+#   colnames(df_final)[colnames(df_final) == "acceptedName"] <- "validName"
+#   colnames(df_final)[colnames(df_final) == "acceptedNameUsage"] <- "validNameUsage"
+#
+#   #Add language
+#   df_final$language <- "pt_br"
+#
+#   if(translate){ #Translate
+#     df_final <- translate_faunabr(df_final, to = "en")} else {
+#       #Or put columns to lower
+#       df_final$lifeForm <- tolower(df_final$lifeForm)
+#       df_final$origin <- tolower(df_final$origin)
+#       df_final$habitat <- tolower(df_final$habitat)
+#       df_final$taxonRank <- tolower(df_final$taxonRank)
+#       df_final$taxonomicStatus <- tolower(df_final$taxonomicStatus)
+#     }
+#
+#
+#   #Solve incongruencies?
+#   if(solve_discrepancies){
+#     df_final <- fauna_discrepancies(df_final)
+#   }
+#
+#   #Save as gzip format
+#   data.table::fwrite(df_final,
+#           file = file.path(path_data, version_data,
+#                            "CompleteBrazilianFauna.gz"),
+#           row.names = FALSE,
+#           compress = "gzip")
+#
+# }
 
 paste_unique <- function(x) {
   valores_validos <- unique(x[!is.na(x)])

@@ -33,4 +33,5 @@ attr(fauna_data, "solved_discrepancies")
 fauna_solved <- fauna_discrepancies(fauna_data)
 #Check if discrepancies were solved in the dataset
 attr(fauna_solved, "solved_discrepancies")
+
 }
