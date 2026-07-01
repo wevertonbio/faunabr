@@ -206,7 +206,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   # 9. Final Column Ordering and File Saving
   select_columns <- intersect(c("id", "taxonID","species", "subspecies", "scientificName",
                                 "validName", "validNameUsage", "parentNameUsage", "namePublishedInYear",
-                                "higherClassification", "kingdom", "phylum", "class", "order", "family", "genus",
+                                "higherClassification", "phylum", "class", "order", "family", "genus",
                                 "specificEpithet", "infraspecificEpithet", "taxonRank", "scientificNameAuthorship",
                                 "taxonomicStatus", "nomenclaturalStatus", "vernacularName", "lifeForm",
                                 "habitat", "origin", "states", "countryCode", "modified", "bibliographicCitation",
