@@ -37,11 +37,11 @@ Load Brazilian Fauna database
 }
 \details{
 The parameter type accepts two arguments. If type = short, it will load a
-data.frame with the 20 columns needed to run the other functions of the
-package: species, subspecies, scientificName, validName, kingdom, phylum,
+data.frame with the 19 columns needed to run the other functions of the
+package: species, subspecies, scientificName, validName, phylum,
 class, order, family, genus, lifeForm, habitat, states, countryCode, origin,
 taxonomicStatus, nomenclaturalStatus, vernacularName, and taxonRank.
-If type = complete, it will load a data.frame with all 31 variables available
+If type = complete, it will load a data.frame with all variables available
 in Brazilian Fauna database.
 }
 \examples{
