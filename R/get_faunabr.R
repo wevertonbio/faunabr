@@ -152,7 +152,7 @@ get_faunabr <- function(output_dir, data_version = "latest",
 
   #Print final message
   if(verbose){
-  message("Data downloaded and merged successfully. Final data saved in",
+  message("Data downloaded and merged successfully. Final data saved in ",
               file.path(path_data, version_data, "CompleteBrazilianFauna.gz"))
   }
 
