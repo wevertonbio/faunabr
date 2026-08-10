@@ -144,9 +144,9 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
 
   # Fast distribution aggregation collapsing unique non-NA values
   dist_final <- dist[, .(
-    states = paste(unique(data.table::na.omit(.SD[[loc_col]])), collapse = ";"),
-    countryCode = paste(unique(data.table::na.omit(countryCode)), collapse = ";"),
-    origin = paste(unique(data.table::na.omit(origin)), collapse = ";")
+    states = paste(unique(stats::na.omit(.SD[[loc_col]])), collapse = ";"),
+    countryCode = paste(unique(stats::na.omit(countryCode)), collapse = ";"),
+    origin = paste(unique(stats::na.omit(origin)), collapse = ";")
   ), by = id]
 
   # Resource Relationship: Group relationships by ID
@@ -245,7 +245,7 @@ merge_data <- function(path_data, version_data, solve_discrepancies = TRUE,
   }
 
   if(solve_discrepancies){
-    df_final <- fauna_discrepancies2(df_final)
+    df_final <- fauna_discrepancies(df_final)
     if(!data.table::is.data.table(df_final)) data.table::setDT(df_final)
   }
 

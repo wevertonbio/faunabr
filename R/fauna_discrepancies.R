@@ -101,7 +101,7 @@ fauna_discrepancies <- function(data) {
     # Generate new random identifier IDs avoiding existing database values
     df_no_species$id <- sample(setdiff(1:50000, data$id), nrow(df_no_species))
     # Subset matching data columns
-    df_no_species <- df_no_species[, colnames(data)]
+    df_no_species <- df_no_species[, colnames(data), with = FALSE]
     # Bind remaining tables
     data_solved <- rbind(data_solved, df_no_species)
   }
