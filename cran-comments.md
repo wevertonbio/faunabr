@@ -1,3 +1,6 @@
+## Submission faunabr 1.1.1 (August 2026)
+This is the first submission of version 1.1.1
+
 ## Submission faunabr 1.1.0 (July 2026)
 This is the first submission of version 1.1.0
 
