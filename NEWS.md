@@ -1,3 +1,9 @@
+# faunabr 1.1.2 (August 2026)
+
+* Update `fauna_version()` to notify users when the IPT is unavailable and allow version checking in this case.
+* Update `get_faunabr()` to notify users when the IPT is unavailable and allow downloading a fixed version from Zenodo.
+
+
 # faunabr 1.1.1 (August 2026)
 * Fix a bug when merging data and solving discrepancies due to changes in the data provided by the Catálogo Taxonômico da Fauna do Brasil.
 
