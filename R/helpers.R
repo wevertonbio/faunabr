@@ -796,3 +796,45 @@ paste_unique <- function(x) {
 #         h_fill = "#008080",
 #         filename="../faunabrdata/HexSticker_markazi_blue4.png",
 #         spotlight = TRUE, l_alpha = 0.3)
+
+# Check last version
+ipt_latest_version <- function(base_url, ua) {
+  tryCatch({
+    info <- httr::HEAD(
+      base_url,
+      httr::user_agent(ua),
+      httr::timeout(15)
+    )
+    httr::stop_for_status(info)
+
+    disposition <- httr::headers(info)[["content-disposition"]]
+    if (is.null(disposition)) {
+      stop("The response has no Content-Disposition header.")
+    }
+
+    match <- regmatches(
+      disposition,
+      regexec("-v([0-9]+(?:\\.[0-9]+)*)\\.zip",
+              disposition, perl = TRUE)
+    )[[1]]
+
+    if (length(match) < 2L) {
+      stop("The archive filename does not contain a valid version.")
+    }
+
+    match[2]
+  }, error = function(e) {
+    stop(
+      "Could not determine the latest Fauna do Brasil version from the IPT: ",
+      conditionMessage(e),
+      call. = FALSE
+    )
+  })
+}
+
+# Check flags
+check_flag <- function(value, name) {
+  if (!is.logical(value) || length(value) != 1L || is.na(value)) {
+    stop(name, " must be TRUE or FALSE.", call. = FALSE)
+  }
+}

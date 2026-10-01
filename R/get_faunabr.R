@@ -20,6 +20,9 @@
 #' ("lifeForm", "origin", "habitat", and "taxonRank") from Portuguese to English.
 #' Default is TRUE.
 #' @param overwrite (logical) If TRUE, data is overwritten. Default = TRUE.
+#' @param get_fixed_version (logical) If TRUE, download the already-merged
+#' version 1.57 from Zenodo instead of downloading and processing an IPT
+#' archive. Default is FALSE.
 #' @param verbose (logical) Whether to display messages during function
 #' execution. Set to TRUE to enable display, or FALSE to run silently.
 #' Default = TRUE.
@@ -35,14 +38,13 @@
 #'
 #' @usage get_faunabr(output_dir, data_version = "latest",
 #'                  solve_discrepancies = TRUE, translate = TRUE,
-#'                  overwrite = TRUE, verbose = TRUE)
+#'                  overwrite = TRUE, get_fixed_version = FALSE,
+#'                  verbose = TRUE)
 #' @export
 #'
-#' @importFrom httr GET write_disk
-#' @importFrom XML htmlParse xpathSApply xmlGetAttr
+#' @importFrom httr GET user_agent timeout write_disk stop_for_status
 #' @importFrom utils unzip
-#' @importFrom utils read.csv
-#' @importFrom data.table fwrite
+#' @importFrom tools md5sum
 #'
 #' @references
 #' Brazilian Zoology Group. Catálogo Taxonômico da Fauna do Brasil. Available at:
@@ -62,98 +64,277 @@ get_faunabr <- function(output_dir, data_version = "latest",
                         solve_discrepancies = TRUE,
                         translate = TRUE,
                         overwrite = TRUE,
+                        get_fixed_version = FALSE,
                         verbose = TRUE) {
-  #Set folder
-  if(is.null(output_dir)) {
-    stop(paste("Argument output_dir is not defined, this is necessary for",
-         "\n downloading and saving data"))
+  if (missing(output_dir) || !is.character(output_dir) ||
+      length(output_dir) != 1L || is.na(output_dir) ||
+      !nzchar(output_dir)) {
+    stop("output_dir must be a single directory path.", call. = FALSE)
   }
-  if (!is.character(output_dir)) {
-    stop(paste0("Argument output_dir must be a character, not ",
-                class(output_dir)))
+
+  if (!is.character(data_version) ||
+      length(data_version) != 1L ||
+      is.na(data_version) ||
+      !grepl("^(latest|[0-9]+(\\.[0-9]+)+)$", data_version)) {
+    stop(
+      "data_version must be 'latest' or a version such as '1.57'.",
+      call. = FALSE
+    )
+  }
+
+  check_flag(solve_discrepancies, "solve_discrepancies")
+  check_flag(translate, "translate")
+  check_flag(overwrite, "overwrite")
+  check_flag(verbose, "verbose")
+  check_flag(get_fixed_version, "get_fixed_version")
+
+  path_data <- output_dir
+
+  if (!dir.exists(path_data) &&
+      !dir.create(path_data, recursive = TRUE, showWarnings = FALSE)) {
+    stop("Could not create output_dir: ", path_data, call. = FALSE)
+  }
+
+  if (verbose) {
+    message("Data will be saved in ", path_data, "\n")
+  }
+
+  # The Zenodo file is already merged; do not process it as a DwC-A.
+  if (get_fixed_version) {
+    fixed_version <- "1.57"
+    fixed_url <- paste0(
+      "https://zenodo.org/records/23084491/files/",
+      "CompleteBrazilianFauna.gz?download=1"
+    )
+    fixed_md5 <- "5c65231575183930fb814be226be60f1"
+
+    if (!data_version %in% c("latest", fixed_version)) {
+      stop(
+        "get_fixed_version = TRUE provides only version ",
+        fixed_version, "; requested version: ", data_version,
+        call. = FALSE
+      )
+    }
+
+    if (!solve_discrepancies || !translate) {
+      stop(
+        "The fixed version is already processed with ",
+        "solve_discrepancies = TRUE and translate = TRUE. ",
+        "Use the IPT download to choose other settings.",
+        call. = FALSE
+      )
+    }
+
+    version_dir <- file.path(path_data, fixed_version)
+    output_file <- file.path(
+      version_dir, "CompleteBrazilianFauna.gz"
+    )
+
+    if (file.exists(output_file) && !overwrite) {
+      stop(
+        "The file already exists and overwrite = FALSE: ",
+        output_file,
+        call. = FALSE
+      )
+    }
+
+    # A failed download must not replace an existing dataset.
+    temp_file <- tempfile(
+      pattern = "faunabr-zenodo-",
+      tmpdir = path_data,
+      fileext = ".gz"
+    )
+    on.exit(unlink(temp_file), add = TRUE)
+
+    if (verbose) {
+      message("Downloading fixed version ", fixed_version,
+              " from Zenodo...")
+    }
+
+    tryCatch(
+      {
+        response <- httr::GET(
+          fixed_url,
+          httr::timeout(180),
+          httr::write_disk(temp_file, overwrite = TRUE)
+        )
+        httr::stop_for_status(response)
+      },
+      error = function(e) {
+        stop(
+          "Could not download Fauna do Brasil version ",
+          fixed_version, " from Zenodo: ",
+          conditionMessage(e),
+          call. = FALSE
+        )
+      }
+    )
+
+    # Verify the file against the checksum published by Zenodo.
+    actual_md5 <- unname(tools::md5sum(temp_file))
+    if (is.na(actual_md5) || !identical(actual_md5, fixed_md5)) {
+      stop(
+        "The downloaded Zenodo file failed checksum verification.",
+        call. = FALSE
+      )
+    }
+
+    if (!dir.exists(version_dir) &&
+        !dir.create(version_dir, recursive = TRUE,
+                    showWarnings = FALSE)) {
+      stop("Could not create directory: ", version_dir,
+           call. = FALSE)
+    }
+
+    if (!file.copy(temp_file, output_file, overwrite = overwrite)) {
+      stop("Could not save the downloaded file: ", output_file,
+           call. = FALSE)
+    }
+
+    if (verbose) {
+      message("Fixed version saved in ", output_file)
+    }
+
+    return(invisible(output_file))
+  }
+
+  # Standard IPT Darwin Core Archive workflow.
+  base_url <- paste0(
+    "https://ipt.jbrj.gov.br/jbrj/archive.do",
+    "?r=catalogo_taxonomico_da_fauna_do_brasil"
+  )
+  ua <- paste(
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+    "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
+  )
+
+  if (data_version == "latest") {
+    version_data <- ipt_latest_version(base_url, ua)
   } else {
-    path_data <- output_dir
+    version_data <- data_version
   }
 
-  if(!file.exists(output_dir)){
-    dir.create(output_dir)
-    warning("'output_dir' does not exists. Creating folder:\n" , output_dir)
+  # Pin the detected version between the HEAD and GET requests.
+  link_download <- paste0(base_url, "&v=", version_data)
+
+  if (verbose) {
+    message("Downloading version: ", version_data, "\n")
   }
 
-  if (!is.character(data_version)) {
-    stop(paste0("Argument data_version must be a character, not ",
-                class(data_version)))
+  zip_path <- file.path(path_data, paste0(version_data, ".zip"))
+
+  if (file.exists(zip_path) && !overwrite) {
+    stop(
+      "The ZIP file already exists and overwrite = FALSE: ",
+      zip_path,
+      call. = FALSE
+    )
   }
 
-  if (!is.logical(solve_discrepancies)) {
-    stop(paste0("Argument solve_discrepancies must be logical, not ",
-                class(overwrite)))
+  temp_zip <- tempfile(
+    pattern = "faunabr-", tmpdir = path_data, fileext = ".zip"
+  )
+  on.exit(unlink(temp_zip), add = TRUE)
+
+  tryCatch(
+    {
+      response <- httr::GET(
+        link_download,
+        httr::user_agent(ua),
+        httr::timeout(120),
+        httr::write_disk(temp_zip, overwrite = TRUE)
+      )
+      httr::stop_for_status(response)
+    },
+    error = function(e) {
+      stop(
+        "Could not download Fauna do Brasil version ",
+        version_data, " from the IPT: ",
+        conditionMessage(e),
+        call. = FALSE
+      )
+    }
+  )
+
+  archive <- tryCatch(
+    utils::unzip(temp_zip, list = TRUE),
+    warning = function(w) {
+      stop(
+        "The IPT response is not a valid ZIP file: ",
+        conditionMessage(w),
+        call. = FALSE
+      )
+    },
+    error = function(e) {
+      stop(
+        "Could not read the downloaded ZIP file: ",
+        conditionMessage(e),
+        call. = FALSE
+      )
+    }
+  )
+
+  required_files <- c(
+    "taxon.txt",
+    "distribution.txt",
+    "speciesprofile.txt",
+    "vernacularname.txt",
+    "resourcerelationship.txt"
+  )
+
+  if (!all(required_files %in% archive$Name)) {
+    stop(
+      "The IPT archive does not contain the expected data files.",
+      call. = FALSE
+    )
   }
 
-  if (!is.logical(overwrite)) {
-    stop(paste0("Argument overwrite must be logical, not ",
-                class(overwrite)))
+  if (!file.copy(temp_zip, zip_path, overwrite = overwrite)) {
+    stop("Could not save the downloaded ZIP file: ", zip_path,
+         call. = FALSE)
   }
 
+  version_dir <- file.path(path_data, version_data)
+  utils::unzip(zipfile = zip_path, exdir = version_dir)
 
-  #Print message
-  if(verbose) {
-  message("Data will be saved in ", path_data, "\n") }
-
-
-  if(data_version != "latest") {
-  link_download <- paste0(
-    "https://ipt.jbrj.gov.br/jbrj/archive.do?r=catalogo_taxonomico_da_fauna_do_brasil&v=",
-                          data_version)
-  version_data <- data_version
+  if (!all(file.exists(file.path(version_dir, required_files)))) {
+    stop(
+      "Could not extract all required data files into ",
+      version_dir,
+      call. = FALSE
+    )
   }
 
-
-  if(data_version == "latest") {
-  #Get link of latest version
-  response <- httr::GET(
-    "https://ipt.jbrj.gov.br/jbrj/resource?r=catalogo_taxonomico_da_fauna_do_brasil")
-  parse <- XML::htmlParse(response)
-  links <- unlist(XML::xpathSApply(parse, path = "//a", XML::xmlGetAttr,
-                                   "href"))
-  download_pattern <- "https://ipt.jbrj.gov.br/jbrj/archive.do?r=catalogo_taxonomico_da_fauna_do_brasil&v="
-  version_data <- subset(links, grepl(download_pattern, links, fixed = TRUE))
-  version_data <- gsub(download_pattern, "", version_data, fixed = TRUE)
-  link_download <- paste0(
-    "https://ipt.jbrj.gov.br/jbrj/archive.do?r=catalogo_taxonomico_da_fauna_do_brasil&v=",
-    version_data)
+  if (verbose) {
+    message("Merging data. Please wait a moment...\n")
   }
 
-  #Print message
-  if(!is.null(version_data) & verbose) {
-      message("Downloading version: ", version_data, "\n")
+  merge_data(
+    path_data = path_data,
+    version_data = version_data,
+    translate = translate,
+    solve_discrepancies = solve_discrepancies,
+    verbose = verbose
+  )
 
+  output_file <- file.path(
+    version_dir, "CompleteBrazilianFauna.gz"
+  )
 
-  #Download data
-  httr::GET(link_download, httr::write_disk(file.path(
-    path_data,
-    paste0(version_data, ".zip")),
-                                      overwrite = overwrite))
+  if (!file.exists(output_file)) {
+    stop(
+      "merge_data() did not create the expected file: ",
+      output_file,
+      call. = FALSE
+    )
   }
 
-  #Unzip folder
-  version_data_numeric <- as.numeric(version_data)
-  utils::unzip(zipfile = paste0(file.path(path_data, version_data), ".zip"),
-        exdir = file.path(path_data, version_data_numeric))
-
-  #Print message
-  if(verbose){
-  message("Merging data. Please wait a moment...\n") }
-
-  #Merge data
-  merge_data(path_data = path_data, version_data = version_data_numeric,
-             translate = translate,
-             solve_discrepancies = solve_discrepancies, verbose = verbose)
-
-  #Print final message
-  if(verbose){
-  message("Data downloaded and merged successfully. Final data saved in ",
-              file.path(path_data, version_data, "CompleteBrazilianFauna.gz"))
+  if (verbose) {
+    message(
+      "Data downloaded and merged successfully. ",
+      "Final data saved in ", output_file
+    )
   }
 
+  invisible(output_file)
 }

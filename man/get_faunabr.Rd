@@ -6,7 +6,8 @@
 \usage{
 get_faunabr(output_dir, data_version = "latest",
                  solve_discrepancies = TRUE, translate = TRUE,
-                 overwrite = TRUE, verbose = TRUE)
+                 overwrite = TRUE, get_fixed_version = FALSE,
+                 verbose = TRUE)
 }
 \arguments{
 \item{output_dir}{(character) a directory to save the data downloaded from
@@ -28,6 +29,10 @@ species also occurs in that state.}
 Default is TRUE.}
 
 \item{overwrite}{(logical) If TRUE, data is overwritten. Default = TRUE.}
+
+\item{get_fixed_version}{(logical) If TRUE, download the already-merged
+version 1.57 from Zenodo instead of downloading and processing an IPT
+archive. Default is FALSE.}
 
 \item{verbose}{(logical) Whether to display messages during function
 execution. Set to TRUE to enable display, or FALSE to run silently.
