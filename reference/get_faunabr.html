@@ -19,7 +19,7 @@ and saves this data.frame in the specified directory."><meta property="og:image"
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">faunabr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@ and saves this data.frame in the specified directory."><meta property="og:image"
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Download the latest version of Catálogo Taxonômico da Fauna do Brasil</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/v1.1.1/R/get_faunabr.R" class="external-link"><code>R/get_faunabr.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/R/get_faunabr.R" class="external-link"><code>R/get_faunabr.R</code></a></small>
     <div class="hidden name"><code>get_faunabr.Rd</code></div>
     </div>
 
@@ -104,7 +104,8 @@ and saves this data.frame in the specified directory.</p>
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">get_faunabr</span><span class="op">(</span><span class="va">output_dir</span>, data_version <span class="op">=</span> <span class="st">"latest"</span>,</span>
 <span>                 solve_discrepancies <span class="op">=</span> <span class="cn">TRUE</span>, translate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                 overwrite <span class="op">=</span> <span class="cn">TRUE</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span>                 overwrite <span class="op">=</span> <span class="cn">TRUE</span>, get_fixed_version <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>                 verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -139,6 +140,12 @@ Default is TRUE.</p></dd>
 
 <dt id="arg-overwrite">overwrite<a class="anchor" aria-label="anchor" href="#arg-overwrite"></a></dt>
 <dd><p>(logical) If TRUE, data is overwritten. Default = TRUE.</p></dd>
+
+
+<dt id="arg-get-fixed-version">get_fixed_version<a class="anchor" aria-label="anchor" href="#arg-get-fixed-version"></a></dt>
+<dd><p>(logical) If TRUE, download the already-merged
+version 1.57 from Zenodo instead of downloading and processing an IPT
+archive. Default is FALSE.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

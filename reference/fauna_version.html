@@ -18,7 +18,7 @@ data available in a specified directory."><meta property="og:image" content="htt
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">faunabr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.1.2</span>
       </span>
     </div>
 
@@ -90,7 +90,7 @@ data available in a specified directory."><meta property="og:image" content="htt
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Check if you have the latest version of Fauna do Brasil data available</h1>
-    <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/v1.1.1/R/fauna_version.R" class="external-link"><code>R/fauna_version.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/wevertonbio/faunabr/blob/main/R/fauna_version.R" class="external-link"><code>R/fauna_version.R</code></a></small>
     <div class="hidden name"><code>fauna_version.Rd</code></div>
     </div>
 
@@ -119,13 +119,11 @@ Brasil available in the data_dir</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#Check if there is a version of Fauna do Brasil data available in the</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co">#Check if there is a version of Fauna do Brasil data available in the</span></span></span>
 <span class="r-in"><span><span class="co">#current directory</span></span></span>
 <span class="r-in"><span><span class="fu">fauna_version</span><span class="op">(</span>data_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/getwd.html" class="external-link">getwd</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> You do not have any version of Fauna do Brasil in this directory.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     The latest version is 1.54. Please, change the directory or</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     run the function get_faunabr() to download the latest version of fauna do</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     Brasil.</span>
+<span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </div>
