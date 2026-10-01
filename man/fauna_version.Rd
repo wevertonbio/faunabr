@@ -18,7 +18,9 @@ This function checks if you have the latest version of the Fauna do Brasil
 data available in a specified directory.
 }
 \examples{
+\dontrun{
 #Check if there is a version of Fauna do Brasil data available in the
 #current directory
 fauna_version(data_dir = getwd())
+}
 }
